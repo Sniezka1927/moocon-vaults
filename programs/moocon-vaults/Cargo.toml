@@ -1,12 +1,12 @@
 [package]
-name = "moocon-vaults"
+name = "premium_vaults"
 version = "0.1.0"
 description = "Created with Anchor"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "moocon_vaults"
+name = "premium_vaults"
 
 [features]
 default = []
@@ -14,15 +14,20 @@ cpi = ["no-entrypoint"]
 no-entrypoint = []
 no-idl = []
 no-log-ix-name = []
-idl-build = ["anchor-lang/idl-build"]
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 anchor-debug = []
 custom-heap = []
 custom-panic = []
-
+local = []
 
 [dependencies]
-anchor-lang = "0.32.1"
-
+anchor-client = { version = "0.32.1", optional = true }
+anchor-lang = { version = "0.32.1", features = ["init-if-needed"] }
+anchor-spl = { version = "0.32.1" }
+bytemuck = { version = "1", features = ["derive", "min_const_generics"] }
+blake3 = "=1.8.2"
+orao-solana-vrf = { version = "0.7.0", default-features = false, features = ["cpi"] }
+rand = { version = "0.8", optional = true }
 
 [lints.rust]
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))', 'cfg(feature, values("local"))'] }
