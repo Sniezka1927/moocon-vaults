@@ -1,20 +1,42 @@
 {
-  "license": "ISC",
   "scripts": {
-    "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
-    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
+    "test": "anchor test",
+    "test:admin": "anchor test --skip-build tests/admin.test.ts",
+    "test:randomness": "anchor test --skip-build tests/randomness.test.ts",
+    "test:deposit": "anchor test --skip-build tests/deposit.test.ts",
+    "test:fee": "anchor test --skip-build tests/fee.test.ts",
+    "test:commit": "anchor test --skip-build tests/commit.test.ts",
+    "test:set-fee": "anchor test --skip-build tests/set-fee.test.ts",
+    "test:reveal": "anchor test --skip-build tests/reveal.test.ts",
+    "test:set-winner": "anchor test --skip-build tests/set-winner.test.ts",
+    "test:multi-user": "anchor test --skip-build tests/multi-user.test.ts",
+    "test:metaplex": "anchor test --skip-build tests/metaplex.test.ts",
+    "test:reward-lifecycle": "anchor test --skip-build tests/reward-lifecycle.test.ts"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.32.1"
+    "@coral-xyz/anchor": "^0.32.0",
+    "@jup-ag/lend": "^0.1.9",
+    "@jup-ag/lend-read": "^0.0.11",
+    "@ledgerhq/hw-transport-node-hid": "^6.2.0",
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@metaplex-foundation/umi": "^1.5.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.5.1",
+    "@metaplex-foundation/umi-web3js-adapters": "^1.5.1",
+    "@orao-network/solana-vrf": "^0.5.0",
+    "@solana/spl-token": "^0.4.14",
+    "@solana/web3.js": "^1.95.0",
+    "bip32": "^2.0.6",
+    "bn.js": "^5.2.3",
+    "bs58": "^4.0.1",
+    "ed25519-hd-key": "^1.2.0"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
-    "mocha": "^9.0.3",
+    "@types/bn.js": "^5.2.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^22.0.0",
+    "mocha": "^10.7.0",
     "ts-mocha": "^10.0.0",
-    "@types/bn.js": "^5.1.0",
-    "@types/chai": "^4.3.0",
-    "@types/mocha": "^9.0.0",
-    "typescript": "^5.7.3",
-    "prettier": "^2.6.2"
+    "tweetnacl": "^1.0.3",
+    "typescript": "^5.0.0"
   }
 }

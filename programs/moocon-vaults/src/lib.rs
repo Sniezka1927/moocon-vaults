@@ -13,7 +13,7 @@ pub use events::*;
 pub use instructions::*;
 pub use state::*;
 
-declare_id!("EJ6ryWkee1qE7LK2MLxWZ3SVq6hiiYLS7Q6trDmKaACv");
+declare_id!("26WWiEiNHYzksQsp9KBfa4acAyoKPnS2Ssp24Uv756S4");
 
 #[program]
 pub mod premium_vaults {

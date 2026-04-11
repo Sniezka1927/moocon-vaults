@@ -1,12 +1,12 @@
 [package]
-name = "premium_vaults"
+name = "moocon_vaults"
 version = "0.1.0"
 description = "Created with Anchor"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "premium_vaults"
+name = "moocon_vaults"
 
 [features]
 default = []

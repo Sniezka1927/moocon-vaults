@@ -1,0 +1,1966 @@
+{
+  "address": "26WWiEiNHYzksQsp9KBfa4acAyoKPnS2Ssp24Uv756S4",
+  "metadata": {
+    "name": "premium_vaults",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "claim",
+      "discriminator": [
+        62,
+        198,
+        214,
+        193,
+        213,
+        159,
+        108,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "claimer",
+          "signer": true
+        },
+        {
+          "name": "state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "reward",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "arg",
+                "path": "round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "vault_token_account",
+          "writable": true
+        },
+        {
+          "name": "claimer_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "rent_recipient",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        },
+        {
+          "name": "round",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "collect_fee",
+      "discriminator": [
+        60,
+        173,
+        247,
+        103,
+        4,
+        93,
+        130,
+        48
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "state"
+          ]
+        },
+        {
+          "name": "state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_f_token_account",
+          "writable": true
+        },
+        {
+          "name": "vault_token_account",
+          "writable": true
+        },
+        {
+          "name": "admin_token_account",
+          "writable": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "lending_admin"
+        },
+        {
+          "name": "lending",
+          "writable": true
+        },
+        {
+          "name": "f_token_mint",
+          "writable": true
+        },
+        {
+          "name": "supply_token_reserves_liquidity",
+          "writable": true
+        },
+        {
+          "name": "lending_supply_position_on_liquidity",
+          "writable": true
+        },
+        {
+          "name": "rate_model"
+        },
+        {
+          "name": "lending_vault",
+          "writable": true
+        },
+        {
+          "name": "claim_account",
+          "writable": true
+        },
+        {
+          "name": "liquidity",
+          "writable": true
+        },
+        {
+          "name": "liquidity_program",
+          "writable": true
+        },
+        {
+          "name": "rewards_rate_model"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "lending_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "commit",
+      "discriminator": [
+        223,
+        140,
+        142,
+        165,
+        229,
+        208,
+        156,
+        74
+      ],
+      "accounts": [
+        {
+          "name": "vrf_authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "state"
+          ]
+        },
+        {
+          "name": "state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lending",
+          "writable": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "vault_f_token_account",
+          "docs": [
+            "Vault's fToken account — read balance + burn fTokens during withdraw CPI"
+          ],
+          "writable": true
+        },
+        {
+          "name": "vault_token_account",
+          "docs": [
+            "Vault's token account — receives redeemed tokens from lending"
+          ],
+          "writable": true
+        },
+        {
+          "name": "reward",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "arg",
+                "path": "round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lending_admin"
+        },
+        {
+          "name": "f_token_mint",
+          "writable": true
+        },
+        {
+          "name": "supply_token_reserves_liquidity",
+          "writable": true
+        },
+        {
+          "name": "lending_supply_position_on_liquidity",
+          "writable": true
+        },
+        {
+          "name": "rate_model"
+        },
+        {
+          "name": "liquidity_vault",
+          "writable": true
+        },
+        {
+          "name": "claim_account",
+          "writable": true
+        },
+        {
+          "name": "liquidity",
+          "writable": true
+        },
+        {
+          "name": "liquidity_program",
+          "writable": true
+        },
+        {
+          "name": "rewards_rate_model"
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "network_state",
+          "writable": true
+        },
+        {
+          "name": "request",
+          "writable": true
+        },
+        {
+          "name": "vrf",
+          "address": "VRFzZoJdhFWL8rkvu87LpKM3RbcVezpMEc6X5GVDr7y"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "lending_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        },
+        {
+          "name": "round",
+          "type": "u32"
+        },
+        {
+          "name": "reward_type",
+          "type": "u8"
+        },
+        {
+          "name": "tickets",
+          "type": "u64"
+        },
+        {
+          "name": "merkle_root",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "secret_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "deposit",
+      "discriminator": [
+        242,
+        35,
+        198,
+        137,
+        82,
+        225,
+        242,
+        182
+      ],
+      "accounts": [
+        {
+          "name": "depositor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "premium_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "depositor_token_account",
+          "writable": true
+        },
+        {
+          "name": "vault_token_account",
+          "writable": true
+        },
+        {
+          "name": "recipient_token_account",
+          "writable": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "p_mint",
+          "writable": true
+        },
+        {
+          "name": "depositor_p_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "depositor"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "p_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "lending_admin"
+        },
+        {
+          "name": "lending",
+          "writable": true
+        },
+        {
+          "name": "f_token_mint",
+          "writable": true
+        },
+        {
+          "name": "supply_token_reserves_liquidity",
+          "writable": true
+        },
+        {
+          "name": "lending_supply_position_on_liquidity",
+          "writable": true
+        },
+        {
+          "name": "rate_model"
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "liquidity",
+          "writable": true
+        },
+        {
+          "name": "liquidity_program",
+          "writable": true
+        },
+        {
+          "name": "rewards_rate_model"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "lending_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "vrf_authority",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "initialize_vault",
+      "discriminator": [
+        48,
+        191,
+        163,
+        44,
+        71,
+        129,
+        63,
+        164
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "state"
+          ]
+        },
+        {
+          "name": "state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "state"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lending"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "p_mint"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "min_deposit",
+          "type": "u64"
+        },
+        {
+          "name": "withdraw_fee",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "reveal",
+      "discriminator": [
+        9,
+        35,
+        59,
+        190,
+        167,
+        249,
+        76,
+        115
+      ],
+      "accounts": [
+        {
+          "name": "vrf_authority",
+          "signer": true,
+          "relations": [
+            "state"
+          ]
+        },
+        {
+          "name": "state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "reward",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "arg",
+                "path": "round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "request"
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        },
+        {
+          "name": "round",
+          "type": "u32"
+        },
+        {
+          "name": "secret_seed",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_vrf_authority",
+      "discriminator": [
+        219,
+        49,
+        136,
+        166,
+        71,
+        6,
+        51,
+        74
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "state"
+          ]
+        },
+        {
+          "name": "state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_vrf_authority",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "set_winner",
+      "discriminator": [
+        207,
+        149,
+        39,
+        13,
+        31,
+        233,
+        182,
+        109
+      ],
+      "accounts": [
+        {
+          "name": "vrf_authority",
+          "signer": true,
+          "relations": [
+            "state"
+          ]
+        },
+        {
+          "name": "state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "reward",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "arg",
+                "path": "round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "winner"
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        },
+        {
+          "name": "round",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "set_withdraw_fee",
+      "discriminator": [
+        33,
+        223,
+        102,
+        118,
+        225,
+        116,
+        8,
+        238
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "state"
+          ]
+        },
+        {
+          "name": "state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        },
+        {
+          "name": "withdraw_fee",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "sync_rate",
+      "discriminator": [
+        44,
+        249,
+        76,
+        136,
+        3,
+        137,
+        49,
+        247
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "state"
+          ]
+        },
+        {
+          "name": "state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lending"
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "withdraw",
+      "discriminator": [
+        183,
+        18,
+        70,
+        156,
+        148,
+        109,
+        161,
+        34
+      ],
+      "accounts": [
+        {
+          "name": "withdrawer",
+          "signer": true
+        },
+        {
+          "name": "premium_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "vault_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_f_token_account",
+          "writable": true
+        },
+        {
+          "name": "vault_token_account",
+          "writable": true
+        },
+        {
+          "name": "withdrawer_token_account",
+          "writable": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "p_mint",
+          "writable": true
+        },
+        {
+          "name": "withdrawer_p_token_account",
+          "writable": true
+        },
+        {
+          "name": "lending_admin"
+        },
+        {
+          "name": "lending",
+          "writable": true
+        },
+        {
+          "name": "f_token_mint",
+          "writable": true
+        },
+        {
+          "name": "supply_token_reserves_liquidity",
+          "writable": true
+        },
+        {
+          "name": "lending_supply_position_on_liquidity",
+          "writable": true
+        },
+        {
+          "name": "rate_model"
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "claim_account",
+          "writable": true
+        },
+        {
+          "name": "liquidity",
+          "writable": true
+        },
+        {
+          "name": "liquidity_program",
+          "writable": true
+        },
+        {
+          "name": "rewards_rate_model"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "lending_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "vault_index",
+          "type": "u32"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "NetworkState",
+      "discriminator": [
+        212,
+        237,
+        148,
+        56,
+        97,
+        245,
+        51,
+        169
+      ]
+    },
+    {
+      "name": "Reward",
+      "discriminator": [
+        174,
+        129,
+        42,
+        212,
+        190,
+        18,
+        45,
+        34
+      ]
+    },
+    {
+      "name": "State",
+      "discriminator": [
+        216,
+        146,
+        107,
+        94,
+        104,
+        75,
+        182,
+        177
+      ]
+    },
+    {
+      "name": "Vault",
+      "discriminator": [
+        211,
+        8,
+        232,
+        43,
+        2,
+        152,
+        117,
+        119
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "CommitEvent",
+      "discriminator": [
+        252,
+        78,
+        246,
+        83,
+        244,
+        83,
+        218,
+        56
+      ]
+    },
+    {
+      "name": "RevealEvent",
+      "discriminator": [
+        51,
+        6,
+        123,
+        75,
+        48,
+        187,
+        64,
+        1
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "RandomnessNotFulfilled",
+      "msg": "Randomness has not been fulfilled yet"
+    },
+    {
+      "code": 6001,
+      "name": "ZeroAmount",
+      "msg": "ZeroAmount"
+    },
+    {
+      "code": 6002,
+      "name": "CpiFailed",
+      "msg": "CPI to Jup program failed"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidMint",
+      "msg": "Provided invalid mint"
+    },
+    {
+      "code": 6004,
+      "name": "Overflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6005,
+      "name": "AlreadySynced",
+      "msg": "Exchange rate already synced"
+    },
+    {
+      "code": 6006,
+      "name": "NotSynced",
+      "msg": "Exchange rate not synced yet"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidExchangeRate",
+      "msg": "Invalid exchange rate data"
+    },
+    {
+      "code": 6008,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
+    },
+    {
+      "code": 6009,
+      "name": "WinnerNotSet",
+      "msg": "Winner not yet assigned"
+    },
+    {
+      "code": 6010,
+      "name": "AlreadyClaimed",
+      "msg": "Reward already claimed"
+    },
+    {
+      "code": 6011,
+      "name": "NotWinner",
+      "msg": "Not the winner"
+    },
+    {
+      "code": 6012,
+      "name": "NothingToClaim",
+      "msg": "No yield to claim"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidRewardType",
+      "msg": "Invalid reward type"
+    },
+    {
+      "code": 6014,
+      "name": "JackpotEmpty",
+      "msg": "Jackpot pool is empty"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidFee",
+      "msg": "Fee exceeds maximum"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidPMint",
+      "msg": "Invalid PMint"
+    },
+    {
+      "code": 6017,
+      "name": "MismatchedDecimals",
+      "msg": "Mismatched decimals between mint and pMint"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidRandomnessAccount",
+      "msg": "Invalid randomness account"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidLendingProgram",
+      "msg": "Invalid lending program"
+    },
+    {
+      "code": 6020,
+      "name": "InvalidLendingAccount",
+      "msg": "Invalid lending account"
+    },
+    {
+      "code": 6021,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient funds"
+    },
+    {
+      "code": 6022,
+      "name": "InvalidRound",
+      "msg": "Invalid Round"
+    },
+    {
+      "code": 6023,
+      "name": "BelowMinimumDeposit",
+      "msg": "Below minimum deposit"
+    }
+  ],
+  "types": [
+    {
+      "name": "CommitEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "round",
+            "type": "u32"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "merkle_root",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "secret_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "vrf_seed",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "NetworkConfiguration",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "request_fee",
+            "type": "u64"
+          },
+          {
+            "name": "fulfillment_authorities",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "token_fee_config",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "OraoTokenFeeConfig"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "NetworkState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "config",
+            "type": {
+              "defined": {
+                "name": "NetworkConfiguration"
+              }
+            }
+          },
+          {
+            "name": "num_received",
+            "docs": [
+              "Total number of received requests."
+            ],
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OraoTokenFeeConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "docs": [
+              "ORAO token mint address."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "docs": [
+              "ORAO token treasury account."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "fee",
+            "docs": [
+              "Fee in ORAO SPL token smallest units."
+            ],
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RevealEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "round",
+            "type": "u32"
+          },
+          {
+            "name": "secret_seed",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "randomness",
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          },
+          {
+            "name": "winner_index",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Reward",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "claimer",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_tickets",
+            "type": "u64"
+          },
+          {
+            "name": "winner_index",
+            "type": "u64"
+          },
+          {
+            "name": "round",
+            "type": "u32"
+          },
+          {
+            "name": "reward_type",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "_padding",
+            "type": {
+              "array": [
+                "u8",
+                2
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "vrf_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "last_vault",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "_padding",
+            "type": {
+              "array": [
+                "u8",
+                3
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Vault",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "p_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "lending",
+            "type": "pubkey"
+          },
+          {
+            "name": "min_deposit",
+            "type": "u64"
+          },
+          {
+            "name": "accumulated_fee",
+            "type": "u64"
+          },
+          {
+            "name": "withdraw_fee",
+            "type": "u64"
+          },
+          {
+            "name": "last_rate",
+            "type": "u64"
+          },
+          {
+            "name": "daily_jackpot_accumulated",
+            "type": "u64"
+          },
+          {
+            "name": "weekly_jackpot_accumulated",
+            "type": "u64"
+          },
+          {
+            "name": "last_daily_ts",
+            "type": "i64"
+          },
+          {
+            "name": "last_weekly_ts",
+            "type": "i64"
+          },
+          {
+            "name": "current_round",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "_padding",
+            "type": {
+              "array": [
+                "u8",
+                3
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "DAILY_JACKPOT_SHARE",
+      "type": "u64",
+      "value": "200000"
+    },
+    {
+      "name": "FEE_DENOMINATOR",
+      "type": "u64",
+      "value": "1000000"
+    },
+    {
+      "name": "REWARD_SEED",
+      "type": "bytes",
+      "value": "[114, 101, 119, 97, 114, 100]"
+    },
+    {
+      "name": "REWARD_TYPE_DAILY",
+      "type": "u8",
+      "value": "1"
+    },
+    {
+      "name": "REWARD_TYPE_ROUND",
+      "type": "u8",
+      "value": "0"
+    },
+    {
+      "name": "REWARD_TYPE_WEEKLY",
+      "type": "u8",
+      "value": "2"
+    },
+    {
+      "name": "SHARE_DENOMINATOR",
+      "type": "u64",
+      "value": "1000000"
+    },
+    {
+      "name": "STATE_SEED",
+      "type": "bytes",
+      "value": "[115, 116, 97, 116, 101]"
+    },
+    {
+      "name": "VAULT_SEED",
+      "type": "bytes",
+      "value": "[118, 97, 117, 108, 116]"
+    },
+    {
+      "name": "WEEKLY_JACKPOT_SHARE",
+      "type": "u64",
+      "value": "200000"
+    },
+    {
+      "name": "WINNER_SHARE",
+      "type": "u64",
+      "value": "600000"
+    }
+  ]
+}

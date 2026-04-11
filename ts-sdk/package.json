@@ -1,0 +1,18 @@
+{
+  "name": "ts-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sync-idl": "cp ../target/types/premium_vaults.ts idl/premium_vaults.ts && cp ../target/idl/premium_vaults.json idl/premium_vaults.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@solana/spl-token": "^0.4.14",
+    "@solana/web3.js": "^1.98.4"
+  }
+}
