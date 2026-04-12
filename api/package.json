@@ -1,0 +1,23 @@
+{
+  "name": "app",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "NODE_ENV=test bun test",
+    "dev": "bun run --watch src/server.ts",
+    "seed": "bun run src/seeds/index.ts"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.32.0",
+    "@elysiajs/cors": "^1.4.1",
+    "@elysiajs/cron": "^1.4.1",
+    "@orao-network/solana-vrf": "^0.5.0",
+    "bs58": "^6.0.0",
+    "elysia": "latest",
+    "logixlysia": "^6.3.0",
+    "ts-sdk": "../ts-sdk"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
+}

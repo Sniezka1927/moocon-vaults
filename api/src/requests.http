@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:7777
+
+### Preview first page of drawings
+GET {{baseUrl}}/api/drawing?page=1&limit=10
+
+### Preview first page of proofs for a drawing (replace drawingId)
+@drawingId = 121
+GET {{baseUrl}}/api/proofs/{{drawingId}}
+
+### Get paginated list of all vault events
+GET {{baseUrl}}/api/events?page=1&limit=20
+
+### Get drawing + on-chain events + match comparison for a specific vault/round
+@vaultAddress = 9yfiTXGBCF4fz2VvwAt6t5Sw7quPowjyjanFxp8KC9pK
+@round = 35
+GET {{baseUrl}}/api/events/{{vaultAddress}}/{{round}}
+
+### Get referral info for a wallet
+@wallet = YourWalletAddressHere
+GET {{baseUrl}}/api/referrals?wallet={{wallet}}
+
+### Create a referral code (signature = bs58(sign("Using Referral MYCOOLCODE with <wallet>")))
+POST {{baseUrl}}/api/referrals
+Content-Type: application/json
+
+{
+  "wallet": "YourWalletAddressHere",
+  "code": "MYCOOLCODE",
+  "signature": "base58SignatureHere"
+}
+
+### Use a referral code
+POST {{baseUrl}}/api/referrals/use
+Content-Type: application/json
+
+{
+  "wallet": "AnotherWalletHere",
+  "code": "MYCOOLCODE",
+  "signature": "base58SignatureHere"
+}
+
+### Get latest TVL stats (1h interval)
+GET {{baseUrl}}/api/stats?interval=1h&limit=40
+
+### Get mint metadata (price, symbol, icon, address) for all vault tokens
+GET {{baseUrl}}/api/stats/mint-data
