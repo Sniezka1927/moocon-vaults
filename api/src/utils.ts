@@ -109,20 +109,18 @@ export async function waitForFinalizedSignature(
 }
 
 export function determineRewardType(v: VaultAccount): number {
-  // Tier 0 is the default round tier.
-  // For non-zero tiers, choose the highest index that is currently due.
+  // Check tiers from the end to the beginning and pick the first due one.
   const now = BigInt(Math.floor(Date.now() / 1000))
 
-  let selectedTierIndex = 0
-  for (let i = 1; i < v.distributionTiers.length; i++) {
+  for (let i = v.distributionTiers.length - 1; i >= 0; i--) {
     const tier = v.distributionTiers[i]
     if (tier.rewardShare <= 0n || tier.interval <= 0n) continue
     if (now >= tier.distributedAt + tier.interval) {
-      selectedTierIndex = i
+      return i
     }
   }
 
-  return selectedTierIndex
+  return 0
 }
 
 export function getLatestDrawing(vaultPda: string): DrawingRow | null {
@@ -131,4 +129,11 @@ export function getLatestDrawing(vaultPda: string): DrawingRow | null {
       'SELECT * FROM drawings WHERE vault = ? ORDER BY round DESC LIMIT 1'
     )
     .get(vaultPda)
+}
+
+export function getDrawingById(id: bigint): DrawingRow | null {
+  return (
+    db.query<DrawingRow, [bigint]>('SELECT * FROM drawings WHERE id = ?').get(id) ??
+    null
+  )
 }

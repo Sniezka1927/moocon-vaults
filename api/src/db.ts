@@ -76,6 +76,14 @@ function initializeSchema(db: Database): void {
   addColumnIfMissing(db, 'drawings', 'reveal_tx', 'TEXT')
   addColumnIfMissing(db, 'drawings', 'request', 'TEXT')
   addColumnIfMissing(db, 'drawings', 'initial_snapshot', 'TEXT')
+  addColumnIfMissing(db, 'drawings', 'eligible_snapshot', 'TEXT')
+  addColumnIfMissing(
+    db,
+    'drawings',
+    'eligibility_blocked',
+    'INTEGER NOT NULL DEFAULT 0'
+  )
+  addColumnIfMissing(db, 'drawings', 'last_eligibility_scan_at', 'INTEGER')
   addColumnIfMissing(db, 'drawings', 'points_processed_at', 'INTEGER')
   addColumnIfMissing(db, 'drawings', 'amount_usd', 'REAL')
   addColumnIfMissing(db, 'drawings', 'apr', 'REAL')
@@ -228,6 +236,9 @@ export interface DrawingRow {
   secret_seed: Uint8Array | null
   randomness: Uint8Array | null
   initial_snapshot: string | null
+  eligible_snapshot: string | null
+  eligibility_blocked: number | bigint
+  last_eligibility_scan_at: number | null
   snapshot_at: number | null
   committed_at: number
   revealed_at: number | null

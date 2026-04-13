@@ -90,7 +90,7 @@ export function RewardsList() {
         )}
 
         {!isLoading && drawings.length > 0 && (
-          <table className="w-full min-w-[940px] text-xs">
+          <table className="w-full min-w-[820px] text-xs">
             <thead
               className="sticky top-0 z-10"
               style={{ backgroundColor: APP_COLORS.page.cardBackground }}
@@ -99,7 +99,7 @@ export function RewardsList() {
                 className="border-b"
                 style={{ borderColor: APP_COLORS.page.cardBorder }}
               >
-                {['Vault', 'Tickets', 'Payout', 'Winner', 'APR', 'Revealed', ''].map(
+                {['Vault', 'Payout', 'Winner', 'APR', 'Revealed', ''].map(
                   (header) => (
                     <th
                       key={header}
@@ -136,12 +136,6 @@ export function RewardsList() {
                         )}
                         <span>{vaultLabel(d.vault)}</span>
                       </span>
-                    </td>
-                    <td
-                      className="px-4 py-3"
-                      style={{ color: APP_COLORS.page.cardValue }}
-                    >
-                      {Number(d.total_tickets).toLocaleString()}
                     </td>
                     <td
                       className="px-4 py-3 font-medium"

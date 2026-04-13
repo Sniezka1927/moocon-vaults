@@ -113,11 +113,22 @@ export function useDeposit(vault: VaultWithAddress) {
           // Check if WSOL ATA already exists
           const ataInfo = await connection.getAccountInfo(depositorTokenAccount)
           if (!ataInfo) {
-            tx.add(createAssociatedTokenAccountInstruction(publicKey, depositorTokenAccount, publicKey, NATIVE_MINT))
+            tx.add(
+              createAssociatedTokenAccountInstruction(
+                publicKey,
+                depositorTokenAccount,
+                publicKey,
+                NATIVE_MINT
+              )
+            )
           }
           // Transfer lamports into the WSOL ATA and sync
           tx.add(
-            SystemProgram.transfer({ fromPubkey: publicKey, toPubkey: depositorTokenAccount, lamports: amount }),
+            SystemProgram.transfer({
+              fromPubkey: publicKey,
+              toPubkey: depositorTokenAccount,
+              lamports: amount
+            }),
             createSyncNativeInstruction(depositorTokenAccount)
           )
         }
@@ -126,7 +137,13 @@ export function useDeposit(vault: VaultWithAddress) {
 
         if (isSol) {
           // Close WSOL account to unwrap remaining lamports back to wallet
-          tx.add(createCloseAccountInstruction(depositorTokenAccount, publicKey, publicKey))
+          tx.add(
+            createCloseAccountInstruction(
+              depositorTokenAccount,
+              publicKey,
+              publicKey
+            )
+          )
         }
 
         tx.feePayer = publicKey
@@ -152,6 +169,9 @@ export function useDeposit(vault: VaultWithAddress) {
     onSuccess: async (sig) => {
       await invalidateAfterAction(qc, vault)
 
+      if (!sig) {
+        return
+      }
       let depositedAmount: number | null = null
       if (sig) {
         const txMeta = await connection.getTransaction(sig, {
@@ -266,9 +286,18 @@ export function useWithdraw(vault: VaultWithAddress) {
 
         if (isSol) {
           // Ensure WSOL ATA exists to receive withdrawn tokens
-          const ataInfo = await connection.getAccountInfo(withdrawerTokenAccount)
+          const ataInfo = await connection.getAccountInfo(
+            withdrawerTokenAccount
+          )
           if (!ataInfo) {
-            tx.add(createAssociatedTokenAccountInstruction(publicKey, withdrawerTokenAccount, publicKey, NATIVE_MINT))
+            tx.add(
+              createAssociatedTokenAccountInstruction(
+                publicKey,
+                withdrawerTokenAccount,
+                publicKey,
+                NATIVE_MINT
+              )
+            )
           }
         }
 
@@ -276,7 +305,13 @@ export function useWithdraw(vault: VaultWithAddress) {
 
         if (isSol) {
           // Close WSOL account to unwrap to native SOL
-          tx.add(createCloseAccountInstruction(withdrawerTokenAccount, publicKey, publicKey))
+          tx.add(
+            createCloseAccountInstruction(
+              withdrawerTokenAccount,
+              publicKey,
+              publicKey
+            )
+          )
         }
 
         tx.feePayer = publicKey
@@ -362,7 +397,13 @@ export function useClaimReward() {
   const qc = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ reward, vault }: { reward: RewardAccount; vault: VaultWithAddress }) => {
+    mutationFn: async ({
+      reward,
+      vault
+    }: {
+      reward: RewardAccount
+      vault: VaultWithAddress
+    }) => {
       if (!publicKey || !program) throw new Error('Wallet not connected')
 
       const ix = await program.claimIx({
@@ -373,13 +414,18 @@ export function useClaimReward() {
       })
 
       try {
-        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
+        const { blockhash, lastValidBlockHeight } =
+          await connection.getLatestBlockhash()
         const tx = new Transaction().add(ix)
         tx.feePayer = publicKey
         tx.recentBlockhash = blockhash
         tx.lastValidBlockHeight = lastValidBlockHeight
         const sig = await sendTransaction(tx, connection)
-        await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature: sig })
+        await connection.confirmTransaction({
+          blockhash,
+          lastValidBlockHeight,
+          signature: sig
+        })
         return sig
       } catch (e) {
         if (isPluginClosed(e as Error)) return null
@@ -414,7 +460,9 @@ export function useClaimAllRewards() {
   const qc = useQueryClient()
 
   return useMutation({
-    mutationFn: async (pairs: { reward: RewardAccount; vault: VaultWithAddress }[]) => {
+    mutationFn: async (
+      pairs: { reward: RewardAccount; vault: VaultWithAddress }[]
+    ) => {
       if (!publicKey || !program) throw new Error('Wallet not connected')
 
       const instructions = await Promise.all(
@@ -429,14 +477,19 @@ export function useClaimAllRewards() {
       )
 
       try {
-        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
+        const { blockhash, lastValidBlockHeight } =
+          await connection.getLatestBlockhash()
         const tx = new Transaction()
         instructions.forEach((ix) => tx.add(ix))
         tx.feePayer = publicKey
         tx.recentBlockhash = blockhash
         tx.lastValidBlockHeight = lastValidBlockHeight
         const sig = await sendTransaction(tx, connection)
-        await connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature: sig })
+        await connection.confirmTransaction({
+          blockhash,
+          lastValidBlockHeight,
+          signature: sig
+        })
         return sig
       } catch (e) {
         if (isPluginClosed(e as Error)) return null

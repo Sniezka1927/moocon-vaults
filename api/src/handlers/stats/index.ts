@@ -14,7 +14,7 @@ export const statsHandler = new Elysia({ prefix: '/api/stats', name: 'stats' })
   .use(
     cron({
       name: 'stats-heartbeat',
-      pattern: Patterns.everyHours(1),
+      pattern: Patterns.everyMinutes(5),
       run: async () => {
         try {
           await fetchPrices()

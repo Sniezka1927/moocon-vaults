@@ -23,6 +23,10 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
   const [modalOpen, setModalOpen] = useState(false)
   const tokenName = metadata.name
   const price = useMintStore((s) => s.getMint(vault.mint.toBase58()))?.price ?? null
+  const tokenDecimals = Number.isInteger(metadata.decimals) && metadata.decimals >= 0
+    ? Math.min(metadata.decimals, 18)
+    : 6
+  const tvlLabel = tvl === '—' ? '—' : tvl !== null ? `${tvl} ${tokenName}` : '...'
 
   useEffect(() => {
     const ROUND_SECS = ROUND_TIME * 60
@@ -58,17 +62,34 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
     const fTokenAta = getAssociatedTokenAddressSync(lendingAccounts.fTokenMint, vault.address, true)
     getAccount(connection, fTokenAta)
       .then((account) => {
+        const baseAmount = Number(account.amount)
+        const rate = Number(vault.lastRate)
         const raw =
-          (Number(account.amount) * Number(vault.lastRate)) /
+          (baseAmount * rate) /
           10 ** 12 /
-          10 ** metadata.decimals
+          10 ** tokenDecimals
+
+        if (!Number.isFinite(raw)) {
+          setTvl('—')
+          setTvlUsd(null)
+          return
+        }
+
         setTvl(raw.toLocaleString('en-US', { maximumFractionDigits: 2 }))
         if (price != null) {
-          setTvlUsd((raw * price).toLocaleString('en-US', { style: 'currency', currency: 'USD' }))
+          const tvlUsdValue = raw * price
+          setTvlUsd(
+            Number.isFinite(tvlUsdValue)
+              ? tvlUsdValue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+              : null
+          )
         }
       })
-      .catch(() => setTvl('—'))
-  }, [connection, vault.address, vault.mint, vault.lastRate, metadata.decimals, price])
+      .catch(() => {
+        setTvl('—')
+        setTvlUsd(null)
+      })
+  }, [connection, vault.address, vault.mint, vault.lastRate, tokenDecimals, price])
 
   return (
     <tr
@@ -96,7 +117,7 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
           className="text-sm font-medium"
           style={{ color: APP_COLORS.page.cardValue }}
         >
-          {tvlUsd !== null ? tvlUsd : tvl !== null ? `${tvl} ${tokenName}` : '...'}
+          {tvlUsd !== null ? tvlUsd : tvlLabel}
         </span>
       </td>
 

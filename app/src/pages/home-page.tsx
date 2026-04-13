@@ -5,6 +5,7 @@ import { useMintStore } from '@/lib/store/mint-store'
 import { VaultCard } from '@/components/vault-card'
 import { useAllVaults } from '@/lib/queries/use-vaults'
 import { useDrawings } from '@/lib/queries'
+import { getLendingAccountsForMint } from 'ts-sdk'
 import { StatsChart } from '@/components/stats-chart'
 import { StatsOverview } from '@/components/stats-overview'
 import { RewardsList } from '@/components/rewards-list'
@@ -13,7 +14,7 @@ import { ReferralPanel } from '@/components/referral-panel'
 
 export function HomePage() {
   const { vaults, setVaults } = useVaultsStore()
-  const { data, isLoading, error } = useAllVaults()
+  const { data } = useAllVaults()
   const { data: drawingsData } = useDrawings(1, 100)
   const aprByVault = drawingsData?.winners_compound_average_apy_percent_by_vault ?? {}
 
@@ -25,7 +26,12 @@ export function HomePage() {
   const registeredVaults = vaults.flatMap((vault) => {
     const mint = getMint(vault.mint.toBase58())
     if (!mint) return []
-    const metadata = { name: mint.symbol ?? 'Unknown', icon: mint.icon ?? '', decimals: mint.decimals }
+    const parsedMintDecimals = Number(mint.decimals)
+    const fallbackDecimals = getLendingAccountsForMint(vault.mint)?.decimal ?? 6
+    const decimals = Number.isInteger(parsedMintDecimals) && parsedMintDecimals >= 0
+      ? parsedMintDecimals
+      : fallbackDecimals
+    const metadata = { name: mint.symbol ?? 'Unknown', icon: mint.icon ?? '', decimals }
     return [{ vault, metadata }]
   })
 

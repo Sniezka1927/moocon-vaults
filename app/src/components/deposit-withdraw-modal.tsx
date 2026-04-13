@@ -16,17 +16,30 @@ interface Props {
 }
 
 const APY = 12.5
+const DEFAULT_TOKEN_DECIMALS = 6
 
 function fmtToken(amount: number, decimals: number) {
+  if (!Number.isFinite(amount)) return '0'
   return amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: decimals })
 }
 
 function trimDecimals(value: number, decimals: number) {
+  if (!Number.isFinite(value)) return '0'
   return parseFloat(value.toFixed(decimals)).toString()
 }
 
 function rawToDisplay(raw: bigint, decimals: number) {
   return Number(raw) / 10 ** decimals
+}
+
+function normalizeDecimals(decimals: number) {
+  const parsed = Number(decimals)
+  if (!Number.isInteger(parsed) || parsed < 0) return DEFAULT_TOKEN_DECIMALS
+  return Math.min(parsed, 18)
+}
+
+function toSafeNumber(value: number) {
+  return Number.isFinite(value) ? value : 0
 }
 
 export function DepositWithdrawModal({ vault, metadata, tvl, open, onClose }: Props) {
@@ -44,19 +57,22 @@ export function DepositWithdrawModal({ vault, metadata, tvl, open, onClose }: Pr
   const deposit  = useDeposit(vault)
   const withdraw = useWithdraw(vault)
 
+  const tokenDecimals = normalizeDecimals(metadata.decimals)
   const isPending = deposit.isPending || withdraw.isPending
   const parsed    = parseFloat(inputValue) || 0
-  const minDeposit = Number(vault.minDeposit) / 10 ** metadata.decimals
+  const minDeposit = toSafeNumber(Number(vault.minDeposit) / 10 ** tokenDecimals)
   const depositBalanceRaw = isSol ? nativeSolRaw : userTokenRaw
-  const userTokenDisplay = rawToDisplay(depositBalanceRaw, metadata.decimals)
+  const userTokenDisplay = toSafeNumber(rawToDisplay(depositBalanceRaw, tokenDecimals))
+  const depositedAmount = toSafeNumber(userDeposited)
+  const pTokenBalance = toSafeNumber(userPTokenBalance)
 
   // Validation
   let validationMsg = ''
   if (tab === 'deposit' && parsed > 0) {
     if (parsed > userTokenDisplay) validationMsg = 'Insufficient balance'
-    else if (parsed < minDeposit)  validationMsg = `Minimum deposit: ${fmtToken(minDeposit, metadata.decimals)} ${metadata.name}`
+    else if (parsed < minDeposit)  validationMsg = `Minimum deposit: ${fmtToken(minDeposit, tokenDecimals)} ${metadata.name}`
   }
-  if (tab === 'withdraw' && parsed > 0 && !isMaxWithdraw && parsed > userPTokenBalance) {
+  if (tab === 'withdraw' && parsed > 0 && !isMaxWithdraw && parsed > pTokenBalance) {
     validationMsg = 'Insufficient deposited amount'
   }
 
@@ -64,25 +80,25 @@ export function DepositWithdrawModal({ vault, metadata, tvl, open, onClose }: Pr
 
   function handleHalf() {
     if (tab === 'deposit') {
-      setInputValue(trimDecimals(userTokenDisplay / 2, metadata.decimals))
+      setInputValue(trimDecimals(userTokenDisplay / 2, tokenDecimals))
     } else {
       setIsMaxWithdraw(false)
-      setInputValue(trimDecimals(userPTokenBalance / 2, metadata.decimals))
+      setInputValue(trimDecimals(pTokenBalance / 2, tokenDecimals))
     }
   }
 
   function handleMax() {
     if (tab === 'deposit') {
-      setInputValue(trimDecimals(userTokenDisplay, metadata.decimals))
+      setInputValue(trimDecimals(userTokenDisplay, tokenDecimals))
     } else {
       setIsMaxWithdraw(true)
-      setInputValue(trimDecimals(userPTokenBalance, metadata.decimals))
+      setInputValue(trimDecimals(pTokenBalance, tokenDecimals))
     }
   }
 
   async function handleSubmit() {
     if (!canSubmit) return
-    const rawAmount = BigInt(Math.floor(parsed * 10 ** metadata.decimals))
+    const rawAmount = BigInt(Math.floor(parsed * 10 ** tokenDecimals))
 
     if (tab === 'deposit') {
       deposit.mutate(rawAmount, { onSuccess: onClose })
@@ -98,8 +114,9 @@ export function DepositWithdrawModal({ vault, metadata, tvl, open, onClose }: Pr
   }
 
   const availableLabel = tab === 'deposit'
-    ? `${fmtToken(userTokenDisplay, metadata.decimals)} ${metadata.name}`
-    : `${fmtToken(userPTokenBalance, metadata.decimals)} p${metadata.name}`
+    ? `${fmtToken(userTokenDisplay, tokenDecimals)} ${metadata.name}`
+    : `${fmtToken(pTokenBalance, tokenDecimals)} p${metadata.name}`
+  const tvlLabel = tvl === '—' ? '—' : tvl !== null ? `${tvl} ${metadata.name}` : '…'
 
   return (
     <Dialog.Root open={open} onOpenChange={(v) => { if (!v) onClose() }}>
@@ -144,7 +161,7 @@ export function DepositWithdrawModal({ vault, metadata, tvl, open, onClose }: Pr
             <div>
               <p className="text-xs font-medium" style={{ color: APP_COLORS.page.cardLabel }}>Deposited</p>
               <p className="mt-0.5 text-lg font-semibold" style={{ color: APP_COLORS.page.cardValue }}>
-                {fmtToken(userDeposited, metadata.decimals)} {metadata.name}
+                {fmtToken(depositedAmount, tokenDecimals)} {metadata.name}
               </p>
               <p className="text-xs" style={{ color: APP_COLORS.page.description }}>$0.00</p>
             </div>
@@ -169,7 +186,7 @@ export function DepositWithdrawModal({ vault, metadata, tvl, open, onClose }: Pr
               Vault TVL
             </span>
             <span className="text-sm font-medium" style={{ color: APP_COLORS.page.cardValue }}>
-              {tvl !== null ? `${tvl} ${metadata.name}` : '…'}
+              {tvlLabel}
             </span>
           </div>
 
@@ -242,7 +259,7 @@ export function DepositWithdrawModal({ vault, metadata, tvl, open, onClose }: Pr
                   const v = e.target.value
                   if (v === '' || /^\d*\.?\d*$/.test(v)) {
                     const dotIdx = v.indexOf('.')
-                    if (dotIdx === -1 || v.length - dotIdx - 1 <= metadata.decimals) {
+                    if (dotIdx === -1 || v.length - dotIdx - 1 <= tokenDecimals) {
                       setIsMaxWithdraw(false)
                       setInputValue(v)
                     }

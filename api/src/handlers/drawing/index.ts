@@ -183,7 +183,7 @@ export const drawingHandler = new Elysia({
   .use(
     cron({
       name: 'heartbeat',
-      pattern: Patterns.everyMinutes(ROUND_TIME),
+      pattern: Patterns.everyMinute(),
       run: processDrawing
     })
   )
