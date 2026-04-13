@@ -13,6 +13,7 @@ export interface ISetVrfAuthorityIx {
 export interface IInitializeVaultIx {
   admin: PublicKey
   mint: PublicKey
+  fMint: PublicKey
   pMint: PublicKey
   lending: PublicKey
   minDeposit: bigint
@@ -59,9 +60,8 @@ export interface ICommitIx {
   secretHash: number[]
   mint: PublicKey
   vaultFTokenAccount: PublicKey
-  vaultTokenAccount: PublicKey
-  claimAccount: PublicKey
-  lendingAccounts: ILendingAccounts
+  fTokenMint: PublicKey
+  lending: PublicKey
   treasury: PublicKey
   networkState: PublicKey
   request: PublicKey
@@ -124,9 +124,7 @@ export interface IClaimIx {
   claimer: PublicKey
   vaultIndex: number
   round: number
-  mint: PublicKey
-  vaultTokenAccount: PublicKey
-  claimerTokenAccount: PublicKey
+  pMint: PublicKey
 }
 
 export interface ICreateMintIx {

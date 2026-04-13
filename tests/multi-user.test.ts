@@ -130,9 +130,19 @@ describe('premium-vaults multi-user', () => {
       DECIMALS
     )
 
+    // Create fToken mint (before vault init)
+    fTokenMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      DECIMALS
+    )
+
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint: fTokenMint,
       lending: DUMMY_WRITABLE,
       minDeposit: MIN_DEPOSIT,
       pMint,
@@ -154,14 +164,7 @@ describe('premium-vaults multi-user', () => {
       true
     )
 
-    // Create fToken mint and vault fToken ATA
-    fTokenMint = await createMint(
-      provider.connection,
-      admin,
-      admin.publicKey,
-      null,
-      DECIMALS
-    )
+    // Create vault fToken ATA
     vaultFTokenAccount = await createAssociatedTokenAccount(
       provider.connection,
       admin,
@@ -343,10 +346,9 @@ describe('premium-vaults multi-user', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState,
       request
@@ -408,8 +410,14 @@ describe('premium-vaults multi-user', () => {
     const reward = await vault.fetcher.getRewardByAddress(rewardPda)
     const rewardAmount = reward.amount
 
-    const userBBefore = (await getAccount(provider.connection, ataB)).amount
-    const vaultBefore = (
+    const userBMintBefore = (await getAccount(provider.connection, ataB)).amount
+    const userBPTokenBefore = (
+      await getAccount(
+        provider.connection,
+        getAssociatedTokenAddressSync(pMint, userB.publicKey)
+      )
+    ).amount
+    const vaultMintBefore = (
       await getAccount(provider.connection, vaultTokenAccount)
     ).amount
 
@@ -418,30 +426,40 @@ describe('premium-vaults multi-user', () => {
       claimer: userB.publicKey,
       vaultIndex,
       round,
-      mint,
-      vaultTokenAccount,
-      claimerTokenAccount: ataB
+      pMint
     })
     await signAndSend(provider.connection, new Transaction().add(claimIx), [
       userB
     ])
 
+    // pToken balance increased by reward amount
     assert.equal(
-      (await getAccount(provider.connection, ataB)).amount,
-      userBBefore + rewardAmount
-    )
-    assert.equal(
-      (await getAccount(provider.connection, vaultTokenAccount)).amount,
-      vaultBefore - rewardAmount
+      (
+        await getAccount(
+          provider.connection,
+          getAssociatedTokenAddressSync(pMint, userB.publicKey)
+        )
+      ).amount,
+      userBPTokenBefore + rewardAmount
     )
 
-    await assertBalance(provider.connection, userB.publicKey, pMint, DEPOSIT_B)
+    // Token balance unchanged (no transfer, only pToken mint)
+    assert.equal(
+      (await getAccount(provider.connection, ataB)).amount,
+      userBMintBefore
+    )
+
+    // Vault token balance unchanged
+    assert.equal(
+      (await getAccount(provider.connection, vaultTokenAccount)).amount,
+      vaultMintBefore
+    )
 
     // Verify reward account closed
     const rewardInfo = await provider.connection.getAccountInfo(rewardPda)
     assert.equal(rewardInfo, null, 'Reward account should be closed')
 
-    // hack and add tokens for withdrawals, norammly thei will originate from CPI lending program durning claim, but since we are not testing that here, we just mint directly to the vault token account
+    // Mint tokens to vault to cover the reward pTokens (in production this comes from lending yield)
     await mintTo(
       provider.connection,
       admin,
@@ -453,22 +471,24 @@ describe('premium-vaults multi-user', () => {
   })
 
   it('all users withdraw full balance', async () => {
-    const users: [Keypair, PublicKey, PublicKey, bigint][] = [
-      [userA, ataA, depositorPTokenAccountA, DEPOSIT_A],
-      [userB, ataB, depositorPTokenAccountB, DEPOSIT_B],
-      [userC, ataC, depositorPTokenAccountC, DEPOSIT_C]
+    // Get reward amount for assertions
+    vault.fetcher.vaults.clear()
+    const vaultAccount = await vault.fetcher.getVaultByIndex(vaultIndex)
+    const round = vaultAccount.currentRound - 1
+    // Reward account is closed, but we know rewardAmount from the commit (local mode: 1000 rate delta)
+    // UserB has DEPOSIT_B + rewardAmount pTokens, others have their deposit amounts
+
+    const users: [Keypair, PublicKey, PublicKey][] = [
+      [userA, ataA, depositorPTokenAccountA],
+      [userB, ataB, depositorPTokenAccountB],
+      [userC, ataC, depositorPTokenAccountC]
     ]
 
     let expectedVaultBalance = (
       await getAccount(provider.connection, vaultTokenAccount)
     ).amount
 
-    for (const [
-      user,
-      ata,
-      withdrawerPTokenAccount,
-      principalDeposit
-    ] of users) {
+    for (const [user, ata, withdrawerPTokenAccount] of users) {
       const userMintBefore = (await getAccount(provider.connection, ata)).amount
       const userPTokenBefore = (
         await getAccount(provider.connection, withdrawerPTokenAccount)
@@ -489,17 +509,17 @@ describe('premium-vaults multi-user', () => {
       })
       await signAndSend(provider.connection, new Transaction().add(ix), [user])
 
-      expectedVaultBalance -= principalDeposit
+      expectedVaultBalance -= userPTokenBefore
 
+      // User gets back tokens equal to their pToken balance
       assert.equal(
         (await getAccount(provider.connection, ata)).amount,
-        userMintBefore + principalDeposit
+        userMintBefore + userPTokenBefore
       )
       assert.equal(
         (await getAccount(provider.connection, withdrawerPTokenAccount)).amount,
         0n
       )
-      assert.equal(userPTokenBefore, principalDeposit)
       assert.equal(
         (await getAccount(provider.connection, vaultTokenAccount)).amount,
         expectedVaultBalance
@@ -509,12 +529,6 @@ describe('premium-vaults multi-user', () => {
     await assertBalance(provider.connection, userA.publicKey, mint, MINT_AMOUNT)
     await assertBalance(provider.connection, userA.publicKey, pMint, 0n)
 
-    await assertBalance(
-      provider.connection,
-      userB.publicKey,
-      mint,
-      MINT_AMOUNT + (DEPOSIT_A + DEPOSIT_B + DEPOSIT_C - TOTAL) + 3600n // reward amount from previous test
-    )
     await assertBalance(provider.connection, userB.publicKey, pMint, 0n)
 
     await assertBalance(provider.connection, userC.publicKey, mint, MINT_AMOUNT)

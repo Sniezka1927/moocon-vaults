@@ -1,5 +1,9 @@
 import { Connection, SystemProgram } from '@solana/web3.js'
-import { ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddressSync
+} from '@solana/spl-token'
 import type { PremiumVaults } from './idl/premium_vaults'
 import IDL from './idl/premium_vaults.json'
 import { AnchorProvider, BN, Program } from '@coral-xyz/anchor'
@@ -64,7 +68,8 @@ export class Vault {
   }
 
   async initializeVaultIx(params: IInitializeVaultIx) {
-    const { admin, mint, lending, pMint, minDeposit, withdrawFee } = params
+    const { admin, mint, fMint, lending, pMint, minDeposit, withdrawFee } =
+      params
     const [state] = this.fetcher.getStateAddress()
     const stateAccount = await this.fetcher.getState()
     const [vault] = this.fetcher.getVaultAddress(stateAccount.lastVault)
@@ -80,6 +85,7 @@ export class Vault {
         vault,
         lending,
         mint,
+        fMint,
         pMint,
         systemProgram: SystemProgram.programId
       })
@@ -130,9 +136,8 @@ export class Vault {
       secretHash,
       mint,
       vaultFTokenAccount,
-      vaultTokenAccount,
-      claimAccount,
-      lendingAccounts,
+      fTokenMint,
+      lending,
       treasury,
       networkState,
       request
@@ -155,31 +160,18 @@ export class Vault {
         vrfAuthority,
         state,
         vault,
-        lending: lendingAccounts.lending,
+        lending,
         mint,
         vaultFTokenAccount,
-        vaultTokenAccount,
+        fTokenMint,
         reward,
-        lendingAdmin: lendingAccounts.lendingAdmin,
-        fTokenMint: lendingAccounts.fTokenMint,
-        supplyTokenReservesLiquidity:
-          lendingAccounts.supplyTokenReservesLiquidity,
-        lendingSupplyPositionOnLiquidity:
-          lendingAccounts.lendingSupplyPositionOnLiquidity,
-        rateModel: lendingAccounts.rateModel,
-        liquidityVault: lendingAccounts.vault,
-        claimAccount,
-        liquidity: lendingAccounts.liquidity,
-        liquidityProgram: lendingAccounts.liquidityProgram,
-        rewardsRateModel: lendingAccounts.rewardsRateModel,
         treasury,
         networkState,
         request,
         vrf: VRF_PROGRAM_ID,
         tokenProgram,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        systemProgram: SystemProgram.programId,
-        lendingProgram: lendingAccounts.lendingProgram
+        systemProgram: SystemProgram.programId
       })
       .instruction()
   }
@@ -321,20 +313,12 @@ export class Vault {
   }
 
   async claimIx(params: IClaimIx) {
-    const {
-      claimer,
-      vaultIndex,
-      round,
-      mint,
-      vaultTokenAccount,
-      claimerTokenAccount
-    } = params
+    const { claimer, vaultIndex, round, pMint } = params
     const [state] = this.fetcher.getStateAddress()
     const [vault] = this.fetcher.getVaultAddress(vaultIndex)
     const [reward] = this.fetcher.getRewardAddress(vault, round)
 
-    // Fetch vault to get mint for stake PDA
-    const tokenProgram = await this.fetcher.getTokenProgram(mint)
+    const claimerPTokenAccount = getAssociatedTokenAddressSync(pMint, claimer)
 
     // Fetch state for rentRecipient (vrf_authority)
     const stateAccount = await this.fetcher.getState()
@@ -346,10 +330,11 @@ export class Vault {
         state,
         vault,
         reward,
-        mint,
-        vaultTokenAccount,
-        claimerTokenAccount,
-        tokenProgram,
+        pMint,
+        claimerPTokenAccount,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
         rentRecipient: stateAccount.vrfAuthority
       })
       .instruction()

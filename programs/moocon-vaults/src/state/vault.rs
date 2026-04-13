@@ -4,7 +4,9 @@ use anchor_lang::prelude::*;
 #[derive(InitSpace)]
 pub struct Vault {
     pub mint: Pubkey,
+    pub f_mint: Pubkey,
     pub p_mint: Pubkey,
+
     pub lending: Pubkey, // Jupiter Lending account PDA
 
     pub min_deposit: u64, // Minimum deposit amount in underlying tokens

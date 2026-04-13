@@ -46,8 +46,10 @@ describe('reward-lifecycle', () => {
 
   let vault: Vault
   let mint: PublicKey
+  let fMint: PublicKey
   let userAta: PublicKey
   let vaultTokenAccount: PublicKey
+  let vaultFTokenAccount: PublicKey
   let vaultPda: PublicKey
   let vaultIndex: number
   let pMint: PublicKey
@@ -99,6 +101,14 @@ describe('reward-lifecycle', () => {
       DECIMALS
     )
 
+    fMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      DECIMALS
+    )
+
     vault.fetcher.state = null
     const stateAcc = await vault.fetcher.getState()
     vaultIndex = stateAcc.lastVault
@@ -108,6 +118,7 @@ describe('reward-lifecycle', () => {
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint,
       pMint,
       minDeposit: 0n,
       lending: DUMMY_WRITABLE,
@@ -121,6 +132,14 @@ describe('reward-lifecycle', () => {
       provider.connection,
       admin,
       mint,
+      vaultPda,
+      Keypair.generate()
+    )
+
+    vaultFTokenAccount = await createAccount(
+      provider.connection,
+      admin,
+      fMint,
       vaultPda,
       Keypair.generate()
     )
@@ -146,6 +165,16 @@ describe('reward-lifecycle', () => {
     } catch {
       /* VRF already initialized */
     }
+
+    // Mint fTokens to vault to simulate lending position (needed for yield calculation)
+    await mintTo(
+      provider.connection,
+      admin,
+      fMint,
+      vaultFTokenAccount,
+      admin,
+      DEPOSIT_AMOUNT
+    )
 
     userAta = await createAccount(
       provider.connection,
@@ -214,10 +243,9 @@ describe('reward-lifecycle', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request
@@ -266,9 +294,7 @@ describe('reward-lifecycle', () => {
     const claimIx = await vault.claimIx({
       claimer: user.publicKey,
       vaultIndex,
-      claimerTokenAccount: userAta,
-      mint,
-      vaultTokenAccount,
+      pMint,
       round
     })
     await signAndSend(provider.connection, new Transaction().add(claimIx), [
@@ -294,10 +320,9 @@ describe('reward-lifecycle', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request
@@ -353,9 +378,7 @@ describe('reward-lifecycle', () => {
     const claimIx = await vault.claimIx({
       claimer: user.publicKey,
       vaultIndex,
-      claimerTokenAccount: userAta,
-      mint,
-      vaultTokenAccount,
+      pMint,
       round
     })
     await signAndSend(provider.connection, new Transaction().add(claimIx), [
@@ -381,10 +404,9 @@ describe('reward-lifecycle', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request
@@ -440,9 +462,7 @@ describe('reward-lifecycle', () => {
     const claimIx = await vault.claimIx({
       claimer: user.publicKey,
       vaultIndex,
-      claimerTokenAccount: userAta,
-      mint,
-      vaultTokenAccount,
+      pMint,
       round
     })
     await signAndSend(provider.connection, new Transaction().add(claimIx), [

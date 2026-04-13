@@ -15,6 +15,7 @@ describe('premium-vaults admin', () => {
   const DUMMY_LENDING = Keypair.generate().publicKey
   let vault: Vault
   let mint: anchor.web3.PublicKey
+  let fMint: anchor.web3.PublicKey
 
   before(async () => {
     vault = new Vault(provider.connection)
@@ -22,6 +23,14 @@ describe('premium-vaults admin', () => {
     await airdrop(provider.connection, admin.publicKey, 2 * LAMPORTS_PER_SOL)
 
     mint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      6
+    )
+
+    fMint = await createMint(
       provider.connection,
       admin,
       admin.publicKey,
@@ -84,6 +93,7 @@ describe('premium-vaults admin', () => {
     const ix = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint,
       pMint,
       lending: DUMMY_LENDING,
       minDeposit: 1_000_000n,
@@ -97,6 +107,7 @@ describe('premium-vaults admin', () => {
     assert.equal(vaultAccount.minDeposit, 1_000_000n)
     assert.equal(vaultAccount.withdrawFee, 50n)
     assert.ok(vaultAccount.mint.equals(mint), 'mint mismatch')
+    assert.ok(vaultAccount.fMint.equals(fMint), 'fMint mismatch')
     assert.ok(vaultAccount.pMint.equals(pMint), 'pMint mismatch')
     assert.ok(vaultAccount.lending.equals(DUMMY_LENDING), 'lending mismatch')
 

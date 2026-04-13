@@ -19,7 +19,6 @@ import {
   VRF_FULFILLMENT_AUTHORITY,
   VRF_TEST_AUTHORITY,
   airdrop,
-  dummyLending,
   sleep
 } from './test-utils'
 
@@ -36,8 +35,9 @@ describe('premium-vaults randomness', () => {
 
   let vault: Vault
   let mint: anchor.web3.PublicKey
+  let fMint: anchor.web3.PublicKey
   let pMint: anchor.web3.PublicKey
-  let vaultTokenAccount: anchor.web3.PublicKey
+  let vaultFTokenAccount: anchor.web3.PublicKey
 
   // VRF seed derived from merkleRoot XOR secretHash
   const merkleRoot = new Array(32).fill(5)
@@ -95,6 +95,14 @@ describe('premium-vaults randomness', () => {
       6
     )
 
+    fMint = await createMint(
+      provider.connection,
+      vrfAuthority,
+      vrfAuthority.publicKey,
+      null,
+      6
+    )
+
     const [vaultPda] = vault.fetcher.getVaultAddress(0)
     pMint = await createMint(
       provider.connection,
@@ -107,6 +115,7 @@ describe('premium-vaults randomness', () => {
     const vaultIx = await vault.initializeVaultIx({
       admin: vrfAuthority.publicKey,
       mint,
+      fMint,
       pMint,
       minDeposit: 0n,
       lending: DUMMY_WRITABLE,
@@ -116,10 +125,10 @@ describe('premium-vaults randomness', () => {
       vrfAuthority
     ])
 
-    vaultTokenAccount = await createAccount(
+    vaultFTokenAccount = await createAccount(
       provider.connection,
       vrfAuthority,
-      mint,
+      fMint,
       vaultPda,
       Keypair.generate()
     )
@@ -150,10 +159,9 @@ describe('premium-vaults randomness', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: networkStateAcc.config.treasury,
       networkState,
       request

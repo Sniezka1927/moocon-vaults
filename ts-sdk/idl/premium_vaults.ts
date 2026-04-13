@@ -28,6 +28,7 @@ export type PremiumVaults = {
       "accounts": [
         {
           "name": "claimer",
+          "writable": true,
           "signer": true
         },
         {
@@ -96,19 +97,110 @@ export type PremiumVaults = {
           }
         },
         {
-          "name": "mint"
-        },
-        {
-          "name": "vaultTokenAccount",
+          "name": "pMint",
           "writable": true
         },
         {
-          "name": "claimerTokenAccount",
-          "writable": true
+          "name": "claimerPTokenAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "claimer"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
         },
         {
           "name": "tokenProgram",
           "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associatedTokenProgram",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         },
         {
           "name": "rentRecipient",
@@ -252,9 +344,6 @@ export type PremiumVaults = {
         {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "lendingProgram"
         }
       ],
       "args": [
@@ -339,10 +428,7 @@ export type PremiumVaults = {
           "writable": true
         },
         {
-          "name": "vaultTokenAccount",
-          "docs": [
-            "Vault's token account — receives redeemed tokens from lending"
-          ],
+          "name": "fTokenMint",
           "writable": true
         },
         {
@@ -373,43 +459,6 @@ export type PremiumVaults = {
           }
         },
         {
-          "name": "lendingAdmin"
-        },
-        {
-          "name": "fTokenMint",
-          "writable": true
-        },
-        {
-          "name": "supplyTokenReservesLiquidity",
-          "writable": true
-        },
-        {
-          "name": "lendingSupplyPositionOnLiquidity",
-          "writable": true
-        },
-        {
-          "name": "rateModel"
-        },
-        {
-          "name": "liquidityVault",
-          "writable": true
-        },
-        {
-          "name": "claimAccount",
-          "writable": true
-        },
-        {
-          "name": "liquidity",
-          "writable": true
-        },
-        {
-          "name": "liquidityProgram",
-          "writable": true
-        },
-        {
-          "name": "rewardsRateModel"
-        },
-        {
           "name": "treasury",
           "writable": true
         },
@@ -436,9 +485,6 @@ export type PremiumVaults = {
         {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "lendingProgram"
         }
       ],
       "args": [
@@ -823,6 +869,9 @@ export type PremiumVaults = {
         },
         {
           "name": "mint"
+        },
+        {
+          "name": "fMint"
         },
         {
           "name": "pMint"
@@ -1852,6 +1901,10 @@ export type PremiumVaults = {
             "type": "pubkey"
           },
           {
+            "name": "fMint",
+            "type": "pubkey"
+          },
+          {
             "name": "pMint",
             "type": "pubkey"
           },
@@ -1922,6 +1975,14 @@ export type PremiumVaults = {
       "name": "feeDenominator",
       "type": "u64",
       "value": "1000000"
+    },
+    {
+      "name": "jupiterLendingProgramId",
+      "docs": [
+        "https://dev.jup.ag/docs/lend/program-addresses"
+      ],
+      "type": "pubkey",
+      "value": "5za4DTEi2hT35dWfNysVgFSeoJ93xTZsKc8Za4gfxEni"
     },
     {
       "name": "rewardSeed",

@@ -16,12 +16,11 @@ use crate::{
         REWARD_TYPE_WEEKLY, SHARE_DENOMINATOR, WEEKLY_JACKPOT_SHARE,
     },
     error::ErrorCode,
-    CommitEvent, Reward, State, Vault, JUPITER_LENDING_PROGRAM_ID, REWARD_SEED, STATE_SEED,
-    VAULT_SEED,
+    CommitEvent, Reward, State, Vault, REWARD_SEED, STATE_SEED, VAULT_SEED,
 };
 
 #[cfg(not(feature = "local"))]
-use crate::{read_exchange_rate, WithdrawParams};
+use crate::read_exchange_rate;
 
 #[derive(Accounts)]
 #[instruction(vault_index: u32, round: u32)]
@@ -58,9 +57,8 @@ pub struct Commit<'info> {
     )]
     pub vault_f_token_account: Box<InterfaceAccount<'info, TokenAccount>>,
 
-    /// Vault's token account — receives redeemed tokens from lending
-    #[account(mut, token::mint = mint.key(), token::authority = vault.key())]
-    pub vault_token_account: Box<InterfaceAccount<'info, TokenAccount>>,
+    #[account(mut, constraint = vault.load()?.f_mint == f_token_mint.key() @ ErrorCode::InvalidMint)]
+    pub f_token_mint: InterfaceAccount<'info, Mint>,
 
     #[account(
         init,
@@ -70,35 +68,6 @@ pub struct Commit<'info> {
         bump,
     )]
     pub reward: AccountLoader<'info, Reward>,
-
-    // Lending CPI accounts (validated by lending program via CPI)
-    /// CHECK: Lending admin — validated by lending program via CPI
-    pub lending_admin: AccountInfo<'info>,
-    /// CHECK: fToken mint — validated by lending program via CPI
-    #[account(mut)]
-    pub f_token_mint: AccountInfo<'info>,
-    /// CHECK: Liquidity protocol account — validated by lending program via CPI
-    #[account(mut)]
-    pub supply_token_reserves_liquidity: AccountInfo<'info>,
-    /// CHECK: Liquidity protocol account — validated by lending program via CPI
-    #[account(mut)]
-    pub lending_supply_position_on_liquidity: AccountInfo<'info>,
-    /// CHECK: Rate model — validated by lending program via CPI
-    pub rate_model: AccountInfo<'info>,
-    /// CHECK: Liquidity vault — validated by lending program via CPI
-    #[account(mut)]
-    pub liquidity_vault: AccountInfo<'info>,
-    /// CHECK: Claim account — validated by lending program via CPI
-    #[account(mut)]
-    pub claim_account: AccountInfo<'info>,
-    /// CHECK: Liquidity account — validated by lending program via CPI
-    #[account(mut)]
-    pub liquidity: AccountInfo<'info>,
-    /// CHECK: Liquidity program — validated by lending program via CPI
-    #[account(mut)]
-    pub liquidity_program: AccountInfo<'info>,
-    /// CHECK: Rewards rate model — validated by lending program via CPI
-    pub rewards_rate_model: AccountInfo<'info>,
 
     // Orao VRF accounts
     /// CHECK: Orao treasury — validated by the Orao program via CPI
@@ -114,15 +83,11 @@ pub struct Commit<'info> {
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
-
-    /// CHECK: Jupiter lending program — target of CPI
-    #[account(constraint = lending_program.key() == JUPITER_LENDING_PROGRAM_ID @ ErrorCode::InvalidLendingProgram)]
-    pub lending_program: UncheckedAccount<'info>,
 }
 
 pub fn handler(
     ctx: Context<Commit>,
-    vault_index: u32,
+    _vault_index: u32,
     round: u32,
     reward_type: u8,
     tickets: u64,
@@ -131,7 +96,7 @@ pub fn handler(
 ) -> Result<()> {
     let now = Clock::get()?.unix_timestamp;
 
-    let (reward_amount, vault_bump) = {
+    let reward_amount = {
         let state = ctx.accounts.state.load()?;
         let mut reward = ctx.accounts.reward.load_init()?;
         let mut vault = ctx.accounts.vault.load_mut()?;
@@ -255,44 +220,8 @@ pub fn handler(
             _ => unreachable!(),
         };
 
-        (reward_amount, vault.bump)
+        reward_amount
     };
-
-    // Withdraw reward_amount from lending to lock in real tokens
-    #[cfg(not(feature = "local"))]
-    if reward_amount > 0 {
-        let vault_index_bytes = vault_index.to_le_bytes();
-        let seeds: &[&[u8]] = &[VAULT_SEED, &vault_index_bytes, &[vault_bump]];
-
-        let params = WithdrawParams {
-            signer: ctx.accounts.vault.to_account_info(),
-            owner_token_account: ctx.accounts.vault_f_token_account.to_account_info(),
-            recipient_token_account: ctx.accounts.vault_token_account.to_account_info(),
-            lending_admin: ctx.accounts.lending_admin.to_account_info(),
-            lending: ctx.accounts.lending.to_account_info(),
-            mint: ctx.accounts.mint.to_account_info(),
-            f_token_mint: ctx.accounts.f_token_mint.to_account_info(),
-            supply_token_reserves_liquidity: ctx
-                .accounts
-                .supply_token_reserves_liquidity
-                .to_account_info(),
-            lending_supply_position_on_liquidity: ctx
-                .accounts
-                .lending_supply_position_on_liquidity
-                .to_account_info(),
-            rate_model: ctx.accounts.rate_model.to_account_info(),
-            vault: ctx.accounts.liquidity_vault.to_account_info(),
-            claim_account: ctx.accounts.claim_account.to_account_info(),
-            liquidity: ctx.accounts.liquidity.to_account_info(),
-            liquidity_program: ctx.accounts.liquidity_program.to_account_info(),
-            rewards_rate_model: ctx.accounts.rewards_rate_model.to_account_info(),
-            token_program: ctx.accounts.token_program.to_account_info(),
-            associated_token_program: ctx.accounts.associated_token_program.to_account_info(),
-            system_program: ctx.accounts.system_program.to_account_info(),
-            lending_program: ctx.accounts.lending_program.clone(),
-        };
-        params.withdraw_signed(reward_amount, &[seeds])?;
-    }
 
     // Compute VRF seed: merkle_root XOR secret_hash
     let mut vrf_seed = [0u8; 32];

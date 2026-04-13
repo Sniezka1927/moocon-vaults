@@ -19,8 +19,7 @@ import { signAndSend } from '../ts-sdk/utils'
 import {
   VRF_TEST_AUTHORITY,
   VRF_FULFILLMENT_AUTHORITY,
-  airdrop,
-  dummyLending
+  airdrop
 } from './test-utils'
 
 describe('commit-', () => {
@@ -35,7 +34,8 @@ describe('commit-', () => {
 
   let vault: Vault
   let mint: PublicKey
-  let vaultTokenAccount: PublicKey
+  let fMint: PublicKey
+  let vaultFTokenAccount: PublicKey
   let vaultIndex: number
   let vaultPda: PublicKey
   let pMint: PublicKey
@@ -67,6 +67,14 @@ describe('commit-', () => {
       DECIMALS
     )
 
+    fMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      DECIMALS
+    )
+
     vault.fetcher.state = null
     const stateAcc = await vault.fetcher.getState()
     vaultIndex = stateAcc.lastVault
@@ -83,6 +91,7 @@ describe('commit-', () => {
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint,
       minDeposit: 0n,
       lending: DUMMY_WRITABLE,
       pMint,
@@ -92,10 +101,10 @@ describe('commit-', () => {
       admin
     ])
 
-    vaultTokenAccount = await createAccount(
+    vaultFTokenAccount = await createAccount(
       provider.connection,
       admin,
-      mint,
+      fMint,
       vaultPda,
       Keypair.generate()
     )
@@ -144,10 +153,9 @@ describe('commit-', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request: randomnessAccountAddress(vrfSeed)
@@ -182,9 +190,18 @@ describe('commit-', () => {
       DECIMALS
     )
 
+    const unsyncedFMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      DECIMALS
+    )
+
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint: unsyncedMint,
+      fMint: unsyncedFMint,
       minDeposit: 0n,
       lending: DUMMY_WRITABLE,
       pMint,
@@ -195,10 +212,10 @@ describe('commit-', () => {
     ])
 
     const [unsyncedPda] = vault.fetcher.getVaultAddress(unsyncedIndex)
-    const unsyncedVaultToken = await createAccount(
+    const unsyncedVaultFToken = await createAccount(
       provider.connection,
       admin,
-      unsyncedMint,
+      unsyncedFMint,
       unsyncedPda,
       Keypair.generate()
     )
@@ -219,10 +236,9 @@ describe('commit-', () => {
       merkleRoot,
       secretHash,
       mint: unsyncedMint,
-      vaultFTokenAccount: unsyncedVaultToken,
-      vaultTokenAccount: unsyncedVaultToken,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount: unsyncedVaultFToken,
+      fTokenMint: unsyncedFMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request: randomnessAccountAddress(vrfSeed)
@@ -257,10 +273,9 @@ describe('commit-', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request: randomnessAccountAddress(vrfSeed)
@@ -300,10 +315,9 @@ describe('commit-', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request: randomnessAccountAddress(vrfSeed)

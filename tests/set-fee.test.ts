@@ -48,19 +48,29 @@ describe('set-fee-', () => {
       null,
       6
     )
+
+    const fMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      6
+    )
+
+    vault.fetcher.state = null
+    const stateAcc = await vault.fetcher.getState()
+    vaultIndex = stateAcc.lastVault
+
     // Get vault PDA before creating pMint (pMint authority = vaultPda)
     ;[vaultPda] = vault.fetcher.getVaultAddress(vaultIndex)
 
     // Create pMint owned by vaultPda
     pMint = await createMint(provider.connection, admin, vaultPda, null, 6)
 
-    vault.fetcher.state = null
-    const stateAcc = await vault.fetcher.getState()
-    vaultIndex = stateAcc.lastVault
-
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint,
       lending: DUMMY_WRITABLE,
       minDeposit: 0n,
       pMint,

@@ -22,7 +22,6 @@ import {
   VRF_TEST_AUTHORITY,
   VRF_FULFILLMENT_AUTHORITY,
   airdrop,
-  dummyLending,
   sleep
 } from './test-utils'
 
@@ -38,7 +37,8 @@ describe('reveal-', () => {
 
   let vault: Vault
   let mint: PublicKey
-  let vaultTokenAccount: PublicKey
+  let fMint: PublicKey
+  let vaultFTokenAccount: PublicKey
   let vaultIndex: number
   let vaultPda: PublicKey
   let pMint: PublicKey
@@ -88,18 +88,27 @@ describe('reveal-', () => {
       null,
       DECIMALS
     )
+
+    fMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      DECIMALS
+    )
+
+    vault.fetcher.state = null
+    const stateAcc = await vault.fetcher.getState()
+    vaultIndex = stateAcc.lastVault
     ;[vaultPda] = vault.fetcher.getVaultAddress(vaultIndex)
 
     // Create pMint owned by vaultPda
     pMint = await createMint(provider.connection, admin, vaultPda, null, 6)
 
-    vault.fetcher.state = null
-    const stateAcc = await vault.fetcher.getState()
-    vaultIndex = stateAcc.lastVault
-
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint,
       lending: DUMMY_WRITABLE,
       minDeposit: 0n,
       pMint,
@@ -109,10 +118,10 @@ describe('reveal-', () => {
       admin
     ])
 
-    vaultTokenAccount = await createAccount(
+    vaultFTokenAccount = await createAccount(
       provider.connection,
       admin,
-      mint,
+      fMint,
       vaultPda,
       Keypair.generate()
     )
@@ -157,10 +166,9 @@ describe('reveal-', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request
@@ -221,10 +229,9 @@ describe('reveal-', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request

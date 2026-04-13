@@ -119,9 +119,19 @@ describe('premium-vaults deposit', () => {
       DECIMALS
     )
 
+    // Create fToken mint (before vault init, vault needs fMint reference)
+    fTokenMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      DECIMALS
+    )
+
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint: fTokenMint,
       pMint,
       lending: DUMMY_WRITABLE,
       minDeposit: 500_000_000_000n,
@@ -143,14 +153,7 @@ describe('premium-vaults deposit', () => {
       true
     )
 
-    // Create fToken mint and vault fToken ATA for withdraw tests
-    fTokenMint = await createMint(
-      provider.connection,
-      admin,
-      admin.publicKey,
-      null,
-      DECIMALS
-    )
+    // Create vault fToken ATA for withdraw tests
     vaultFTokenAccount = await createAssociatedTokenAccount(
       provider.connection,
       admin,
@@ -407,10 +410,9 @@ describe('premium-vaults deposit', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState,
       request
@@ -451,7 +453,11 @@ describe('premium-vaults deposit', () => {
     const reward = await vault.fetcher.getRewardByAddress(rewardPda)
     const rewardAmount = reward.amount
 
-    // Token balance before claim
+    // pToken balance before claim
+    const pTokenAta = getAssociatedTokenAddressSync(pMint, user.publicKey)
+    const pTokenBefore = (await getAccount(provider.connection, pTokenAta)).amount
+
+    // Token balance before claim (should not change)
     const tokenBefore = (await getAccount(provider.connection, userAta)).amount
 
     // Claim
@@ -459,17 +465,19 @@ describe('premium-vaults deposit', () => {
       claimer: user.publicKey,
       vaultIndex,
       round,
-      mint,
-      vaultTokenAccount,
-      claimerTokenAccount: userAta
+      pMint
     })
     await signAndSend(provider.connection, new Transaction().add(claimIx), [
       user
     ])
 
-    // Verify token balance increased by reward amount
+    // Verify pToken balance increased by reward amount
+    const pTokenAfter = (await getAccount(provider.connection, pTokenAta)).amount
+    assert.equal(pTokenAfter, pTokenBefore + rewardAmount)
+
+    // Verify token balance unchanged (no transfer, only pToken mint)
     const tokenAfter = (await getAccount(provider.connection, userAta)).amount
-    assert.equal(tokenAfter, tokenBefore + rewardAmount)
+    assert.equal(tokenAfter, tokenBefore)
 
     // Verify reward account is closed
     const rewardInfo = await provider.connection.getAccountInfo(rewardPda)
@@ -488,9 +496,7 @@ describe('premium-vaults deposit', () => {
       claimer: user.publicKey,
       vaultIndex,
       round: claimedRound,
-      mint,
-      vaultTokenAccount,
-      claimerTokenAccount: userAta
+      pMint
     })
     try {
       await signAndSend(provider.connection, new Transaction().add(claimIx), [
@@ -547,10 +553,9 @@ describe('premium-vaults deposit', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState,
       request
@@ -593,9 +598,7 @@ describe('premium-vaults deposit', () => {
       claimer: user.publicKey,
       vaultIndex,
       round,
-      mint,
-      vaultTokenAccount,
-      claimerTokenAccount: userAta
+      pMint
     })
     try {
       await signAndSend(provider.connection, new Transaction().add(claimIx), [

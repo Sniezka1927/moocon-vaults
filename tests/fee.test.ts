@@ -94,10 +94,20 @@ describe('premium-vaults fees', () => {
       DECIMALS
     )
 
+    // Create fToken mint (before vault init)
+    fTokenMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      DECIMALS
+    )
+
     // Initialize vault with 5% withdraw fee
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint: fTokenMint,
       pMint,
       lending: DUMMY_WRITABLE,
       minDeposit: 0n,
@@ -119,14 +129,7 @@ describe('premium-vaults fees', () => {
       true
     )
 
-    // Create fToken mint and vault fToken ATA for withdraw tests
-    fTokenMint = await createMint(
-      provider.connection,
-      admin,
-      admin.publicKey,
-      null,
-      DECIMALS
-    )
+    // Create vault fToken ATA for withdraw tests
     vaultFTokenAccount = await createAssociatedTokenAccount(
       provider.connection,
       admin,

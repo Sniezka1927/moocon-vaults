@@ -22,6 +22,7 @@ type RawReward = IdlAccounts<PremiumVaults>['reward']
 // Parsed types with u64 as bigint, u32 as number
 export type VaultAccount = {
   mint: PublicKey
+  fMint: PublicKey
   pMint: PublicKey
   lending: PublicKey
 
@@ -261,6 +262,7 @@ function bnToBigInt(v: BN): bigint {
 export function parseVault(raw: RawVault): VaultAccount {
   return {
     mint: raw.mint,
+    fMint: raw.fMint,
     pMint: raw.pMint,
     lending: raw.lending,
     minDeposit: bnToBigInt(raw.minDeposit),

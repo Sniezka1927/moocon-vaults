@@ -27,6 +27,7 @@ pub struct InitializeVault<'info> {
     pub lending: AccountInfo<'info>,
 
     pub mint: InterfaceAccount<'info, Mint>,
+    pub f_mint: InterfaceAccount<'info, Mint>,
     pub p_mint: InterfaceAccount<'info, Mint>,
     pub system_program: Program<'info, System>,
 }
@@ -53,8 +54,9 @@ pub fn handler(ctx: Context<InitializeVault>, min_deposit: u64, withdraw_fee: u6
     require!(withdraw_fee <= FEE_DENOMINATOR, ErrorCode::InvalidFee);
 
     vault.mint = ctx.accounts.mint.key();
-    vault.lending = ctx.accounts.lending.key();
+    vault.f_mint = ctx.accounts.f_mint.key();
     vault.p_mint = ctx.accounts.p_mint.key();
+    vault.lending = ctx.accounts.lending.key();
 
     vault.min_deposit = min_deposit;
     vault.accumulated_fee = 0;

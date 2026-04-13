@@ -44,9 +44,11 @@ describe('set-winner-', () => {
 
   let vault: Vault
   let mint: PublicKey
+  let fMint: PublicKey
   let pMint: PublicKey
   let userAta: PublicKey
   let vaultTokenAccount: PublicKey
+  let vaultFTokenAccount: PublicKey
   let vaultPda: PublicKey
   let vaultIndex: number
   let depositorPTokenAccount: PublicKey
@@ -102,6 +104,14 @@ describe('set-winner-', () => {
       DECIMALS
     )
 
+    fMint = await createMint(
+      provider.connection,
+      admin,
+      admin.publicKey,
+      null,
+      DECIMALS
+    )
+
     vault.fetcher.state = null
     const stateAcc = await vault.fetcher.getState()
     vaultIndex = stateAcc.lastVault
@@ -118,6 +128,7 @@ describe('set-winner-', () => {
     const initVaultIx = await vault.initializeVaultIx({
       admin: admin.publicKey,
       mint,
+      fMint,
       minDeposit: 0n,
       pMint,
       lending: DUMMY_WRITABLE,
@@ -131,6 +142,17 @@ describe('set-winner-', () => {
       provider.connection,
       admin,
       mint,
+      vaultPda,
+      undefined,
+      undefined,
+      undefined,
+      true
+    )
+
+    vaultFTokenAccount = await createAssociatedTokenAccount(
+      provider.connection,
+      admin,
+      fMint,
       vaultPda,
       undefined,
       undefined,
@@ -232,10 +254,9 @@ describe('set-winner-', () => {
       merkleRoot,
       secretHash,
       mint,
-      vaultFTokenAccount: vaultTokenAccount,
-      vaultTokenAccount,
-      claimAccount: DUMMY_WRITABLE,
-      lendingAccounts: dummyLending({ lending: DUMMY_WRITABLE }),
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
       treasury: (await vrf.getNetworkState()).config.treasury,
       networkState: networkStateAccountAddress(),
       request
