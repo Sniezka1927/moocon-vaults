@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react'
 import { AppLayout } from '@/components/app-layout'
-import { GlobalLoader } from '@/components/global-loader'
 import { AppProviders } from '@/lib/app-providers'
 import { RouteObject, useRoutes } from 'react-router'
-import { useIsFetching } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 
 import { HomePage } from '@/pages/home-page'
@@ -12,22 +9,9 @@ const routes: RouteObject[] = [{ index: true, element: <HomePage /> }]
 
 function AppContent() {
   const router = useRoutes(routes)
-  const isFetching = useIsFetching()
-  const [hasLoaded, setHasLoaded] = useState(false)
-
-  useEffect(() => {
-    if (!hasLoaded && isFetching === 0) {
-      // Small delay so the loader doesn't flash away instantly
-      const t = setTimeout(() => setHasLoaded(true), 200)
-      return () => clearTimeout(t)
-    }
-  }, [isFetching, hasLoaded])
 
   return (
-    <>
-      {!hasLoaded && <GlobalLoader visible={!hasLoaded} />}
-      <AppLayout>{router}</AppLayout>
-    </>
+    <AppLayout>{router}</AppLayout>
   )
 }
 

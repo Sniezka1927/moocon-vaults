@@ -1,49 +1,46 @@
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import react from '@vitejs/plugin-react'
-import { defineConfig, Plugin } from 'vite'
+import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
+import topLevelAwait from 'vite-plugin-top-level-await'
+import wasm from 'vite-plugin-wasm'
+import { compression } from 'vite-plugin-compression2'
+import inject from '@rollup/plugin-inject'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { resolve } from 'node:path'
-import { createRequire } from 'node:module'
-
-const require = createRequire(import.meta.url)
-
-const shimAliases = {
-  'vite-plugin-node-polyfills/shims/buffer': require.resolve(
-    'vite-plugin-node-polyfills/shims/buffer'
-  ),
-  'vite-plugin-node-polyfills/shims/global': require.resolve(
-    'vite-plugin-node-polyfills/shims/global'
-  ),
-  'vite-plugin-node-polyfills/shims/process': require.resolve(
-    'vite-plugin-node-polyfills/shims/process'
-  ),
-}
-
-const resolveNodePolyfillShims = (): Plugin => ({
-  name: 'resolve-node-polyfill-shims',
-  enforce: 'pre',
-  resolveId(source) {
-    if (source in shimAliases) {
-      return shimAliases[source as keyof typeof shimAliases]
-    }
-    return null
-  },
-})
 
 // https://vite.dev/config/
 export default defineConfig({
-  resolve: {
-    alias: shimAliases,
-  },
   plugins: [
-    resolveNodePolyfillShims(),
-    nodePolyfills({}),
     react(),
     tailwindcss(),
     viteTsconfigPaths({
-      //
-      root: resolve(__dirname),
+      root: resolve(__dirname)
     }),
+    topLevelAwait(),
+    wasm(),
+    compression(),
+    inject({
+      assert: ['assert', 'default']
+    }),
+    nodePolyfills()
   ],
+  define: {
+    'process.env.NODE_DEBUG': 'false',
+    'process.browser': `"test"`,
+    'process.version': `"test"`
+  },
+  build: {
+    target: 'es2020',
+    assetsInlineLimit: 0,
+    rollupOptions: {
+      external: ['fs/promises', 'path'],
+      plugins: [inject({ Buffer: ['buffer', 'Buffer'] })]
+    }
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'es2020'
+    }
+  }
 })
