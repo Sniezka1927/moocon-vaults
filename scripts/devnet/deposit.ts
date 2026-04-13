@@ -1,16 +1,15 @@
 import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { DEVNET_RPC } from '../consts'
-import { signAndSend, Vault } from '../../ts-sdk'
+import { JUPITER_USDC_ACCOUNTS, signAndSend, Vault } from '../../ts-sdk'
 import { DEVNET_ADMIN, WALLETS } from './keypairs'
 import { getAssociatedTokenAddressSync } from '@solana/spl-token'
-import { JUPITER_USDC_ACCOUNTS } from './jupiter-accounts'
 
 const connection = new Connection(DEVNET_RPC, { commitment: 'confirmed' })
 const vault = new Vault(connection)
 
 const MINT = new PublicKey('4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU') // USDC mint
-const P_MINT = new PublicKey('H2sg4kd9diQn2vodRk3sc6Wr7fKKoW5LcSGqsRQcp43J') // pUSDC mint
-
+const P_MINT = new PublicKey('5ZP4x2Q5cYjd3feJMpJtkY5AmJ9ify71qxMBQUHSXqPi') // pUSDC mint
+const VAULT_INDEX = 1
 const main = async () => {
   // const depositor = DEVNET_ADMIN.publicKey
   for (const wallet of WALLETS) {
@@ -22,8 +21,7 @@ const main = async () => {
     )
     const lendingAccounts = JUPITER_USDC_ACCOUNTS
     const amount = 3n * 10n ** 6n
-    const vaultIndex = 0
-    const vaultPda = vault.fetcher.getVaultAddress(vaultIndex)[0]
+    const vaultPda = vault.fetcher.getVaultAddress(VAULT_INDEX)[0]
     const vaultTokenAccount = getAssociatedTokenAddressSync(
       MINT,
       vaultPda,
@@ -44,7 +42,7 @@ const main = async () => {
       mint: MINT,
       pMint: P_MINT,
       recipientTokenAccount,
-      vaultIndex: 0,
+      vaultIndex: VAULT_INDEX,
       vaultTokenAccount
     })
 

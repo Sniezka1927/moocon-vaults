@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sync-idl": "cp ../target/types/premium_vaults.ts idl/premium_vaults.ts && cp ../target/idl/premium_vaults.json idl/premium_vaults.json"
+    "sync-idl": "cp ../target/types/moocon_vaults.ts idl/moocon_vaults.ts && cp ../target/idl/moocon_vaults.json idl/moocon_vaults.json"
   },
   "keywords": [],
   "author": "",

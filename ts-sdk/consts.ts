@@ -46,10 +46,33 @@ export const JUPITER_USDC_ACCOUNTS: ILendingAccounts = {
   decimal: 6
 }
 
-export const LENDING_ACCOUNTS_BY_MINT: LendingAccountsByMint = {
-  [USDC_MINT.toBase58()]: JUPITER_USDC_ACCOUNTS
+export const JUPITER_WSOL_ACCOUNTS: ILendingAccounts = {
+  mint: new PublicKey('So11111111111111111111111111111111111111112'),
+  fTokenMint: new PublicKey('BG892DUQW1NHQLinc4mabqH7EVeEfFWpVibAiNnggwmU'),
+  lending: new PublicKey('GAvizzttfkgetRzkZY9fqzCYo3fJULM7E9V1Gq5CVTNS'),
+  lendingAdmin: new PublicKey('DeF2BVMjWdCamK71nqBZ7uzQkLeW9MJ6C7zoCKLJXEmW'),
+  lendingProgram: new PublicKey('7tjE28izRUjzmxC1QNXnNwcc4N82CNYCexf3k8mw67s3'),
+  lendingSupplyPositionOnLiquidity: new PublicKey(
+    'Gi2KLaG18VZYF6TG8qhTbuVjw3pANXuMjYsZkskasXzR'
+  ),
+  liquidity: new PublicKey('DFHSbFzMU67yHK9yLsLBLso7aEnzrB4ZQR7KBujmSU3M'),
+  liquidityProgram: new PublicKey(
+    '5uDkCoM96pwGYhAUucvCzLfm5UcjVRuxz6gH81RnRBmL'
+  ),
+  rateModel: new PublicKey('HNT4VUeaBaBMqqCa1oJWwG8g1TApZfAJR6e34h9JL5c1'),
+  rewardsRateModel: new PublicKey(
+    'CnKAZc6aSnncZRRM9K1bsP1ngS6yAayYYDBQBcQdTwef'
+  ),
+  supplyTokenReservesLiquidity: new PublicKey(
+    'BA6Sg5PUACHHUgK9emXGLdLXEVuPvWGZADo5ZqTLqVi1'
+  ),
+  vault: new PublicKey('GoT7214qjHGt6QNqQKhQmqFFVT3qVwzjZvUZK4enV8E7'),
+  decimal: 9
 }
-
+export const LENDING_ACCOUNTS_BY_MINT: LendingAccountsByMint = {
+  [USDC_MINT.toBase58()]: JUPITER_USDC_ACCOUNTS,
+  [NATIVE_MINT.toBase58()]: JUPITER_WSOL_ACCOUNTS
+}
 export const STATS_INTERVALS: Record<string, number> = {
   '1h': 3600,
   '4h': 14400,

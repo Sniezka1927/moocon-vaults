@@ -28,8 +28,17 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
     const ROUND_SECS = ROUND_TIME * 60
     const tick = () => {
       const nowSec = Math.floor(Date.now() / 1000)
-      const lastDailySec = Number(vault.lastDailyTs)
-      const elapsed = nowSec - lastDailySec
+      const lastTier0DistributedAt = Number(
+        vault.distributionTiers[0]?.distributedAt ?? 0n
+      )
+      if (!Number.isFinite(lastTier0DistributedAt) || lastTier0DistributedAt <= 0) {
+        const m = Math.floor(ROUND_SECS / 60).toString().padStart(2, '0')
+        const s = (ROUND_SECS % 60).toString().padStart(2, '0')
+        setCountdown(`${m}:${s}`)
+        return
+      }
+
+      const elapsed = Math.max(0, nowSec - lastTier0DistributedAt)
       const remaining = ROUND_SECS - (elapsed % ROUND_SECS)
       const m = Math.floor(remaining / 60).toString().padStart(2, '0')
       const s = (remaining % 60).toString().padStart(2, '0')
@@ -38,7 +47,7 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
     tick()
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
-  }, [vault.lastDailyTs])
+  }, [vault.distributionTiers[0]?.distributedAt])
 
   useEffect(() => {
     const lendingAccounts = getLendingAccountsForMint(vault.mint)

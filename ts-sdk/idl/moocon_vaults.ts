@@ -2,12 +2,12 @@
  * Program IDL in camelCase format in order to be used in JS/TS.
  *
  * Note that this is only a type helper and is not the actual IDL. The original
- * IDL can be found at `target/idl/premium_vaults.json`.
+ * IDL can be found at `target/idl/moocon_vaults.json`.
  */
-export type PremiumVaults = {
+export type MooconVaults = {
   "address": "26WWiEiNHYzksQsp9KBfa4acAyoKPnS2Ssp24Uv756S4",
   "metadata": {
-    "name": "premiumVaults",
+    "name": "mooconVaults",
     "version": "0.1.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"

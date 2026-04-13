@@ -16,7 +16,7 @@ pub use state::*;
 declare_id!("26WWiEiNHYzksQsp9KBfa4acAyoKPnS2Ssp24Uv756S4");
 
 #[program]
-pub mod premium_vaults {
+pub mod moocon_vaults {
 
     use super::*;
 

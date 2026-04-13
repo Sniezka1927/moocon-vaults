@@ -23,7 +23,7 @@ import {
   InitBuilder
 } from '@orao-network/solana-vrf'
 import nacl from 'tweetnacl'
-import { PremiumVaults } from '../ts-sdk/idl/premium_vaults'
+import { MooconVaults } from '../ts-sdk/idl/moocon_vaults'
 import { Vault } from '../ts-sdk/vault'
 import { signAndSend } from '../ts-sdk/utils'
 import {
@@ -36,7 +36,7 @@ import {
 } from './test-utils'
 import { MAX_U64 } from '../ts-sdk'
 
-describe('premium-vaults deposit', () => {
+describe('moocon-vaults deposit', () => {
   const provider = anchor.AnchorProvider.env()
   anchor.setProvider(provider)
 

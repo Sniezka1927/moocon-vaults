@@ -101,18 +101,30 @@ function initializeSchema(db: Database): void {
 
   db.run(`
     CREATE TABLE IF NOT EXISTS stats (
-      id                         INTEGER PRIMARY KEY AUTOINCREMENT,
-      vault                      TEXT NOT NULL,
-      round                      INTEGER NOT NULL,
-      reward_type                INTEGER NOT NULL,
-      total_tickets              INTEGER NOT NULL,
-      daily_jackpot_accumulated  INTEGER NOT NULL,
-      weekly_jackpot_accumulated INTEGER NOT NULL,
-      winner_wallet              TEXT,
-      amount_won                 INTEGER,
-      recorded_at                INTEGER NOT NULL DEFAULT (unixepoch())
+      id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+      vault              TEXT NOT NULL,
+      round              INTEGER NOT NULL,
+      reward_type        INTEGER NOT NULL,
+      total_tickets      INTEGER NOT NULL,
+      tier_0_accumulated INTEGER NOT NULL DEFAULT 0,
+      tier_1_accumulated INTEGER NOT NULL DEFAULT 0,
+      winner_wallet      TEXT,
+      amount_won         INTEGER,
+      recorded_at        INTEGER NOT NULL DEFAULT (unixepoch())
     )
   `)
+  addColumnIfMissing(
+    db,
+    'stats',
+    'tier_0_accumulated',
+    'INTEGER NOT NULL DEFAULT 0'
+  )
+  addColumnIfMissing(
+    db,
+    'stats',
+    'tier_1_accumulated',
+    'INTEGER NOT NULL DEFAULT 0'
+  )
   db.run(
     'CREATE INDEX IF NOT EXISTS idx_stats_recorded_at ON stats(recorded_at)'
   )
@@ -259,8 +271,8 @@ export interface StatsRow {
   round: bigint
   reward_type: number
   total_tickets: bigint
-  daily_jackpot_accumulated: bigint
-  weekly_jackpot_accumulated: bigint
+  tier_0_accumulated: bigint
+  tier_1_accumulated: bigint
   winner_wallet: string | null
   amount_won: bigint | null
   recorded_at: number

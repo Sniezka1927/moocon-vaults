@@ -8,7 +8,6 @@ import {
   Leaf,
   MerkleTree,
   signAndSend,
-  getClaimAccount,
   getLendingAccountsForMint
 } from 'ts-sdk'
 import type { VaultAccount } from 'ts-sdk'
@@ -280,13 +279,11 @@ async function commitDrawing(
   }
 
   const vaultPda = vault.fetcher.getVaultAddress(vaultIndex)[0]
-  const vaultTokenAccount = getAssociatedTokenAddressSync(mint, vaultPda, true)
   const vaultFTokenAccount = getAssociatedTokenAddressSync(
     lendingAccounts.fTokenMint,
     vaultPda,
     true
   )
-  const claimAccount = getClaimAccount(mint, lendingAccounts.lendingAdmin)
 
   const networkState = networkStateAccountAddress()
   const networkStateAcc = await orao.getNetworkState()
@@ -302,9 +299,8 @@ async function commitDrawing(
     secretHash: Array.from(secretHash),
     mint,
     vaultFTokenAccount,
-    vaultTokenAccount,
-    claimAccount,
-    lendingAccounts,
+    fTokenMint: lendingAccounts.fTokenMint,
+    lending: lendingAccounts.lending,
     treasury: networkStateAcc.config.treasury,
     networkState,
     request
@@ -423,7 +419,7 @@ async function tryRevealAndComplete(
     `winner resolved winnerWallet=${winnerWallet} winnerIndex=${String(winnerIndex)}`
   )
 
-  // Build reveal + setWinner in single transaction
+  // Reveal with the resolved winner wallet.
   const request = randomnessAccountAddress(vrfSeed)
 
   const revealIx = await vault.revealIx({
@@ -431,20 +427,14 @@ async function tryRevealAndComplete(
     vaultIndex,
     round: Number(drawing.round),
     secretSeed: Array.from(secretSeed),
-    request
-  })
-
-  const setWinnerIx = await vault.setWinnerIx({
-    vrfAuthority: vrfAuthority.publicKey,
-    vaultIndex,
-    round: Number(drawing.round),
+    request,
     winner: new PublicKey(winnerWallet)
   })
 
-  const tx = new Transaction().add(revealIx).add(setWinnerIx)
+  const tx = new Transaction().add(revealIx)
   try {
     const sig = await signAndSend(connection, tx, [vrfAuthority])
-    console.log(`reveal and setWinner transaction submitted signature=${sig}`)
+    console.log(`reveal transaction submitted signature=${sig}`)
     await waitForFinalizedSignature(sig, 60)
     const apr = computeDrawingAprValue(drawing, winnerWallet)
 

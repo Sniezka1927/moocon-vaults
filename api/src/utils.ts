@@ -1,12 +1,7 @@
 import { createHash } from 'crypto'
 import { db, type DrawingRow } from './db'
-import { connection, DAILY_INTERVAL, WEEKLY_INTERVAL } from './consts'
-import {
-  REWARD_TYPE_DAILY,
-  REWARD_TYPE_ROUND,
-  REWARD_TYPE_WEEKLY,
-  VaultAccount
-} from 'ts-sdk'
+import { connection } from './consts'
+import { VaultAccount } from 'ts-sdk'
 
 export function toHexOrNull(buf: Uint8Array | null): string | null {
   return buf ? Buffer.from(buf).toString('hex') : null
@@ -114,10 +109,20 @@ export async function waitForFinalizedSignature(
 }
 
 export function determineRewardType(v: VaultAccount): number {
-  const now = Math.floor(Date.now() / 1000)
-  if (now - Number(v.lastWeeklyTs) >= WEEKLY_INTERVAL) return REWARD_TYPE_WEEKLY
-  if (now - Number(v.lastDailyTs) >= DAILY_INTERVAL) return REWARD_TYPE_DAILY
-  return REWARD_TYPE_ROUND
+  // Tier 0 is the default round tier.
+  // For non-zero tiers, choose the highest index that is currently due.
+  const now = BigInt(Math.floor(Date.now() / 1000))
+
+  let selectedTierIndex = 0
+  for (let i = 1; i < v.distributionTiers.length; i++) {
+    const tier = v.distributionTiers[i]
+    if (tier.rewardShare <= 0n || tier.interval <= 0n) continue
+    if (now >= tier.distributedAt + tier.interval) {
+      selectedTierIndex = i
+    }
+  }
+
+  return selectedTierIndex
 }
 
 export function getLatestDrawing(vaultPda: string): DrawingRow | null {

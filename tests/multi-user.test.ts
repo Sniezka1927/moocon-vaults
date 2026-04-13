@@ -35,7 +35,7 @@ import {
 } from './test-utils'
 import { MAX_U64 } from '../ts-sdk'
 
-describe('premium-vaults multi-user', () => {
+describe('moocon-vaults multi-user', () => {
   const provider = anchor.AnchorProvider.env()
   anchor.setProvider(provider)
 

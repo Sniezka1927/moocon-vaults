@@ -23,6 +23,3 @@ const provider = new AnchorProvider(
   }
 )
 export const orao = new Orao(provider)
-
-export const DAILY_INTERVAL = 86400
-export const WEEKLY_INTERVAL = 604800

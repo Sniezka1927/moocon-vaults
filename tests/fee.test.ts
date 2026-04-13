@@ -13,7 +13,7 @@ import {
   mintTo,
   getAssociatedTokenAddressSync
 } from '@solana/spl-token'
-import { PremiumVaults } from '../ts-sdk/idl/premium_vaults'
+import { MooconVaults } from '../ts-sdk/idl/moocon_vaults'
 import { Vault } from '../ts-sdk/vault'
 import { signAndSend } from '../ts-sdk/utils'
 import {
@@ -24,7 +24,7 @@ import {
   TIER_60_40
 } from './test-utils'
 
-describe('premium-vaults fees', () => {
+describe('moocon-vaults fees', () => {
   const provider = anchor.AnchorProvider.env()
   anchor.setProvider(provider)
 

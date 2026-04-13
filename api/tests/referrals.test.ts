@@ -4,6 +4,7 @@ import { db } from '../src/db'
 import { referralsHandler } from '../src/handlers/referrals'
 import nacl from 'tweetnacl'
 import bs58 from 'bs58'
+import { getCreateReferralMessage, getReferralMessage } from 'ts-sdk'
 
 const app = new Elysia().use(referralsHandler)
 
@@ -28,11 +29,22 @@ const CODE_USER = `REF_USER_${ts}`
 const CODE_USED = `REF_USED_${ts}`
 const CODE_FRESH = `REF_FRESH_${ts}`
 
-function sign(kp: nacl.SignKeyPair, code: string, wallet: string): string {
-  const msg = `Using Referral ${code} with ${wallet}`
+function signMessage(kp: nacl.SignKeyPair, msg: string): string {
   return bs58.encode(
     nacl.sign.detached(new TextEncoder().encode(msg), kp.secretKey)
   )
+}
+
+function signUse(kp: nacl.SignKeyPair, code: string, wallet: string): string {
+  return signMessage(kp, getReferralMessage(code, wallet))
+}
+
+function signCreate(
+  kp: nacl.SignKeyPair,
+  code: string,
+  wallet: string
+): string {
+  return signMessage(kp, getCreateReferralMessage(code, wallet))
 }
 
 beforeAll(() => {
@@ -130,7 +142,7 @@ describe('POST /api/referrals — create code', () => {
 
   test('signature from wrong key returns 400', async () => {
     // Sign with kpWrongKey but claim to be walletFresh
-    const sig = sign(kpWrongKey, CODE_FRESH, walletFresh)
+    const sig = signCreate(kpWrongKey, CODE_FRESH, walletFresh)
     const res = await app.handle(
       new Request('http://localhost/api/referrals', {
         method: 'POST',
@@ -148,7 +160,7 @@ describe('POST /api/referrals — create code', () => {
   })
 
   test('invalid wallet address returns 400', async () => {
-    const sig = sign(kpFresh, CODE_FRESH, 'notavalidwallet')
+    const sig = signCreate(kpFresh, CODE_FRESH, 'notavalidwallet')
     const res = await app.handle(
       new Request('http://localhost/api/referrals', {
         method: 'POST',
@@ -166,7 +178,7 @@ describe('POST /api/referrals — create code', () => {
   })
 
   test('valid signature creates referral code', async () => {
-    const sig = sign(kpFresh, CODE_FRESH, walletFresh)
+    const sig = signCreate(kpFresh, CODE_FRESH, walletFresh)
     const res = await app.handle(
       new Request('http://localhost/api/referrals', {
         method: 'POST',
@@ -184,7 +196,7 @@ describe('POST /api/referrals — create code', () => {
   })
 
   test('duplicate wallet returns 400', async () => {
-    const sig = sign(kpFresh, CODE_FRESH, walletFresh)
+    const sig = signCreate(kpFresh, CODE_FRESH, walletFresh)
     const res = await app.handle(
       new Request('http://localhost/api/referrals', {
         method: 'POST',
@@ -204,7 +216,7 @@ describe('POST /api/referrals — create code', () => {
   test('duplicate code returns 400', async () => {
     const kpOther = nacl.sign.keyPair()
     const walletOther = bs58.encode(kpOther.publicKey)
-    const sig = sign(kpOther, CODE_OWNER, walletOther) // CODE_OWNER already taken
+    const sig = signCreate(kpOther, CODE_OWNER, walletOther) // CODE_OWNER already taken
     const res = await app.handle(
       new Request('http://localhost/api/referrals', {
         method: 'POST',
@@ -255,7 +267,7 @@ describe('POST /api/referrals/use — use code', () => {
   })
 
   test('signature from wrong key returns 400', async () => {
-    const sig = sign(kpWrongKey, CODE_OWNER, walletUser)
+    const sig = signUse(kpWrongKey, CODE_OWNER, walletUser)
     const res = await app.handle(
       new Request('http://localhost/api/referrals/use', {
         method: 'POST',
@@ -274,7 +286,7 @@ describe('POST /api/referrals/use — use code', () => {
 
   test('code not found returns 400', async () => {
     const fakeCode = `NONEXISTENT_${ts}`
-    const sig = sign(kpUser, fakeCode, walletUser)
+    const sig = signUse(kpUser, fakeCode, walletUser)
     const res = await app.handle(
       new Request('http://localhost/api/referrals/use', {
         method: 'POST',
@@ -292,7 +304,7 @@ describe('POST /api/referrals/use — use code', () => {
   })
 
   test('own code returns 400', async () => {
-    const sig = sign(kpOwner, CODE_OWNER, walletOwner)
+    const sig = signUse(kpOwner, CODE_OWNER, walletOwner)
     const res = await app.handle(
       new Request('http://localhost/api/referrals/use', {
         method: 'POST',
@@ -310,7 +322,7 @@ describe('POST /api/referrals/use — use code', () => {
   })
 
   test('no own code yet returns 400', async () => {
-    const sig = sign(kpNoCode, CODE_OWNER, walletNoCode)
+    const sig = signUse(kpNoCode, CODE_OWNER, walletNoCode)
     const res = await app.handle(
       new Request('http://localhost/api/referrals/use', {
         method: 'POST',
@@ -328,7 +340,7 @@ describe('POST /api/referrals/use — use code', () => {
   })
 
   test('already used a code returns 400', async () => {
-    const sig = sign(kpUsed, CODE_USER, walletUsed) // walletUsed already has referred_by set
+    const sig = signUse(kpUsed, CODE_USER, walletUsed) // walletUsed already has referred_by set
     const res = await app.handle(
       new Request('http://localhost/api/referrals/use', {
         method: 'POST',
@@ -347,7 +359,7 @@ describe('POST /api/referrals/use — use code', () => {
 
   test('valid use returns success and sets referred_by', async () => {
     // walletUser has CODE_USER, no referredBy — use CODE_OWNER
-    const sig = sign(kpUser, CODE_OWNER, walletUser)
+    const sig = signUse(kpUser, CODE_OWNER, walletUser)
     const res = await app.handle(
       new Request('http://localhost/api/referrals/use', {
         method: 'POST',
@@ -384,7 +396,7 @@ describe('POST /api/referrals/use — use code', () => {
   })
 
   test('idempotent: second use attempt returns already-used error', async () => {
-    const sig = sign(kpUser, CODE_USED, walletUser) // try using another code
+    const sig = signUse(kpUser, CODE_USED, walletUser) // try using another code
     const res = await app.handle(
       new Request('http://localhost/api/referrals/use', {
         method: 'POST',

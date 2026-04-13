@@ -6,7 +6,7 @@ import { Vault } from '../ts-sdk/vault'
 import { signAndSend } from '../ts-sdk/utils'
 import { VRF_TEST_AUTHORITY, airdrop, TIER_60_40 } from './test-utils'
 
-describe('premium-vaults admin', () => {
+describe('moocon-vaults admin', () => {
   const provider = anchor.AnchorProvider.env()
   anchor.setProvider(provider)
 

@@ -4,8 +4,8 @@ import {
   TOKEN_PROGRAM_ID,
   getAssociatedTokenAddressSync
 } from '@solana/spl-token'
-import type { PremiumVaults } from './idl/premium_vaults'
-import IDL from './idl/premium_vaults.json'
+import type { MooconVaults } from './idl/moocon_vaults'
+import IDL from './idl/moocon_vaults.json'
 import { AnchorProvider, BN, Program } from '@coral-xyz/anchor'
 import { Fetcher } from './fetcher'
 import type {
@@ -25,12 +25,12 @@ import { VRF_PROGRAM_ID } from './consts'
 
 export class Vault {
   connection: Connection
-  program: Program<PremiumVaults>
+  program: Program<MooconVaults>
   fetcher: Fetcher
 
   constructor(connection: Connection) {
     this.connection = connection
-    this.program = new Program<PremiumVaults>(
+    this.program = new Program<MooconVaults>(
       IDL,
       new AnchorProvider(connection, {} as any)
     )

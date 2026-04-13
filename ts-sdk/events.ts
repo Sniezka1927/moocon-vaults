@@ -1,6 +1,6 @@
 import { Program, EventParser, BorshCoder } from '@coral-xyz/anchor'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { PremiumVaults } from './idl/premium_vaults'
+import { MooconVaults } from './idl/moocon_vaults'
 
 export interface CommitEventData {
   vault: PublicKey
@@ -20,7 +20,7 @@ export interface RevealEventData {
 }
 
 export async function parseEvents(
-  program: Program<PremiumVaults>,
+  program: Program<MooconVaults>,
   connection: Connection,
   signature: string
 ): Promise<{ name: string; data: any }[]> {

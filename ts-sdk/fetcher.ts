@@ -4,7 +4,7 @@ import {
   TOKEN_2022_PROGRAM_ID,
   TOKEN_PROGRAM_ID
 } from '@solana/spl-token'
-import { PremiumVaults } from './idl/premium_vaults'
+import { MooconVaults } from './idl/moocon_vaults'
 import { BN, IdlAccounts, Program } from '@coral-xyz/anchor'
 import {
   VAULT_SEED,
@@ -15,9 +15,9 @@ import {
 import { IHolders } from './types'
 
 // Raw types as decoded by Anchor (u64 = BN)
-type RawVault = IdlAccounts<PremiumVaults>['vault']
-type RawState = IdlAccounts<PremiumVaults>['state']
-type RawReward = IdlAccounts<PremiumVaults>['reward']
+type RawVault = IdlAccounts<MooconVaults>['vault']
+type RawState = IdlAccounts<MooconVaults>['state']
+type RawReward = IdlAccounts<MooconVaults>['reward']
 
 // Parsed types with u64 as bigint, u32 as number
 export type VaultAccount = {
@@ -71,7 +71,7 @@ type Cached<T> = T & { ts: number }
 
 export class Fetcher {
   state: StateAccount | null
-  program: Program<PremiumVaults>
+  program: Program<MooconVaults>
   lastAllVaultsTs: number;
 
   [Keys.Vaults]: Map<string, Cached<VaultAccount>>;
@@ -79,7 +79,7 @@ export class Fetcher {
 
   mintOwners: Map<string, PublicKey>
 
-  constructor(program: Program<PremiumVaults>) {
+  constructor(program: Program<MooconVaults>) {
     this.program = program
     this.vaults = new Map()
     this.rewards = new Map()

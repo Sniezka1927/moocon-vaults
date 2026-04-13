@@ -37,10 +37,10 @@ const main = async () => {
     connection: connection,
     vault: vaultPda,
     payer: DEVNET_ADMIN.publicKey,
-    name: 'pSOL',
-    symbol: 'pSOL',
+    name: 'pUSDC',
+    symbol: 'pUSDC',
     uri: 'https://example.com/metadata.json',
-    decimals: 9,
+    decimals: 6,
     preparedKeypair: mintKeypairInput
   })
 

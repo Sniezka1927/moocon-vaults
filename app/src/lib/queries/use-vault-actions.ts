@@ -365,16 +365,11 @@ export function useClaimReward() {
     mutationFn: async ({ reward, vault }: { reward: RewardAccount; vault: VaultWithAddress }) => {
       if (!publicKey || !program) throw new Error('Wallet not connected')
 
-      const vaultTokenAccount = getAssociatedTokenAddressSync(vault.mint, vault.address, true)
-      const claimerTokenAccount = getAssociatedTokenAddressSync(vault.mint, publicKey, false)
-
       const ix = await program.claimIx({
         claimer: publicKey,
         vaultIndex: vault.index,
         round: reward.round,
-        mint: vault.mint,
-        vaultTokenAccount,
-        claimerTokenAccount
+        pMint: vault.pMint
       })
 
       try {
@@ -424,15 +419,11 @@ export function useClaimAllRewards() {
 
       const instructions = await Promise.all(
         pairs.map(({ reward, vault }) => {
-          const vaultTokenAccount = getAssociatedTokenAddressSync(vault.mint, vault.address, true)
-          const claimerTokenAccount = getAssociatedTokenAddressSync(vault.mint, publicKey, false)
           return program.claimIx({
             claimer: publicKey,
             vaultIndex: vault.index,
             round: reward.round,
-            mint: vault.mint,
-            vaultTokenAccount,
-            claimerTokenAccount
+            pMint: vault.pMint
           })
         })
       )

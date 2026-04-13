@@ -60,6 +60,22 @@ export const TIER_60_40: [DistributionTierInput, DistributionTierInput] = [
   }
 ]
 
+export const TIER_70_30_WEEKLY: [DistributionTierInput, DistributionTierInput] =
+  [
+    {
+      distributedAt: 0n,
+      interval: 60n * 60n, // 1 hour in seconds
+      rewardShare: 700_000n,
+      accumulated: 0n
+    },
+    {
+      distributedAt: 0n,
+      interval: 7n * 24n * 60n * 60n, // 7 days
+      rewardShare: 300_000n,
+      accumulated: 0n
+    }
+  ]
+
 // Non-program pubkey safe for #[account(mut)] dummy accounts.
 // PublicKey.default = System Program and cannot be marked writable.
 const DUMMY_KEY = Keypair.generate().publicKey

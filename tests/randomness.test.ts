@@ -23,7 +23,7 @@ import {
   TIER_60_40
 } from './test-utils'
 
-describe('premium-vaults randomness', () => {
+describe('moocon-vaults randomness', () => {
   const provider = anchor.AnchorProvider.env()
   anchor.setProvider(provider)
 

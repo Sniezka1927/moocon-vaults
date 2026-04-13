@@ -46,6 +46,7 @@ pub fn handler(
     let mut sum_share = 0u64;
     for i in 0..tiers.len() {
         tiers[i].distributed_at = now;
+        tiers[i].accumulated = 0;
         sum_share += tiers[i].reward_share
     }
 
