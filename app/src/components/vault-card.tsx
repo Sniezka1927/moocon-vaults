@@ -1,0 +1,138 @@
+import { useEffect, useState } from 'react'
+import { useConnection } from '@solana/wallet-adapter-react'
+import { getAssociatedTokenAddressSync, getAccount } from '@solana/spl-token'
+import { APP_COLORS, COLOR_TOKENS } from '@/consts'
+import { Button } from '@/components/ui/button'
+import type { VaultWithAddress } from '@/lib/store/vault-store'
+import { useMintStore } from '@/lib/store/mint-store'
+import { getLendingAccountsForMint, ROUND_TIME } from 'ts-sdk'
+import { DepositWithdrawModal } from './deposit-withdraw-modal'
+
+interface VaultCardProps {
+  vault: VaultWithAddress
+  metadata: { name: string; icon: string; decimals: number }
+  isLast: boolean
+  avgApr: number | null
+}
+
+export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
+  const { connection } = useConnection()
+  const [tvl, setTvl] = useState<string | null>(null)
+  const [tvlUsd, setTvlUsd] = useState<string | null>(null)
+  const [countdown, setCountdown] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
+  const tokenName = metadata.name
+  const price = useMintStore((s) => s.getMint(vault.mint.toBase58()))?.price ?? null
+
+  useEffect(() => {
+    const ROUND_SECS = ROUND_TIME * 60
+    const tick = () => {
+      const nowSec = Math.floor(Date.now() / 1000)
+      const lastDailySec = Number(vault.lastDailyTs)
+      const elapsed = nowSec - lastDailySec
+      const remaining = ROUND_SECS - (elapsed % ROUND_SECS)
+      const m = Math.floor(remaining / 60).toString().padStart(2, '0')
+      const s = (remaining % 60).toString().padStart(2, '0')
+      setCountdown(`${m}:${s}`)
+    }
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [vault.lastDailyTs])
+
+  useEffect(() => {
+    const lendingAccounts = getLendingAccountsForMint(vault.mint)
+    if (!lendingAccounts) {
+      setTvl('—')
+      return
+    }
+    const fTokenAta = getAssociatedTokenAddressSync(lendingAccounts.fTokenMint, vault.address, true)
+    getAccount(connection, fTokenAta)
+      .then((account) => {
+        const raw =
+          (Number(account.amount) * Number(vault.lastRate)) /
+          10 ** 12 /
+          10 ** metadata.decimals
+        setTvl(raw.toLocaleString('en-US', { maximumFractionDigits: 2 }))
+        if (price != null) {
+          setTvlUsd((raw * price).toLocaleString('en-US', { style: 'currency', currency: 'USD' }))
+        }
+      })
+      .catch(() => setTvl('—'))
+  }, [connection, vault.address, vault.mint, vault.lastRate, metadata.decimals, price])
+
+  return (
+    <tr
+      style={{
+        borderBottom: isLast ? 'none' : `1px solid ${APP_COLORS.page.cardBorder}`
+      }}
+    >
+      {/* Asset */}
+      <td className="py-4 px-6">
+        <div className="flex items-center gap-3">
+          <img
+            src={metadata.icon}
+            alt={tokenName}
+            className="h-6 w-6 rounded-full object-contain"
+          />
+          <span className="text-sm font-semibold" style={{ color: APP_COLORS.page.cardValue }}>
+            {tokenName}
+          </span>
+        </div>
+      </td>
+
+      {/* Total Supplied */}
+      <td className="py-4 px-6 text-center">
+        <span
+          className="text-sm font-medium"
+          style={{ color: APP_COLORS.page.cardValue }}
+        >
+          {tvlUsd !== null ? tvlUsd : tvl !== null ? `${tvl} ${tokenName}` : '...'}
+        </span>
+      </td>
+
+      {/* Avg APR */}
+      <td className="py-4 px-6 text-center">
+        <span className="text-sm font-semibold" style={{ color: COLOR_TOKENS.secondary }}>
+          {avgApr !== null ? `${avgApr.toFixed(2)}%` : '—'}
+        </span>
+      </td>
+
+      {/* Next Drawing */}
+      <td className="py-4 px-6 text-center">
+        <span className="text-sm font-mono font-medium" style={{ color: APP_COLORS.page.cardValue }}>
+          {countdown || '—'}
+        </span>
+      </td>
+
+      {/* Deposit */}
+      <td className="py-4 px-6 text-right">
+        <Button
+          className="rounded-lg px-6 py-2 text-xs uppercase tracking-widest"
+          style={{
+            backgroundColor: APP_COLORS.walletButton.background,
+            border: 'none',
+            color: APP_COLORS.walletButton.text,
+            fontWeight: 700
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = APP_COLORS.walletButton.backgroundHover
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = APP_COLORS.walletButton.background
+          }}
+          onClick={() => setModalOpen(true)}
+        >
+          Deposit
+        </Button>
+        <DepositWithdrawModal
+          vault={vault}
+          metadata={metadata}
+          tvl={tvl}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      </td>
+    </tr>
+  )
+}
