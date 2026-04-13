@@ -7,17 +7,8 @@ import { useIsFetching } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 
 import { HomePage } from '@/pages/home-page'
-import { ProfilePage } from '@/pages/profile-page'
-import { StatsPage } from '@/pages/stats-page'
-import { RewardsPage } from '@/pages/rewards-page'
 
-const routes: RouteObject[] = [
-  { index: true, element: <HomePage /> },
-  { path: 'profile', element: <ProfilePage /> },
-  { path: 'account', element: <ProfilePage /> },
-  { path: 'stats', element: <StatsPage /> },
-  { path: 'rewards', element: <RewardsPage /> }
-]
+const routes: RouteObject[] = [{ index: true, element: <HomePage /> }]
 
 function AppContent() {
   const router = useRoutes(routes)
