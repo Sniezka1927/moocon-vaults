@@ -1,6 +1,7 @@
 import { keccak256 } from 'js-sha3'
 import { HASH_SIZE } from './consts'
 import { PublicKey } from '@solana/web3.js'
+import { Buffer } from 'node:buffer'
 
 const LEAF_PREFIX = new Uint8Array([0x00])
 const NODE_PREFIX = new Uint8Array([0x01])

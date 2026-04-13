@@ -1,4 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
+import { Buffer } from 'node:buffer'
 import {
   AccountLayout,
   TOKEN_2022_PROGRAM_ID,

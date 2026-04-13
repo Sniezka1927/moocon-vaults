@@ -6,6 +6,7 @@ import {
   TransactionInstruction,
   SystemProgram
 } from '@solana/web3.js'
+import { Buffer } from 'node:buffer'
 import {
   MINT_SIZE,
   TOKEN_PROGRAM_ID,
