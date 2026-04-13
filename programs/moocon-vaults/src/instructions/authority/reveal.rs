@@ -33,6 +33,9 @@ pub struct Reveal<'info> {
     /// CHECK: Orao randomness account — deserialized manually below
     #[account(constraint = request.owner.key() == orao_solana_vrf::ID @ ErrorCode::InvalidRandomnessAccount)]
     pub request: AccountInfo<'info>,
+
+    // Can be derived from offchain once the request is fulfilled
+    pub winner: SystemAccount<'info>,
 }
 
 /// KISS (Keep It Simple Stupid) PRNG
@@ -110,6 +113,7 @@ pub fn handler(
         ErrorCode::AlreadyClaimed
     );
     reward.winner_index = winner_index;
+    reward.claimer = ctx.accounts.winner.key();
 
     emit!(RevealEvent {
         vault: ctx.accounts.vault.key(),

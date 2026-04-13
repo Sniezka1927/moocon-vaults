@@ -30,7 +30,8 @@ import {
   airdrop,
   dummyLending,
   sleep,
-  assertBalance
+  assertBalance,
+  TIER_60_40
 } from './test-utils'
 
 describe('reward-lifecycle', () => {
@@ -122,7 +123,8 @@ describe('reward-lifecycle', () => {
       pMint,
       minDeposit: 0n,
       lending: DUMMY_WRITABLE,
-      withdrawFee: 0n
+      withdrawFee: 0n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(initVaultIx), [
       admin
@@ -226,10 +228,11 @@ describe('reward-lifecycle', () => {
     )
   })
 
-  it('ROUND commit accumulates daily+weekly jackpots', async () => {
+  it('TIER_0 commit accumulates tier 1', async () => {
     vault.fetcher.vaults.clear()
     const vaultBefore = await vault.fetcher.getVaultByIndex(vaultIndex)
     const round = vaultBefore.currentRound
+    const tier1Before = vaultBefore.distributionTiers[1].accumulated
 
     const { merkleRoot, secretSeed, secretHash, vrfSeed } = makeVrfParams(20)
     const request = randomnessAccountAddress(vrfSeed)
@@ -256,13 +259,10 @@ describe('reward-lifecycle', () => {
 
     vault.fetcher.vaults.clear()
     const vaultAfter = await vault.fetcher.getVaultByIndex(vaultIndex)
+    assert.equal(vaultAfter.distributionTiers[0].accumulated, 0n)
     assert.ok(
-      vaultAfter.dailyJackpotAccumulated > 0n,
-      'daily jackpot should accumulate'
-    )
-    assert.ok(
-      vaultAfter.weeklyJackpotAccumulated > 0n,
-      'weekly jackpot should accumulate'
+      vaultAfter.distributionTiers[1].accumulated > tier1Before,
+      'tier 1 should accumulate on tier 0 payout'
     )
     assert.equal(vaultAfter.currentRound, round + 1)
 
@@ -275,19 +275,10 @@ describe('reward-lifecycle', () => {
       vaultIndex,
       round,
       secretSeed,
-      request
-    })
-    await signAndSend(provider.connection, new Transaction().add(revealIx), [
-      vrfAuthority
-    ])
-
-    const setWinnerIx = await vault.setWinnerIx({
-      vrfAuthority: vrfAuthority.publicKey,
-      vaultIndex,
-      round,
+      request,
       winner: user.publicKey
     })
-    await signAndSend(provider.connection, new Transaction().add(setWinnerIx), [
+    await signAndSend(provider.connection, new Transaction().add(revealIx), [
       vrfAuthority
     ])
 
@@ -302,11 +293,12 @@ describe('reward-lifecycle', () => {
     ])
   })
 
-  it('DAILY commit includes accumulated jackpot and resets', async () => {
+  it('TIER_1 commit includes accumulated payout and resets tier 1', async () => {
     vault.fetcher.vaults.clear()
     const vaultBefore = await vault.fetcher.getVaultByIndex(vaultIndex)
     const round = vaultBefore.currentRound
-    const weeklyJackpotBefore = vaultBefore.weeklyJackpotAccumulated
+    const tier0Before = vaultBefore.distributionTiers[0].accumulated
+    const tier1Before = vaultBefore.distributionTiers[1].accumulated
 
     const { merkleRoot, secretHash, vrfSeed } = makeVrfParams(30)
     const request = randomnessAccountAddress(vrfSeed)
@@ -331,22 +323,22 @@ describe('reward-lifecycle', () => {
       vrfAuthority
     ])
 
-    // Check reward includes daily jackpot
+    // Check reward includes accumulated tier 1 amount + current tier 1 share
     const [rewardPda] = vault.fetcher.getRewardAddress(vaultPda, round)
     vault.fetcher.rewards.clear()
     const reward = await vault.fetcher.getRewardByAddress(rewardPda)
-    assert.ok(reward.amount > 0n, 'reward amount should include daily jackpot')
+    assert.ok(reward.amount > tier1Before, 'reward should include accumulated tier 1')
 
     vault.fetcher.vaults.clear()
     const vaultAfter = await vault.fetcher.getVaultByIndex(vaultIndex)
     assert.equal(
-      vaultAfter.dailyJackpotAccumulated,
+      vaultAfter.distributionTiers[1].accumulated,
       0n,
-      'daily jackpot should reset'
+      'tier 1 should reset after payout'
     )
     assert.ok(
-      vaultAfter.weeklyJackpotAccumulated > weeklyJackpotBefore,
-      'weekly jackpot should still grow'
+      vaultAfter.distributionTiers[0].accumulated > tier0Before,
+      'tier 0 should accumulate when tier 1 is distributed'
     )
 
     // Complete the round
@@ -359,19 +351,10 @@ describe('reward-lifecycle', () => {
       vaultIndex,
       round,
       secretSeed,
-      request
-    })
-    await signAndSend(provider.connection, new Transaction().add(revealIx), [
-      vrfAuthority
-    ])
-
-    const setWinnerIx = await vault.setWinnerIx({
-      vrfAuthority: vrfAuthority.publicKey,
-      vaultIndex,
-      round,
+      request,
       winner: user.publicKey
     })
-    await signAndSend(provider.connection, new Transaction().add(setWinnerIx), [
+    await signAndSend(provider.connection, new Transaction().add(revealIx), [
       vrfAuthority
     ])
 
@@ -386,11 +369,11 @@ describe('reward-lifecycle', () => {
     ])
   })
 
-  it('WEEKLY commit includes accumulated jackpot and resets', async () => {
+  it('TIER_0 commit starts tier 1 accumulation again after a tier 1 payout', async () => {
     vault.fetcher.vaults.clear()
     const vaultBefore = await vault.fetcher.getVaultByIndex(vaultIndex)
     const round = vaultBefore.currentRound
-    const dailyJackpotBefore = vaultBefore.dailyJackpotAccumulated
+    const tier1Before = vaultBefore.distributionTiers[1].accumulated
 
     const { merkleRoot, secretHash, vrfSeed } = makeVrfParams(40)
     const request = randomnessAccountAddress(vrfSeed)
@@ -399,7 +382,7 @@ describe('reward-lifecycle', () => {
       vrfAuthority: vrfAuthority.publicKey,
       vaultIndex,
       round,
-      rewardType: 2,
+      rewardType: 0,
       tickets: 100n,
       merkleRoot,
       secretHash,
@@ -415,26 +398,16 @@ describe('reward-lifecycle', () => {
       vrfAuthority
     ])
 
-    // Check reward includes weekly jackpot
-    const [rewardPda] = vault.fetcher.getRewardAddress(vaultPda, round)
-    vault.fetcher.rewards.clear()
-    const reward = await vault.fetcher.getRewardByAddress(rewardPda)
-    assert.ok(reward.amount > 0n, 'reward amount should include weekly jackpot')
-
     vault.fetcher.vaults.clear()
     const vaultAfter = await vault.fetcher.getVaultByIndex(vaultIndex)
-    assert.equal(
-      vaultAfter.weeklyJackpotAccumulated,
-      0n,
-      'weekly jackpot should reset'
-    )
+    assert.equal(vaultAfter.distributionTiers[0].accumulated, 0n)
     assert.ok(
-      vaultAfter.dailyJackpotAccumulated > dailyJackpotBefore,
-      'daily jackpot should still grow'
+      vaultAfter.distributionTiers[1].accumulated > tier1Before,
+      'tier 1 should accumulate again'
     )
 
     // Complete the round
-    const { secretSeed } = makeVrfParams(30)
+    const { secretSeed } = makeVrfParams(40)
     await Promise.all([vrf.waitFulfilled(vrfSeed), emulateFulfill(vrfSeed)])
     await sleep(2000)
 
@@ -443,19 +416,10 @@ describe('reward-lifecycle', () => {
       vaultIndex,
       round,
       secretSeed,
-      request
-    })
-    await signAndSend(provider.connection, new Transaction().add(revealIx), [
-      vrfAuthority
-    ])
-
-    const setWinnerIx = await vault.setWinnerIx({
-      vrfAuthority: vrfAuthority.publicKey,
-      vaultIndex,
-      round,
+      request,
       winner: user.publicKey
     })
-    await signAndSend(provider.connection, new Transaction().add(setWinnerIx), [
+    await signAndSend(provider.connection, new Transaction().add(revealIx), [
       vrfAuthority
     ])
 

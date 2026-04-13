@@ -5,7 +5,9 @@ use anchor_spl::{
     token_interface::{burn, transfer_checked, Burn, Mint, TokenAccount, TransferChecked},
 };
 
-use crate::{error::ErrorCode, Vault, FEE_DENOMINATOR, JUPITER_LENDING_PROGRAM_ID, VAULT_SEED};
+use crate::{
+    error::ErrorCode, Vault, JUPITER_LENDING_PROGRAM_ID, PERCENTAGE_DENOMINATOR, VAULT_SEED,
+};
 
 #[cfg(not(feature = "local"))]
 use crate::WithdrawParams;
@@ -103,7 +105,7 @@ pub fn handler(ctx: Context<Withdraw>, vault_index: u32, mut amount: u64) -> Res
 
         let fee_amount = amount
             .checked_mul(withdraw_fee)
-            .and_then(|v| v.checked_div(FEE_DENOMINATOR))
+            .and_then(|v| v.checked_div(PERCENTAGE_DENOMINATOR))
             .ok_or(ErrorCode::Overflow)?;
 
         let withdraw_amount = amount.checked_sub(fee_amount).ok_or(ErrorCode::Overflow)?;

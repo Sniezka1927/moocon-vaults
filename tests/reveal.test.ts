@@ -22,7 +22,8 @@ import {
   VRF_TEST_AUTHORITY,
   VRF_FULFILLMENT_AUTHORITY,
   airdrop,
-  sleep
+  sleep,
+  TIER_60_40
 } from './test-utils'
 
 describe('reveal-', () => {
@@ -112,7 +113,8 @@ describe('reveal-', () => {
       lending: DUMMY_WRITABLE,
       minDeposit: 0n,
       pMint,
-      withdrawFee: 0n
+      withdrawFee: 0n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(initVaultIx), [
       admin
@@ -186,7 +188,8 @@ describe('reveal-', () => {
       vaultIndex,
       round,
       secretSeed,
-      request
+      request,
+      winner: vrfAuthority.publicKey
     })
     await signAndSend(provider.connection, new Transaction().add(revealIx), [
       vrfAuthority
@@ -198,7 +201,8 @@ describe('reveal-', () => {
       vaultIndex,
       round,
       secretSeed,
-      request
+      request,
+      winner: vrfAuthority.publicKey
     })
     try {
       await signAndSend(provider.connection, new Transaction().add(revealIx2), [
@@ -253,7 +257,8 @@ describe('reveal-', () => {
       vaultIndex,
       round,
       secretSeed,
-      request
+      request,
+      winner: vrfAuthority.publicKey
     })
     try {
       await signAndSend(provider.connection, new Transaction().add(ix), [

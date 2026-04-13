@@ -16,7 +16,6 @@ import type {
   ISyncRateIx,
   ICommitIx,
   IRevealIx,
-  ISetWinnerIx,
   IDepositIx,
   IWithdrawIx,
   IClaimIx,
@@ -68,16 +67,45 @@ export class Vault {
   }
 
   async initializeVaultIx(params: IInitializeVaultIx) {
-    const { admin, mint, fMint, lending, pMint, minDeposit, withdrawFee } =
+    const { admin, mint, fMint, lending, pMint, minDeposit, withdrawFee, tiers } =
       params
     const [state] = this.fetcher.getStateAddress()
     const stateAccount = await this.fetcher.getState()
     const [vault] = this.fetcher.getVaultAddress(stateAccount.lastVault)
 
+    const normalizedTiers = [
+      {
+        distributedAt: new BN((tiers[0].distributedAt ?? 0n).toString()),
+        interval: new BN(tiers[0].interval.toString()),
+        rewardShare: new BN(tiers[0].rewardShare.toString()),
+        accumulated: new BN((tiers[0].accumulated ?? 0n).toString())
+      },
+      {
+        distributedAt: new BN((tiers[1].distributedAt ?? 0n).toString()),
+        interval: new BN(tiers[1].interval.toString()),
+        rewardShare: new BN(tiers[1].rewardShare.toString()),
+        accumulated: new BN((tiers[1].accumulated ?? 0n).toString())
+      }
+    ] as [
+      {
+        distributedAt: BN
+        interval: BN
+        rewardShare: BN
+        accumulated: BN
+      },
+      {
+        distributedAt: BN
+        interval: BN
+        rewardShare: BN
+        accumulated: BN
+      }
+    ]
+
     return await this.program.methods
       .initializeVault(
         new BN(minDeposit.toString()),
-        new BN(withdrawFee.toString())
+        new BN(withdrawFee.toString()),
+        normalizedTiers
       )
       .accountsStrict({
         admin,
@@ -177,7 +205,7 @@ export class Vault {
   }
 
   async revealIx(params: IRevealIx) {
-    const { authority, vaultIndex, round, secretSeed, request } = params
+    const { authority, vaultIndex, round, secretSeed, request, winner } = params
     const [state] = this.fetcher.getStateAddress()
     const [vault] = this.fetcher.getVaultAddress(vaultIndex)
     const [reward] = this.fetcher.getRewardAddress(vault, round)
@@ -189,24 +217,7 @@ export class Vault {
         state,
         vault,
         reward,
-        request
-      })
-      .instruction()
-  }
-
-  async setWinnerIx(params: ISetWinnerIx) {
-    const { vrfAuthority, vaultIndex, round, winner } = params
-    const [state] = this.fetcher.getStateAddress()
-    const [vault] = this.fetcher.getVaultAddress(vaultIndex)
-    const [reward] = this.fetcher.getRewardAddress(vault, round)
-
-    return await this.program.methods
-      .setWinner(vaultIndex, round)
-      .accountsStrict({
-        vrfAuthority,
-        state,
-        vault,
-        reward,
+        request,
         winner
       })
       .instruction()

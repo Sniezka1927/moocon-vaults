@@ -31,7 +31,8 @@ import {
   VRF_FULFILLMENT_AUTHORITY,
   airdrop,
   dummyLending,
-  assertBalance
+  assertBalance,
+  TIER_60_40
 } from './test-utils'
 import { MAX_U64 } from '../ts-sdk'
 
@@ -135,7 +136,8 @@ describe('premium-vaults deposit', () => {
       pMint,
       lending: DUMMY_WRITABLE,
       minDeposit: 500_000_000_000n,
-      withdrawFee: 0n
+      withdrawFee: 0n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(initVaultIx), [
       admin
@@ -405,7 +407,7 @@ describe('premium-vaults deposit', () => {
       vrfAuthority: vrfAuthority.publicKey,
       vaultIndex,
       round,
-      rewardType: 0, // REWARD_TYPE_ROUND
+      rewardType: 0, // Tier 0 (60%)
       tickets: 100n,
       merkleRoot,
       secretHash,
@@ -430,20 +432,10 @@ describe('premium-vaults deposit', () => {
       vaultIndex,
       round,
       secretSeed,
-      request
-    })
-    await signAndSend(provider.connection, new Transaction().add(revealIx), [
-      vrfAuthority
-    ])
-
-    // Set winner
-    const setWinnerIx = await vault.setWinnerIx({
-      vrfAuthority: vrfAuthority.publicKey,
-      vaultIndex,
-      round,
+      request,
       winner: user.publicKey
     })
-    await signAndSend(provider.connection, new Transaction().add(setWinnerIx), [
+    await signAndSend(provider.connection, new Transaction().add(revealIx), [
       vrfAuthority
     ])
 
@@ -568,28 +560,18 @@ describe('premium-vaults deposit', () => {
     await Promise.all([vrf.waitFulfilled(vrfSeed), emulateFulfill(vrfSeed)])
 
     // Reveal
+    const otherUser = Keypair.generate()
+    await airdrop(provider.connection, otherUser.publicKey, LAMPORTS_PER_SOL)
+
     const revealIx = await vault.revealIx({
       authority: vrfAuthority.publicKey,
       vaultIndex,
       round,
       secretSeed,
-      request
-    })
-    await signAndSend(provider.connection, new Transaction().add(revealIx), [
-      vrfAuthority
-    ])
-
-    // Set winner to a DIFFERENT user
-    const otherUser = Keypair.generate()
-    await airdrop(provider.connection, otherUser.publicKey, LAMPORTS_PER_SOL)
-
-    const setWinnerIx = await vault.setWinnerIx({
-      vrfAuthority: vrfAuthority.publicKey,
-      vaultIndex,
-      round,
+      request,
       winner: otherUser.publicKey
     })
-    await signAndSend(provider.connection, new Transaction().add(setWinnerIx), [
+    await signAndSend(provider.connection, new Transaction().add(revealIx), [
       vrfAuthority
     ])
 

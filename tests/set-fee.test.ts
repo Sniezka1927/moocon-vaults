@@ -9,7 +9,7 @@ import {
 import { createMint } from '@solana/spl-token'
 import { Vault } from '../ts-sdk/vault'
 import { signAndSend } from '../ts-sdk/utils'
-import { VRF_TEST_AUTHORITY, airdrop } from './test-utils'
+import { VRF_TEST_AUTHORITY, airdrop, TIER_60_40 } from './test-utils'
 
 describe('set-fee-', () => {
   const provider = anchor.AnchorProvider.env()
@@ -74,14 +74,15 @@ describe('set-fee-', () => {
       lending: DUMMY_WRITABLE,
       minDeposit: 0n,
       pMint,
-      withdrawFee: 0n
+      withdrawFee: 0n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(initVaultIx), [
       admin
     ])
   })
 
-  it('set_withdraw_fee fails when fee > FEE_DENOMINATOR', async () => {
+  it('set_withdraw_fee fails when fee > PERCENTAGE_DENOMINATOR', async () => {
     const ix = await vault.setWithdrawFeeIx({
       admin: admin.publicKey,
       vaultIndex,

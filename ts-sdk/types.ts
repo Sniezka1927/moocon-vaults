@@ -18,6 +18,14 @@ export interface IInitializeVaultIx {
   lending: PublicKey
   minDeposit: bigint
   withdrawFee: bigint
+  tiers: [DistributionTierInput, DistributionTierInput]
+}
+
+export interface DistributionTierInput {
+  interval: bigint
+  rewardShare: bigint
+  accumulated?: bigint
+  distributedAt?: bigint
 }
 
 export interface ISetWithdrawFeeIx {
@@ -73,12 +81,6 @@ export interface IRevealIx {
   round: number
   secretSeed: number[]
   request: PublicKey
-}
-
-export interface ISetWinnerIx {
-  vrfAuthority: PublicKey
-  vaultIndex: number
-  round: number
   winner: PublicKey
 }
 

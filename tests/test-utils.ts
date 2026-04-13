@@ -1,5 +1,5 @@
 import { Keypair, PublicKey, Connection } from '@solana/web3.js'
-import { ILendingAccounts } from '../ts-sdk/types'
+import { DistributionTierInput, ILendingAccounts } from '../ts-sdk/types'
 import { getAssociatedTokenAddressSync } from '@solana/spl-token'
 
 export const VRF_TEST_AUTHORITY = Keypair.fromSecretKey(
@@ -45,6 +45,21 @@ export async function airdrop(
 
 export const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
+export const TIER_60_40: [DistributionTierInput, DistributionTierInput] = [
+  {
+    distributedAt: 0n,
+    interval: 30n * 60n,
+    rewardShare: 600_000n,
+    accumulated: 0n
+  },
+  {
+    distributedAt: 0n,
+    interval: 24n * 60n * 60n,
+    rewardShare: 400_000n,
+    accumulated: 0n
+  }
+]
+
 // Non-program pubkey safe for #[account(mut)] dummy accounts.
 // PublicKey.default = System Program and cannot be marked writable.
 const DUMMY_KEY = Keypair.generate().publicKey
@@ -52,9 +67,10 @@ const DUMMY_KEY = Keypair.generate().publicKey
 export function dummyLending(
   overrides?: Partial<ILendingAccounts>
 ): ILendingAccounts {
-  return {
+  const merged = {
     lendingAdmin: DUMMY_KEY,
     lending: DUMMY_KEY,
+    mint: DUMMY_KEY,
     fTokenMint: DUMMY_KEY,
     supplyTokenReservesLiquidity: DUMMY_KEY,
     lendingSupplyPositionOnLiquidity: DUMMY_KEY,
@@ -64,7 +80,14 @@ export function dummyLending(
     liquidityProgram: DUMMY_KEY,
     rewardsRateModel: DUMMY_KEY,
     lendingProgram: JUP_LOCAL.publicKey,
+    decimal: 6,
     ...overrides
+  }
+
+  return {
+    ...merged,
+    mint: merged.mint ?? DUMMY_KEY,
+    decimal: merged.decimal ?? 6
   }
 }
 

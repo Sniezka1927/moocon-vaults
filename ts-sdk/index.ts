@@ -1,6 +1,11 @@
 export { Vault } from './vault'
 export { Fetcher, parseVault } from './fetcher'
-export type { VaultAccount, StateAccount, RewardAccount } from './fetcher'
+export type {
+  VaultAccount,
+  StateAccount,
+  RewardAccount,
+  DistributionTier
+} from './fetcher'
 export * from './types'
 export * from './consts'
 export { signAndSend, getClaimAccount } from './utils'

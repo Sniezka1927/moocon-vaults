@@ -11,10 +11,7 @@ use orao_solana_vrf::program::OraoVrf;
 use orao_solana_vrf::state::NetworkState;
 
 use crate::{
-    constants::{
-        DAILY_JACKPOT_SHARE, EXCHANGE_RATE_PRECISION, REWARD_TYPE_DAILY, REWARD_TYPE_ROUND,
-        REWARD_TYPE_WEEKLY, SHARE_DENOMINATOR, WEEKLY_JACKPOT_SHARE,
-    },
+    constants::{EXCHANGE_RATE_PRECISION, SHARE_DENOMINATOR},
     error::ErrorCode,
     CommitEvent, Reward, State, Vault, REWARD_SEED, STATE_SEED, VAULT_SEED,
 };
@@ -106,14 +103,18 @@ pub fn handler(
             ErrorCode::Unauthorized
         );
 
-        require!(reward_type <= 2, ErrorCode::InvalidRewardType);
+        let distribution_tier_index = reward_type as usize;
+        require!(
+            distribution_tier_index < vault.distribution_tiers.len(),
+            ErrorCode::InvalidRewardType
+        );
 
-        // Compute reward amount + side effects depending on reward_type.
-        let (reward_amount, current_rate, daily_share, weekly_share) = {
-            // Validate round matches expected for this reward_type
+        // Compute reward amount + tier side effects for this reward_type index.
+        let (reward_amount, current_rate) = {
+            // Validate round matches expected for this commit
             require!(round == vault.current_round, ErrorCode::InvalidRound);
 
-            // All reward types compute yield and split 60/20/20
+            // All reward types compute yield and spread across configured tiers.
             require!(vault.last_rate > 0, ErrorCode::NotSynced);
 
             #[cfg(not(feature = "local"))]
@@ -141,36 +142,42 @@ pub fn handler(
                 .checked_div(EXCHANGE_RATE_PRECISION as u128)
                 .ok_or(ErrorCode::Overflow)? as u64;
 
-            let daily_share = yield_amount
-                .checked_mul(DAILY_JACKPOT_SHARE)
-                .ok_or(ErrorCode::Overflow)?
-                .checked_div(SHARE_DENOMINATOR)
-                .ok_or(ErrorCode::Overflow)?;
-            let weekly_share = yield_amount
-                .checked_mul(WEEKLY_JACKPOT_SHARE)
-                .ok_or(ErrorCode::Overflow)?
-                .checked_div(SHARE_DENOMINATOR)
-                .ok_or(ErrorCode::Overflow)?;
-            let winner_share = yield_amount
-                .checked_sub(daily_share)
-                .ok_or(ErrorCode::Overflow)?
-                .checked_sub(weekly_share)
-                .ok_or(ErrorCode::Overflow)?;
+            let tiers_len = vault.distribution_tiers.len();
+            let mut remaining_yield = yield_amount;
+            let mut reward_amount = 0u64;
 
-            // For round: reward = winner_share
-            // For daily/weekly: reward = accumulated jackpot + winner_share
-            let accumulated = match reward_type {
-                REWARD_TYPE_ROUND => 0,
-                REWARD_TYPE_DAILY => vault.daily_jackpot_accumulated,
-                REWARD_TYPE_WEEKLY => vault.weekly_jackpot_accumulated,
-                _ => unreachable!(),
-            };
+            for (index, tier) in vault.distribution_tiers.iter_mut().enumerate() {
+                let tier_share = if index + 1 == tiers_len {
+                    // Assign rounding remainder to the last tier.
+                    remaining_yield
+                } else {
+                    (yield_amount as u128)
+                        .checked_mul(tier.reward_share as u128)
+                        .ok_or(ErrorCode::Overflow)?
+                        .checked_div(SHARE_DENOMINATOR as u128)
+                        .ok_or(ErrorCode::Overflow)? as u64
+                };
 
-            let reward_amount = accumulated
-                .checked_add(winner_share)
-                .ok_or(ErrorCode::Overflow)?;
+                remaining_yield = remaining_yield
+                    .checked_sub(tier_share)
+                    .ok_or(ErrorCode::Overflow)?;
 
-            (reward_amount, current_rate, daily_share, weekly_share)
+                if index == distribution_tier_index {
+                    reward_amount = tier
+                        .accumulated
+                        .checked_add(tier_share)
+                        .ok_or(ErrorCode::Overflow)?;
+                    tier.accumulated = 0;
+                    tier.distributed_at = now;
+                } else {
+                    tier.accumulated = tier
+                        .accumulated
+                        .checked_add(tier_share)
+                        .ok_or(ErrorCode::Overflow)?;
+                }
+            }
+
+            (reward_amount, current_rate)
         };
 
         // Init reward
@@ -189,36 +196,6 @@ pub fn handler(
             .current_round
             .checked_add(1)
             .ok_or(ErrorCode::Overflow)?;
-
-        match reward_type {
-            REWARD_TYPE_ROUND => {
-                vault.daily_jackpot_accumulated = vault
-                    .daily_jackpot_accumulated
-                    .checked_add(daily_share)
-                    .ok_or(ErrorCode::Overflow)?;
-                vault.weekly_jackpot_accumulated = vault
-                    .weekly_jackpot_accumulated
-                    .checked_add(weekly_share)
-                    .ok_or(ErrorCode::Overflow)?;
-            }
-            REWARD_TYPE_DAILY => {
-                vault.last_daily_ts = now;
-                vault.daily_jackpot_accumulated = 0;
-                vault.weekly_jackpot_accumulated = vault
-                    .weekly_jackpot_accumulated
-                    .checked_add(weekly_share)
-                    .ok_or(ErrorCode::Overflow)?;
-            }
-            REWARD_TYPE_WEEKLY => {
-                vault.last_weekly_ts = now;
-                vault.weekly_jackpot_accumulated = 0;
-                vault.daily_jackpot_accumulated = vault
-                    .daily_jackpot_accumulated
-                    .checked_add(daily_share)
-                    .ok_or(ErrorCode::Overflow)?;
-            }
-            _ => unreachable!(),
-        };
 
         reward_amount
     };

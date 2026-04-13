@@ -74,4 +74,7 @@ pub enum ErrorCode {
     // 6023
     #[msg("Below minimum deposit")]
     BelowMinimumDeposit,
+    // 6024
+    #[msg("Invalid Vault share")]
+    InvalidVaultShare,
 }

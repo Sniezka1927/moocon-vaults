@@ -883,6 +883,19 @@
         {
           "name": "withdraw_fee",
           "type": "u64"
+        },
+        {
+          "name": "tiers",
+          "type": {
+            "array": [
+              {
+                "defined": {
+                  "name": "DistributionTier"
+                }
+              },
+              2
+            ]
+          }
         }
       ]
     },
@@ -973,6 +986,9 @@
         },
         {
           "name": "request"
+        },
+        {
+          "name": "winner"
         }
       ],
       "args": [
@@ -1038,106 +1054,6 @@
         {
           "name": "new_vrf_authority",
           "type": "pubkey"
-        }
-      ]
-    },
-    {
-      "name": "set_winner",
-      "discriminator": [
-        207,
-        149,
-        39,
-        13,
-        31,
-        233,
-        182,
-        109
-      ],
-      "accounts": [
-        {
-          "name": "vrf_authority",
-          "signer": true,
-          "relations": [
-            "state"
-          ]
-        },
-        {
-          "name": "state",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "vault",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
-              },
-              {
-                "kind": "arg",
-                "path": "vault_index"
-              }
-            ]
-          }
-        },
-        {
-          "name": "reward",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  114,
-                  101,
-                  119,
-                  97,
-                  114,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "vault"
-              },
-              {
-                "kind": "arg",
-                "path": "round"
-              }
-            ]
-          }
-        },
-        {
-          "name": "winner"
-        }
-      ],
-      "args": [
-        {
-          "name": "vault_index",
-          "type": "u32"
-        },
-        {
-          "name": "round",
-          "type": "u32"
         }
       ]
     },
@@ -1615,6 +1531,11 @@
       "code": 6023,
       "name": "BelowMinimumDeposit",
       "msg": "Below minimum deposit"
+    },
+    {
+      "code": 6024,
+      "name": "InvalidVaultShare",
+      "msg": "Invalid Vault share"
     }
   ],
   "types": [
@@ -1661,6 +1582,33 @@
                 32
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "DistributionTier",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "distributed_at",
+            "type": "i64"
+          },
+          {
+            "name": "interval",
+            "type": "i64"
+          },
+          {
+            "name": "reward_share",
+            "type": "u64"
+          },
+          {
+            "name": "accumulated",
+            "type": "u64"
           }
         ]
       }
@@ -1923,20 +1871,17 @@
             "type": "u64"
           },
           {
-            "name": "daily_jackpot_accumulated",
-            "type": "u64"
-          },
-          {
-            "name": "weekly_jackpot_accumulated",
-            "type": "u64"
-          },
-          {
-            "name": "last_daily_ts",
-            "type": "i64"
-          },
-          {
-            "name": "last_weekly_ts",
-            "type": "i64"
+            "name": "distribution_tiers",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "DistributionTier"
+                  }
+                },
+                2
+              ]
+            }
           },
           {
             "name": "current_round",
@@ -1966,17 +1911,17 @@
       "value": "200000"
     },
     {
-      "name": "FEE_DENOMINATOR",
-      "type": "u64",
-      "value": "1000000"
-    },
-    {
       "name": "JUPITER_LENDING_PROGRAM_ID",
       "docs": [
         "https://dev.jup.ag/docs/lend/program-addresses"
       ],
       "type": "pubkey",
       "value": "5za4DTEi2hT35dWfNysVgFSeoJ93xTZsKc8Za4gfxEni"
+    },
+    {
+      "name": "PERCENTAGE_DENOMINATOR",
+      "type": "u64",
+      "value": "1000000"
     },
     {
       "name": "REWARD_SEED",

@@ -37,8 +37,9 @@ pub mod premium_vaults {
         ctx: Context<InitializeVault>,
         min_deposit: u64,
         withdraw_fee: u64,
+        tiers: [DistributionTier; 2],
     ) -> Result<()> {
-        initialize_vault::handler(ctx, min_deposit, withdraw_fee)
+        initialize_vault::handler(ctx, min_deposit, withdraw_fee, tiers)
     }
 
     pub fn set_withdraw_fee(
@@ -86,10 +87,6 @@ pub mod premium_vaults {
         secret_seed: [u8; 32],
     ) -> Result<()> {
         reveal::handler(ctx, vault_index, round, secret_seed)
-    }
-
-    pub fn set_winner(ctx: Context<SetWinner>, vault_index: u32, round: u32) -> Result<()> {
-        set_winner::handler(ctx, vault_index, round)
     }
 
     // User

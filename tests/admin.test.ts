@@ -4,7 +4,7 @@ import { Keypair, LAMPORTS_PER_SOL, Transaction } from '@solana/web3.js'
 import { createMint } from '@solana/spl-token'
 import { Vault } from '../ts-sdk/vault'
 import { signAndSend } from '../ts-sdk/utils'
-import { VRF_TEST_AUTHORITY, airdrop } from './test-utils'
+import { VRF_TEST_AUTHORITY, airdrop, TIER_60_40 } from './test-utils'
 
 describe('premium-vaults admin', () => {
   const provider = anchor.AnchorProvider.env()
@@ -97,7 +97,8 @@ describe('premium-vaults admin', () => {
       pMint,
       lending: DUMMY_LENDING,
       minDeposit: 1_000_000n,
-      withdrawFee: 50n
+      withdrawFee: 50n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(ix), [admin])
 

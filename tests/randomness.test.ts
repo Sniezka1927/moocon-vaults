@@ -19,7 +19,8 @@ import {
   VRF_FULFILLMENT_AUTHORITY,
   VRF_TEST_AUTHORITY,
   airdrop,
-  sleep
+  sleep,
+  TIER_60_40
 } from './test-utils'
 
 describe('premium-vaults randomness', () => {
@@ -119,7 +120,8 @@ describe('premium-vaults randomness', () => {
       pMint,
       minDeposit: 0n,
       lending: DUMMY_WRITABLE,
-      withdrawFee: 0n
+      withdrawFee: 0n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(vaultIx), [
       vrfAuthority
@@ -193,7 +195,8 @@ describe('premium-vaults randomness', () => {
       vaultIndex: 0,
       round: 0,
       secretSeed,
-      request
+      request,
+      winner: vrfAuthority.publicKey
     })
 
     try {
@@ -220,7 +223,8 @@ describe('premium-vaults randomness', () => {
       vaultIndex: 0,
       round: 0,
       secretSeed,
-      request
+      request,
+      winner: vrfAuthority.publicKey
     })
 
     try {
@@ -256,7 +260,8 @@ describe('premium-vaults randomness', () => {
       vaultIndex: 0,
       round: 0,
       secretSeed,
-      request
+      request,
+      winner: vrfAuthority.publicKey
     })
 
     const sig = await signAndSend(

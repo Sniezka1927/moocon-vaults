@@ -8,7 +8,6 @@
     "test:commit": "anchor test --skip-build tests/commit.test.ts",
     "test:set-fee": "anchor test --skip-build tests/set-fee.test.ts",
     "test:reveal": "anchor test --skip-build tests/reveal.test.ts",
-    "test:set-winner": "anchor test --skip-build tests/set-winner.test.ts",
     "test:multi-user": "anchor test --skip-build tests/multi-user.test.ts",
     "test:metaplex": "anchor test --skip-build tests/metaplex.test.ts",
     "test:reward-lifecycle": "anchor test --skip-build tests/reward-lifecycle.test.ts"

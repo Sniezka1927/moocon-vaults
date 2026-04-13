@@ -889,6 +889,19 @@ export type PremiumVaults = {
         {
           "name": "withdrawFee",
           "type": "u64"
+        },
+        {
+          "name": "tiers",
+          "type": {
+            "array": [
+              {
+                "defined": {
+                  "name": "distributionTier"
+                }
+              },
+              2
+            ]
+          }
         }
       ]
     },
@@ -979,6 +992,9 @@ export type PremiumVaults = {
         },
         {
           "name": "request"
+        },
+        {
+          "name": "winner"
         }
       ],
       "args": [
@@ -1044,106 +1060,6 @@ export type PremiumVaults = {
         {
           "name": "newVrfAuthority",
           "type": "pubkey"
-        }
-      ]
-    },
-    {
-      "name": "setWinner",
-      "discriminator": [
-        207,
-        149,
-        39,
-        13,
-        31,
-        233,
-        182,
-        109
-      ],
-      "accounts": [
-        {
-          "name": "vrfAuthority",
-          "signer": true,
-          "relations": [
-            "state"
-          ]
-        },
-        {
-          "name": "state",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "vault",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
-              },
-              {
-                "kind": "arg",
-                "path": "vaultIndex"
-              }
-            ]
-          }
-        },
-        {
-          "name": "reward",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  114,
-                  101,
-                  119,
-                  97,
-                  114,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "vault"
-              },
-              {
-                "kind": "arg",
-                "path": "round"
-              }
-            ]
-          }
-        },
-        {
-          "name": "winner"
-        }
-      ],
-      "args": [
-        {
-          "name": "vaultIndex",
-          "type": "u32"
-        },
-        {
-          "name": "round",
-          "type": "u32"
         }
       ]
     },
@@ -1621,6 +1537,11 @@ export type PremiumVaults = {
       "code": 6023,
       "name": "belowMinimumDeposit",
       "msg": "Below minimum deposit"
+    },
+    {
+      "code": 6024,
+      "name": "invalidVaultShare",
+      "msg": "Invalid Vault share"
     }
   ],
   "types": [
@@ -1667,6 +1588,33 @@ export type PremiumVaults = {
                 32
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "distributionTier",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "distributedAt",
+            "type": "i64"
+          },
+          {
+            "name": "interval",
+            "type": "i64"
+          },
+          {
+            "name": "rewardShare",
+            "type": "u64"
+          },
+          {
+            "name": "accumulated",
+            "type": "u64"
           }
         ]
       }
@@ -1929,20 +1877,17 @@ export type PremiumVaults = {
             "type": "u64"
           },
           {
-            "name": "dailyJackpotAccumulated",
-            "type": "u64"
-          },
-          {
-            "name": "weeklyJackpotAccumulated",
-            "type": "u64"
-          },
-          {
-            "name": "lastDailyTs",
-            "type": "i64"
-          },
-          {
-            "name": "lastWeeklyTs",
-            "type": "i64"
+            "name": "distributionTiers",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "distributionTier"
+                  }
+                },
+                2
+              ]
+            }
           },
           {
             "name": "currentRound",
@@ -1972,17 +1917,17 @@ export type PremiumVaults = {
       "value": "200000"
     },
     {
-      "name": "feeDenominator",
-      "type": "u64",
-      "value": "1000000"
-    },
-    {
       "name": "jupiterLendingProgramId",
       "docs": [
         "https://dev.jup.ag/docs/lend/program-addresses"
       ],
       "type": "pubkey",
       "value": "5za4DTEi2hT35dWfNysVgFSeoJ93xTZsKc8Za4gfxEni"
+    },
+    {
+      "name": "percentageDenominator",
+      "type": "u64",
+      "value": "1000000"
     },
     {
       "name": "rewardSeed",

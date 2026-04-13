@@ -17,7 +17,7 @@ pub const REWARD_TYPE_DAILY: u8 = 1;
 #[constant]
 pub const REWARD_TYPE_WEEKLY: u8 = 2;
 #[constant]
-pub const WINNER_SHARE: u64 = 600000;
+pub const WINNER_SHARE: u64 = 600_000;
 #[constant]
 pub const DAILY_JACKPOT_SHARE: u64 = 200000;
 #[constant]
@@ -25,7 +25,7 @@ pub const WEEKLY_JACKPOT_SHARE: u64 = 200000;
 #[constant]
 pub const SHARE_DENOMINATOR: u64 = 1000000;
 #[constant]
-pub const FEE_DENOMINATOR: u64 = 1_000_000;
+pub const PERCENTAGE_DENOMINATOR: u64 = 1_000_000;
 
 /// https://dev.jup.ag/docs/lend/program-addresses
 #[constant]

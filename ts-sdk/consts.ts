@@ -13,9 +13,8 @@ export const MPL_TOKEN_PROGRAM_ID = new PublicKey(
 )
 export const ROUND_TIME = 30 // minutes per round
 export const GLOBAL_ACCOUNTS_TTL = 86400
-export const REWARD_TYPE_ROUND = 0
-export const REWARD_TYPE_DAILY = 1
-export const REWARD_TYPE_WEEKLY = 2
+export const REWARD_TYPE_TIER_0 = 0
+export const REWARD_TYPE_TIER_1 = 1
 export const HASH_SIZE = 32
 export const MAX_U64 = BigInt('0xffffffffffffffff')
 export const MIN_TICKETS_FOR_REFERRAL = 0n

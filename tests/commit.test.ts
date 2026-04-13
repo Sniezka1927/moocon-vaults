@@ -19,7 +19,8 @@ import { signAndSend } from '../ts-sdk/utils'
 import {
   VRF_TEST_AUTHORITY,
   VRF_FULFILLMENT_AUTHORITY,
-  airdrop
+  airdrop,
+  TIER_60_40
 } from './test-utils'
 
 describe('commit-', () => {
@@ -95,7 +96,8 @@ describe('commit-', () => {
       minDeposit: 0n,
       lending: DUMMY_WRITABLE,
       pMint,
-      withdrawFee: 0n
+      withdrawFee: 0n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(initVaultIx), [
       admin
@@ -205,7 +207,8 @@ describe('commit-', () => {
       minDeposit: 0n,
       lending: DUMMY_WRITABLE,
       pMint,
-      withdrawFee: 0n
+      withdrawFee: 0n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(initVaultIx), [
       admin
@@ -268,7 +271,7 @@ describe('commit-', () => {
       vrfAuthority: vrfAuthority.publicKey,
       vaultIndex,
       round,
-      rewardType: 3,
+      rewardType: 2,
       tickets: 100n,
       merkleRoot,
       secretHash,
@@ -290,6 +293,43 @@ describe('commit-', () => {
         e.logs?.some((l: string) => l.includes('InvalidRewardType')) ?? true
       )
     }
+  })
+
+  it('commit accepts valid second-tier reward_type', async () => {
+    vault.fetcher.vaults.clear()
+    const round = (await vault.fetcher.getVaultByIndex(vaultIndex)).currentRound
+
+    const merkleRoot = new Array(32).fill(31)
+    const secretHash = new Array(32).fill(0)
+    for (let i = 0; i < 32; i++) secretHash[i] = merkleRoot[i] ^ 32
+    const vrfSeed = Buffer.from(
+      merkleRoot.map((b: number, i: number) => b ^ secretHash[i])
+    )
+
+    const ix = await vault.commitIx({
+      vrfAuthority: vrfAuthority.publicKey,
+      vaultIndex,
+      round,
+      rewardType: 1,
+      tickets: 100n,
+      merkleRoot,
+      secretHash,
+      mint,
+      vaultFTokenAccount,
+      fTokenMint: fMint,
+      lending: DUMMY_WRITABLE,
+      treasury: (await vrf.getNetworkState()).config.treasury,
+      networkState: networkStateAccountAddress(),
+      request: randomnessAccountAddress(vrfSeed)
+    })
+    await signAndSend(provider.connection, new Transaction().add(ix), [
+      vrfAuthority
+    ])
+
+    const [rewardPda] = vault.fetcher.getRewardAddress(vaultPda, round)
+    vault.fetcher.rewards.clear()
+    const reward = await vault.fetcher.getRewardByAddress(rewardPda)
+    assert.equal(reward.rewardType, 1)
   })
 
   it('commit fails for non-vrf-authority', async () => {

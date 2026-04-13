@@ -31,13 +31,16 @@ export type VaultAccount = {
   withdrawFee: bigint
 
   lastRate: bigint
-  dailyJackpotAccumulated: bigint
-  weeklyJackpotAccumulated: bigint
-
-  lastDailyTs: bigint
-  lastWeeklyTs: bigint
+  distributionTiers: [DistributionTier, DistributionTier]
   currentRound: number
   bump: number
+}
+
+export type DistributionTier = {
+  distributedAt: bigint
+  interval: bigint
+  rewardShare: bigint
+  accumulated: bigint
 }
 
 export type StateAccount = {
@@ -260,6 +263,11 @@ function bnToBigInt(v: BN): bigint {
 }
 
 export function parseVault(raw: RawVault): VaultAccount {
+  const distributionTiers = raw.distributionTiers.map(parseDistributionTier) as [
+    DistributionTier,
+    DistributionTier
+  ]
+
   return {
     mint: raw.mint,
     fMint: raw.fMint,
@@ -269,12 +277,23 @@ export function parseVault(raw: RawVault): VaultAccount {
     lastRate: bnToBigInt(raw.lastRate),
     withdrawFee: bnToBigInt(raw.withdrawFee),
     accumulatedFee: bnToBigInt(raw.accumulatedFee),
-    dailyJackpotAccumulated: bnToBigInt(raw.dailyJackpotAccumulated),
-    weeklyJackpotAccumulated: bnToBigInt(raw.weeklyJackpotAccumulated),
-    lastDailyTs: bnToBigInt(raw.lastDailyTs),
-    lastWeeklyTs: bnToBigInt(raw.lastWeeklyTs),
+    distributionTiers,
     currentRound: raw.currentRound,
     bump: raw.bump
+  }
+}
+
+function parseDistributionTier(raw: {
+  distributedAt: BN
+  interval: BN
+  rewardShare: BN
+  accumulated: BN
+}): DistributionTier {
+  return {
+    distributedAt: bnToBigInt(raw.distributedAt),
+    interval: bnToBigInt(raw.interval),
+    rewardShare: bnToBigInt(raw.rewardShare),
+    accumulated: bnToBigInt(raw.accumulated)
   }
 }
 

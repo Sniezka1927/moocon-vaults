@@ -1,7 +1,10 @@
 use anchor_lang::prelude::{program_option::COption, *};
 use anchor_spl::token_interface::Mint;
 
-use crate::{error::ErrorCode, State, Vault, FEE_DENOMINATOR, STATE_SEED, VAULT_SEED};
+use crate::{
+    error::ErrorCode, DistributionTier, State, Vault, PERCENTAGE_DENOMINATOR, STATE_SEED,
+    VAULT_SEED,
+};
 
 #[derive(Accounts)]
 pub struct InitializeVault<'info> {
@@ -32,8 +35,19 @@ pub struct InitializeVault<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<InitializeVault>, min_deposit: u64, withdraw_fee: u64) -> Result<()> {
+pub fn handler(
+    ctx: Context<InitializeVault>,
+    min_deposit: u64,
+    withdraw_fee: u64,
+    mut tiers: [DistributionTier; 2],
+) -> Result<()> {
     let mut vault = ctx.accounts.vault.load_init()?;
+    let now = Clock::get()?.unix_timestamp;
+    let mut sum_share = 0u64;
+    for i in 0..tiers.len() {
+        tiers[i].distributed_at = now;
+        sum_share += tiers[i].reward_share
+    }
 
     // Validate that p_mint mint authoritiy is vault PDA
     require!(
@@ -51,7 +65,15 @@ pub fn handler(ctx: Context<InitializeVault>, min_deposit: u64, withdraw_fee: u6
         ErrorCode::InvalidPMint
     );
 
-    require!(withdraw_fee <= FEE_DENOMINATOR, ErrorCode::InvalidFee);
+    require!(
+        withdraw_fee <= PERCENTAGE_DENOMINATOR,
+        ErrorCode::InvalidFee
+    );
+
+    require!(
+        sum_share == PERCENTAGE_DENOMINATOR,
+        ErrorCode::InvalidVaultShare
+    );
 
     vault.mint = ctx.accounts.mint.key();
     vault.f_mint = ctx.accounts.f_mint.key();
@@ -63,11 +85,7 @@ pub fn handler(ctx: Context<InitializeVault>, min_deposit: u64, withdraw_fee: u6
     vault.withdraw_fee = withdraw_fee;
 
     vault.last_rate = 0;
-    vault.daily_jackpot_accumulated = 0;
-    vault.weekly_jackpot_accumulated = 0;
-
-    vault.last_daily_ts = Clock::get()?.unix_timestamp;
-    vault.last_weekly_ts = Clock::get()?.unix_timestamp;
+    vault.distribution_tiers = tiers;
 
     vault.current_round = 0;
     vault.bump = ctx.bumps.vault;

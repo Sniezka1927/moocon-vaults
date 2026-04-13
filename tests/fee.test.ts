@@ -20,7 +20,8 @@ import {
   VRF_TEST_AUTHORITY,
   airdrop,
   dummyLending,
-  assertBalance
+  assertBalance,
+  TIER_60_40
 } from './test-utils'
 
 describe('premium-vaults fees', () => {
@@ -47,7 +48,7 @@ describe('premium-vaults fees', () => {
   const DEPOSIT_AMOUNT = 1_000_000_000_000n // 1M tokens
   const MINT_AMOUNT = 10_000_000_000_000n // 10M tokens
   const WITHDRAW_FEE = 50_000n // 5% (out of 1_000_000)
-  const FEE_DENOMINATOR = 1_000_000n
+  const PERCENTAGE_DENOMINATOR = 1_000_000n
 
   before(async () => {
     vault = new Vault(provider.connection)
@@ -111,7 +112,8 @@ describe('premium-vaults fees', () => {
       pMint,
       lending: DUMMY_WRITABLE,
       minDeposit: 0n,
-      withdrawFee: WITHDRAW_FEE
+      withdrawFee: WITHDRAW_FEE,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(initVaultIx), [
       admin
@@ -215,7 +217,8 @@ describe('premium-vaults fees', () => {
       adminMintBalance = 0n
 
       const withdrawAmount = 1_000_000_000_000n // 1M
-      const expectedFee = (withdrawAmount * WITHDRAW_FEE) / FEE_DENOMINATOR // 50_000_000_000
+      const expectedFee =
+        (withdrawAmount * WITHDRAW_FEE) / PERCENTAGE_DENOMINATOR // 50_000_000_000
 
       const ix = await vault.withdrawIx({
         withdrawer: user.publicKey,
@@ -300,7 +303,8 @@ describe('premium-vaults fees', () => {
         .accumulatedFee
 
       const withdrawAmount = 500_000_000_000n
-      const expectedNewFee = (withdrawAmount * WITHDRAW_FEE) / FEE_DENOMINATOR
+      const expectedNewFee =
+        (withdrawAmount * WITHDRAW_FEE) / PERCENTAGE_DENOMINATOR
 
       const ix = await vault.withdrawIx({
         withdrawer: user.publicKey,
@@ -394,8 +398,8 @@ describe('premium-vaults fees', () => {
       const vaultAccount = await vault.fetcher.getVaultByIndex(vaultIndex)
       // Fee unchanged from previous test (accumulated fee stays the same since withdraw fee was 0)
       const expectedAccumulatedFee =
-        (1_000_000_000_000n * WITHDRAW_FEE) / FEE_DENOMINATOR +
-        (500_000_000_000n * WITHDRAW_FEE) / FEE_DENOMINATOR
+        (1_000_000_000_000n * WITHDRAW_FEE) / PERCENTAGE_DENOMINATOR +
+        (500_000_000_000n * WITHDRAW_FEE) / PERCENTAGE_DENOMINATOR
       assert.equal(
         vaultAccount.accumulatedFee,
         expectedAccumulatedFee,
@@ -531,7 +535,8 @@ describe('premium-vaults fees', () => {
         [user]
       )
 
-      const withdrawFee = (DEPOSIT_AMOUNT * WITHDRAW_FEE) / FEE_DENOMINATOR
+      const withdrawFee =
+        (DEPOSIT_AMOUNT * WITHDRAW_FEE) / PERCENTAGE_DENOMINATOR
       userMintBalance += DEPOSIT_AMOUNT - withdrawFee
       vaultMintBalance -= DEPOSIT_AMOUNT - withdrawFee
       userPTokenBalance -= DEPOSIT_AMOUNT

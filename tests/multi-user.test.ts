@@ -30,7 +30,8 @@ import {
   VRF_FULFILLMENT_AUTHORITY,
   airdrop,
   dummyLending,
-  assertBalance
+  assertBalance,
+  TIER_60_40
 } from './test-utils'
 import { MAX_U64 } from '../ts-sdk'
 
@@ -146,7 +147,8 @@ describe('premium-vaults multi-user', () => {
       lending: DUMMY_WRITABLE,
       minDeposit: MIN_DEPOSIT,
       pMint,
-      withdrawFee: 0n
+      withdrawFee: 0n,
+      tiers: TIER_60_40
     })
     await signAndSend(provider.connection, new Transaction().add(initVaultIx), [
       admin
@@ -314,7 +316,7 @@ describe('premium-vaults multi-user', () => {
     }
   })
 
-  it('lottery round: commit, fulfill, reveal, setWinner', async () => {
+  it('lottery round: commit, fulfill, reveal', async () => {
     vault.fetcher.vaults.clear()
     const vaultBefore = await vault.fetcher.getVaultByIndex(vaultIndex)
     const round = vaultBefore.currentRound
@@ -371,25 +373,10 @@ describe('premium-vaults multi-user', () => {
       vaultIndex,
       round,
       secretSeed,
-      request
-    })
-    await signAndSend(provider.connection, new Transaction().add(revealIx), [
-      vrfAuthority
-    ])
-
-    assert.equal(
-      (await getAccount(provider.connection, vaultTokenAccount)).amount,
-      vaultTokenBeforeCommit
-    )
-
-    // Set winner = userB
-    const setWinnerIx = await vault.setWinnerIx({
-      vrfAuthority: vrfAuthority.publicKey,
-      vaultIndex,
-      round,
+      request,
       winner: userB.publicKey
     })
-    await signAndSend(provider.connection, new Transaction().add(setWinnerIx), [
+    await signAndSend(provider.connection, new Transaction().add(revealIx), [
       vrfAuthority
     ])
 

@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use bytemuck::{Pod, Zeroable};
 
 #[account(zero_copy)]
 #[derive(InitSpace)]
@@ -14,15 +15,19 @@ pub struct Vault {
     pub withdraw_fee: u64,
 
     pub last_rate: u64,
-    pub daily_jackpot_accumulated: u64,
-    pub weekly_jackpot_accumulated: u64,
-
-    pub last_daily_ts: i64,
-    pub last_weekly_ts: i64,
-
+    pub distribution_tiers: [DistributionTier; 2],
     pub current_round: u32,
     pub bump: u8,
     pub _padding: [u8; 3],
+}
+
+#[repr(C)]
+#[derive(InitSpace, Pod, Zeroable, AnchorSerialize, AnchorDeserialize, Copy, Clone)]
+pub struct DistributionTier {
+    pub distributed_at: i64, // last distribution
+    pub interval: i64,       // distributed every
+    pub reward_share: u64,   // share of yield assigned to this tier
+    pub accumulated: u64,    // amount of yield accumulated in this tier
 }
 
 impl Vault {

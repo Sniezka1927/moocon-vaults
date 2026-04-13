@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::{error::ErrorCode, State, Vault, FEE_DENOMINATOR, STATE_SEED, VAULT_SEED};
+use crate::{error::ErrorCode, State, Vault, PERCENTAGE_DENOMINATOR, STATE_SEED, VAULT_SEED};
 
 #[derive(Accounts)]
 #[instruction(vault_index: u32)]
@@ -25,7 +25,10 @@ pub fn handler(
     _vault_index: u32,
     withdraw_fee: u64,
 ) -> Result<()> {
-    require!(withdraw_fee <= FEE_DENOMINATOR, ErrorCode::InvalidFee);
+    require!(
+        withdraw_fee <= PERCENTAGE_DENOMINATOR,
+        ErrorCode::InvalidFee
+    );
     ctx.accounts.vault.load_mut()?.withdraw_fee = withdraw_fee;
     Ok(())
 }
