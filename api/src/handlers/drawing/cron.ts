@@ -7,11 +7,13 @@ export const processDrawing = async () => {
   logInfo('drawing tick')
 
   try {
-    const vaults = await vault.fetcher.getAllVaults(true)
+    const state = await vault.fetcher.getState(true)
+    const vaultCount = state.lastVault
 
-    for (let i = 0; i < vaults.length; i++) {
+    for (let i = 0; i < vaultCount; i++) {
       try {
-        await processVaultLifecycle(i, vaults[i])
+        const vaultAccount = await vault.fetcher.getVaultByIndex(i)
+        await processVaultLifecycle(i, vaultAccount)
       } catch (err) {
         logError('vault processing error', { vaultIndex: i, err })
       }

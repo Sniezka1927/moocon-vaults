@@ -1,0 +1,209 @@
+2026-04-13T22:08:00.002Z [INFO] drawing tick
+2026-04-13T22:08:00.385Z [INFO] eligibility scan updated drawingId=113 previous=1 current=5 intersection=1
+2026-04-13T22:08:00.387Z [INFO] commit artifacts materialized drawingId=113 holders=1 totalTickets=1
+2026-04-13T22:08:00.387Z [INFO] commit vaultIndex=0 round=3 rewardType=0
+2026-04-13T22:08:02.386Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:152:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:08:02.461Z [INFO] eligibility scan updated drawingId=114 previous=1 current=1 intersection=1
+2026-04-13T22:08:02.462Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:08:02.462Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:08:03.668Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:152:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:09:00.013Z [INFO] drawing tick
+2026-04-13T22:09:00.615Z [INFO] eligibility scan updated drawingId=113 previous=1 current=5 intersection=1
+2026-04-13T22:09:00.616Z [INFO] commit artifacts materialized drawingId=113 holders=1 totalTickets=1
+2026-04-13T22:09:00.616Z [INFO] commit vaultIndex=0 round=3 rewardType=0
+2026-04-13T22:09:02.238Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:152:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:09:02.391Z [INFO] eligibility scan updated drawingId=114 previous=1 current=1 intersection=1
+2026-04-13T22:09:02.392Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:09:02.392Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:09:03.956Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:152:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:10:00.002Z [INFO] drawing tick
+2026-04-13T22:10:00.343Z [INFO] eligibility scan updated drawingId=113 previous=1 current=5 intersection=1
+2026-04-13T22:10:00.345Z [INFO] commit artifacts materialized drawingId=113 holders=1 totalTickets=1
+2026-04-13T22:10:00.345Z [INFO] commit vaultIndex=0 round=3 rewardType=0
+2026-04-13T22:10:01.671Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:152:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:10:01.810Z [INFO] eligibility scan updated drawingId=114 previous=1 current=1 intersection=1
+2026-04-13T22:10:01.812Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:10:01.812Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:10:03.206Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:152:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:11:00.001Z [INFO] drawing tick
+2026-04-13T22:11:18.876Z [INFO] eligibility scan updated drawingId=113 previous=1 current=5 intersection=1
+2026-04-13T22:11:18.878Z [INFO] commit artifacts materialized drawingId=113 holders=1 totalTickets=1
+2026-04-13T22:11:18.878Z [INFO] commit vaultIndex=0 round=3 rewardType=0
+2026-04-13T22:11:21.323Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:152:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:11:21.398Z [INFO] eligibility scan updated drawingId=114 previous=1 current=1 intersection=1
+2026-04-13T22:11:21.399Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:11:21.399Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:11:23.111Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:152:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:12:00.003Z [INFO] drawing tick
+2026-04-13T22:12:01.132Z [INFO] eligibility scan updated drawingId=113 previous=1 current=5 intersection=1
+2026-04-13T22:12:01.133Z [INFO] commit artifacts materialized drawingId=113 holders=1 totalTickets=1
+2026-04-13T22:12:01.134Z [INFO] commit vaultIndex=0 round=3 rewardType=0
+2026-04-13T22:12:04.109Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:12:04.184Z [INFO] eligibility scan updated drawingId=114 previous=1 current=1 intersection=1
+2026-04-13T22:12:04.185Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:12:04.185Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:12:05.352Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:13:00.003Z [INFO] drawing tick
+2026-04-13T22:13:00.490Z [INFO] eligibility scan updated drawingId=113 previous=1 current=5 intersection=1
+2026-04-13T22:13:00.493Z [INFO] commit artifacts materialized drawingId=113 holders=1 totalTickets=1
+2026-04-13T22:13:00.493Z [INFO] commit vaultIndex=0 round=3 rewardType=0
+2026-04-13T22:13:02.193Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:13:02.270Z [INFO] eligibility scan updated drawingId=114 previous=1 current=1 intersection=1
+2026-04-13T22:13:02.272Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:13:02.272Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:13:03.413Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:38:00.005Z [INFO] drawing tick
+2026-04-13T22:38:00.517Z [INFO] eligibility scan updated drawingId=113 previous=1 current=1 intersection=1
+2026-04-13T22:38:00.521Z [INFO] commit artifacts materialized drawingId=113 holders=1 totalTickets=1
+2026-04-13T22:38:00.522Z [INFO] commit vaultIndex=0 round=3 rewardType=0
+2026-04-13T22:38:01.812Z [INFO] commit transaction submitted signature=2drx4TnjsMWszRdZQPSfrNCcxgjtwYHsfi4eWLDkTDZvUo2rbv3CpaTEET6o2RQwNrzHArZ3gKJaGxdXyyd3HGDK
+2026-04-13T22:38:14.176Z [INFO] commit saved drawingId=113
+2026-04-13T22:38:14.178Z [INFO] checking VRF vaultIndex=0 round=3
+2026-04-13T22:38:14.237Z [INFO] VRF not fulfilled yet attempt=1 maxAttempts=180
+2026-04-13T22:38:15.299Z [INFO] VRF fulfilled, computing winner drawingId=113
+2026-04-13T22:38:16.372Z [INFO] reveal transaction submitted signature=43A49844BiCSZEyzZsB5YMNBrbS3zjN9ZMytVM9HdKBiCXoGTnJ5UQE77jczc7RoSvfH6LCQmLDVq6a7sEHw9mz8
+2026-04-13T22:38:28.331Z [INFO] drawing completed drawingId=113
+2026-04-13T22:38:30.472Z [INFO] snapshot vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=4
+2026-04-13T22:38:30.604Z [INFO] initial snapshot saved drawingId=304 holders=1
+2026-04-13T22:38:30.604Z [INFO] next snapshot attempted after reveal vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=4
+2026-04-13T22:38:30.747Z [INFO] eligibility scan updated drawingId=114 previous=1 current=5 intersection=1
+2026-04-13T22:38:30.750Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:38:30.751Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:38:32.506Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":6022}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":6022}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at unknown\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:39:00.010Z [INFO] drawing tick
+2026-04-13T22:39:00.203Z [INFO] eligibility scan updated drawingId=304 previous=1 current=1 intersection=1
+2026-04-13T22:39:00.203Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=4 (no due tier)
+2026-04-13T22:39:00.262Z [INFO] eligibility scan updated drawingId=114 previous=1 current=5 intersection=1
+2026-04-13T22:39:00.263Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:39:00.263Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:39:02.155Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":6022}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":6022}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-13T22:40:00.006Z [INFO] drawing tick
+2026-04-13T22:40:00.496Z [INFO] eligibility scan updated drawingId=304 previous=1 current=1 intersection=1
+2026-04-13T22:40:00.497Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=4 (no due tier)
+2026-04-13T22:40:00.625Z [INFO] eligibility scan updated drawingId=114 previous=1 current=5 intersection=1
+2026-04-13T22:40:00.626Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-13T22:40:00.627Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-13T22:40:02.097Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":6022}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":6022}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T18:52:00.005Z [INFO] drawing tick
+2026-04-14T18:52:00.282Z [INFO] eligibility scan updated drawingId=304 previous=1 current=5 intersection=1
+2026-04-14T18:52:00.286Z [INFO] commit artifacts materialized drawingId=304 holders=1 totalTickets=1
+2026-04-14T18:52:00.287Z [INFO] commit vaultIndex=0 round=4 rewardType=0
+2026-04-14T18:52:02.080Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T18:52:02.147Z [INFO] eligibility scan updated drawingId=114 previous=1 current=1 intersection=1
+2026-04-14T18:52:02.148Z [INFO] commit artifacts materialized drawingId=114 holders=1 totalTickets=1
+2026-04-14T18:52:02.149Z [INFO] commit vaultIndex=1 round=3 rewardType=0
+2026-04-14T18:52:03.345Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T18:53:00.006Z [INFO] drawing tick
+2026-04-14T18:53:02.899Z [INFO] snapshot vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=2
+2026-04-14T18:53:03.609Z [INFO] initial snapshot saved drawingId=1 holders=5
+2026-04-14T18:53:03.611Z [INFO] snapshot vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=4
+2026-04-14T18:53:04.189Z [INFO] initial snapshot saved drawingId=2 holders=1
+2026-04-14T18:54:00.000Z [INFO] drawing tick
+2026-04-14T18:54:00.203Z [INFO] eligibility scan updated drawingId=1 previous=5 current=5 intersection=5
+2026-04-14T18:54:00.210Z [INFO] commit artifacts materialized drawingId=1 holders=5 totalTickets=17
+2026-04-14T18:54:00.211Z [INFO] commit vaultIndex=0 round=2 rewardType=0
+2026-04-14T18:54:02.067Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (unknown)\n    at unknown\n    at unknown\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T18:54:02.211Z [INFO] eligibility scan updated drawingId=2 previous=1 current=1 intersection=1
+2026-04-14T18:54:02.212Z [INFO] commit artifacts materialized drawingId=2 holders=1 totalTickets=1
+2026-04-14T18:54:02.213Z [INFO] commit vaultIndex=1 round=4 rewardType=0
+2026-04-14T18:54:04.267Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}","stack":"Error: Transaction failed: {\"InstructionError\":[0,{\"Custom\":3012}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:148:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at unknown\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T18:58:00.001Z [INFO] drawing tick
+2026-04-14T18:58:00.285Z [INFO] eligibility scan updated drawingId=1 previous=5 current=5 intersection=5
+2026-04-14T18:58:00.288Z [INFO] commit artifacts materialized drawingId=1 holders=5 totalTickets=17
+2026-04-14T18:58:00.289Z [INFO] commit vaultIndex=0 round=2 rewardType=0
+2026-04-14T18:58:02.014Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[1,{\"Custom\":0}]}","stack":"Error: Transaction failed: {\"InstructionError\":[1,{\"Custom\":0}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:158:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T18:58:02.087Z [INFO] eligibility scan updated drawingId=2 previous=1 current=1 intersection=1
+2026-04-14T18:58:02.089Z [INFO] commit artifacts materialized drawingId=2 holders=1 totalTickets=1
+2026-04-14T18:58:02.089Z [INFO] commit vaultIndex=1 round=4 rewardType=0
+2026-04-14T18:58:03.274Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[1,{\"Custom\":6020}]}","stack":"Error: Transaction failed: {\"InstructionError\":[1,{\"Custom\":6020}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:158:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:14:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T19:02:00.003Z [INFO] drawing tick
+2026-04-14T19:02:17.438Z [INFO] eligibility scan updated drawingId=1 previous=5 current=1 intersection=1
+2026-04-14T19:02:17.442Z [INFO] commit artifacts materialized drawingId=1 holders=1 totalTickets=1
+2026-04-14T19:02:17.443Z [INFO] commit vaultIndex=0 round=2 rewardType=0
+2026-04-14T19:02:19.928Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[1,{\"Custom\":0}]}","stack":"Error: Transaction failed: {\"InstructionError\":[1,{\"Custom\":0}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:158:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:16:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T19:02:20.212Z [INFO] eligibility scan updated drawingId=2 previous=1 current=5 intersection=1
+2026-04-14T19:02:20.215Z [INFO] commit artifacts materialized drawingId=2 holders=1 totalTickets=1
+2026-04-14T19:02:20.215Z [INFO] commit vaultIndex=1 round=4 rewardType=0
+2026-04-14T19:02:21.741Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[1,{\"Custom\":6022}]}","stack":"Error: Transaction failed: {\"InstructionError\":[1,{\"Custom\":6022}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:158:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:16:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T19:03:00.004Z [INFO] drawing tick
+2026-04-14T19:03:02.444Z [INFO] eligibility scan updated drawingId=1 previous=1 current=1 intersection=1
+2026-04-14T19:03:02.447Z [INFO] commit artifacts materialized drawingId=1 holders=1 totalTickets=1
+2026-04-14T19:03:02.447Z [INFO] commit vaultIndex=0 round=2 rewardType=0
+2026-04-14T19:03:04.354Z [ERROR] vault processing error {"vaultIndex":0,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[1,{\"Custom\":0}]}","stack":"Error: Transaction failed: {\"InstructionError\":[1,{\"Custom\":0}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:158:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:16:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T19:03:05.001Z [INFO] eligibility scan updated drawingId=2 previous=1 current=5 intersection=1
+2026-04-14T19:03:05.003Z [INFO] commit artifacts materialized drawingId=2 holders=1 totalTickets=1
+2026-04-14T19:03:05.004Z [INFO] commit vaultIndex=1 round=4 rewardType=0
+2026-04-14T19:03:06.352Z [ERROR] vault processing error {"vaultIndex":1,"err":{"name":"Error","message":"Transaction failed: {\"InstructionError\":[1,{\"Custom\":6022}]}","stack":"Error: Transaction failed: {\"InstructionError\":[1,{\"Custom\":6022}]}\n    at <anonymous> (/Users/sniezka/solana/moocon-vaults/ts-sdk/utils.ts:62:11)\n    at async commitDrawing (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/tx.ts:158:21)\n    at async processVaultLifecycle (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron/lifecycle.ts:86:27)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/src/handlers/drawing/cron.ts:16:15)\n    at async <anonymous> (/Users/sniezka/solana/moocon-vaults/api/node_modules/croner/dist/croner.min.js:1:19062)\n    at processTicksAndRejections (native:7:39)"}}
+2026-04-14T19:07:00.008Z [INFO] drawing tick
+2026-04-14T19:07:00.676Z [INFO] eligibility scan updated drawingId=1 previous=1 current=1 intersection=1
+2026-04-14T19:07:00.679Z [INFO] commit artifacts materialized drawingId=1 holders=1 totalTickets=1
+2026-04-14T19:07:00.679Z [INFO] commit vaultIndex=0 round=2 rewardType=0
+2026-04-14T19:07:02.038Z [WARN] reward account already exists, recovering DB state drawingId=1
+2026-04-14T19:07:02.108Z [WARN] recovered commit drawingId=1
+2026-04-14T19:07:02.108Z [INFO] checking VRF vaultIndex=0 round=2
+2026-04-14T19:10:00.008Z [INFO] drawing tick
+2026-04-14T19:10:00.736Z [INFO] snapshot vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=4
+2026-04-14T19:10:00.872Z [INFO] initial snapshot saved drawingId=1 holders=1
+2026-04-14T19:10:01.006Z [INFO] snapshot vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=2
+2026-04-14T19:10:01.142Z [INFO] initial snapshot saved drawingId=2 holders=5
+2026-04-14T19:11:00.005Z [INFO] drawing tick
+2026-04-14T19:11:00.639Z [INFO] eligibility scan updated drawingId=1 previous=1 current=1 intersection=1
+2026-04-14T19:11:00.644Z [INFO] commit artifacts materialized drawingId=1 holders=1 totalTickets=1
+2026-04-14T19:11:00.646Z [INFO] commit vaultIndex=0 round=4 rewardType=0
+2026-04-14T19:11:02.298Z [INFO] commit transaction submitted signature=xNwnAvMFuN9VidR1uHedqDgo1Rf2gJKgvhNGBqDHGvxZ2oJDPeiv7f7wZ5t1ahjiKhNzFFNxk5ehUtJ6XuHLtwZ
+2026-04-14T19:11:14.824Z [INFO] commit saved drawingId=1
+2026-04-14T19:11:14.830Z [INFO] checking VRF vaultIndex=0 round=4
+2026-04-14T19:11:14.894Z [INFO] VRF fulfilled, computing winner drawingId=1
+2026-04-14T19:11:16.167Z [INFO] reveal transaction submitted signature=3Na5hfxL5ud38Ld5bN97NkJ29Hd5F91azfGVXdUgdewP9y6uoKsggz1yTaoXdbkSnXckVTqyTwnfnMLrSbeySJAE
+2026-04-14T19:11:28.014Z [INFO] drawing completed drawingId=1
+2026-04-14T19:11:30.078Z [INFO] snapshot vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5
+2026-04-14T19:11:30.140Z [INFO] initial snapshot saved drawingId=3 holders=1
+2026-04-14T19:11:30.140Z [INFO] next snapshot attempted after reveal vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5
+2026-04-14T19:11:30.258Z [INFO] eligibility scan updated drawingId=2 previous=5 current=5 intersection=5
+2026-04-14T19:11:30.262Z [INFO] commit artifacts materialized drawingId=2 holders=5 totalTickets=17
+2026-04-14T19:11:30.262Z [INFO] commit vaultIndex=1 round=2 rewardType=0
+2026-04-14T19:11:31.278Z [INFO] commit transaction submitted signature=4jq95GbuHgpekD256hrx94ycQAoK7dUWkeUgc7tnXZ8tYNQ86c6h4rgPF4Wfe1wcPKHykCT8EBkVTWUDr8tLrFvL
+2026-04-14T19:11:43.613Z [INFO] commit saved drawingId=2
+2026-04-14T19:11:43.614Z [INFO] checking VRF vaultIndex=1 round=2
+2026-04-14T19:11:43.749Z [INFO] VRF not fulfilled yet attempt=1 maxAttempts=180
+2026-04-14T19:11:44.812Z [INFO] VRF fulfilled, computing winner drawingId=2
+2026-04-14T19:11:45.674Z [INFO] reveal transaction submitted signature=c5Nghu6gKasQVQLDfahnm5JPxUETxcpHwS9N8wckfrQSM7tn3uqDApDoWgLeYPCHZaxNhCFT4joe5JdXRExAbZ4
+2026-04-14T19:11:58.603Z [INFO] drawing completed drawingId=2
+2026-04-14T19:12:00.002Z [INFO] drawing tick
+2026-04-14T19:12:00.784Z [INFO] snapshot vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3
+2026-04-14T19:12:00.928Z [INFO] initial snapshot saved drawingId=4 holders=5
+2026-04-14T19:12:00.928Z [INFO] next snapshot attempted after reveal vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3
+2026-04-14T19:12:01.141Z [INFO] eligibility scan updated drawingId=3 previous=1 current=1 intersection=1
+2026-04-14T19:12:01.142Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5 (no due tier)
+2026-04-14T19:12:02.014Z [INFO] eligibility scan updated drawingId=4 previous=5 current=5 intersection=5
+2026-04-14T19:12:02.015Z [INFO] commit gate not reached vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3 (no due tier)
+2026-04-14T19:13:00.007Z [INFO] drawing tick
+2026-04-14T19:13:00.268Z [INFO] eligibility scan updated drawingId=3 previous=1 current=1 intersection=1
+2026-04-14T19:13:00.268Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5 (no due tier)
+2026-04-14T19:13:00.394Z [INFO] eligibility scan updated drawingId=4 previous=5 current=5 intersection=5
+2026-04-14T19:13:00.394Z [INFO] commit gate not reached vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3 (no due tier)
+2026-04-14T19:14:00.005Z [INFO] drawing tick
+2026-04-14T19:14:00.283Z [INFO] eligibility scan updated drawingId=3 previous=1 current=1 intersection=1
+2026-04-14T19:14:00.284Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5 (no due tier)
+2026-04-14T19:14:00.407Z [INFO] eligibility scan updated drawingId=4 previous=5 current=5 intersection=5
+2026-04-14T19:14:00.408Z [INFO] commit gate not reached vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3 (no due tier)
+2026-04-14T19:15:00.002Z [INFO] drawing tick
+2026-04-14T19:15:00.264Z [INFO] eligibility scan updated drawingId=3 previous=1 current=1 intersection=1
+2026-04-14T19:15:00.265Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5 (no due tier)
+2026-04-14T19:15:00.379Z [INFO] eligibility scan updated drawingId=4 previous=5 current=5 intersection=5
+2026-04-14T19:15:00.380Z [INFO] commit gate not reached vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3 (no due tier)
+2026-04-14T19:16:00.003Z [INFO] drawing tick
+2026-04-14T19:16:00.615Z [INFO] eligibility scan updated drawingId=3 previous=1 current=1 intersection=1
+2026-04-14T19:16:00.616Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5 (no due tier)
+2026-04-14T19:16:00.880Z [INFO] eligibility scan updated drawingId=4 previous=5 current=5 intersection=5
+2026-04-14T19:16:00.881Z [INFO] commit gate not reached vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3 (no due tier)
+2026-04-14T19:17:00.003Z [INFO] drawing tick
+2026-04-14T19:17:00.478Z [INFO] eligibility scan updated drawingId=3 previous=1 current=1 intersection=1
+2026-04-14T19:17:00.479Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5 (no due tier)
+2026-04-14T19:17:00.740Z [INFO] eligibility scan updated drawingId=4 previous=5 current=5 intersection=5
+2026-04-14T19:17:00.741Z [INFO] commit gate not reached vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3 (no due tier)
+2026-04-14T19:18:00.004Z [INFO] drawing tick
+2026-04-14T19:18:00.475Z [INFO] eligibility scan updated drawingId=3 previous=1 current=1 intersection=1
+2026-04-14T19:18:00.476Z [INFO] commit gate not reached vault=38orCaG3rSt7tpNuLCcCzb3aC37cZWhxK1secGjaKtf9 round=5 (no due tier)
+2026-04-14T19:18:00.736Z [INFO] eligibility scan updated drawingId=4 previous=5 current=5 intersection=5
+2026-04-14T19:18:00.737Z [INFO] commit gate not reached vault=HKJYZqhpUQJWU5WnCwKkZkdDjjFxtxpTRVGtTBkSckH8 round=3 (no due tier)
