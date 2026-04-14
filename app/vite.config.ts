@@ -32,7 +32,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'node:buffer': 'buffer/',
+      'vite-plugin-node-polyfills/shims/buffer': resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/buffer/dist/index.js'),
+      'vite-plugin-node-polyfills/shims/global': resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/global/dist/index.js'),
+      'node:buffer': resolve(__dirname, 'node_modules/buffer/index.js'),
       'node:stream': 'stream-browserify',
       'node:util': 'util/',
       'node:process': 'process/browser',
