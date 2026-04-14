@@ -1,13 +1,21 @@
-import { PublicKey, Transaction } from '@solana/web3.js'
+import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
 import {
   getAssociatedTokenAddressSync,
-  createAssociatedTokenAccountIdempotentInstruction
+  createAssociatedTokenAccountIdempotentInstruction,
+  createSyncNativeInstruction,
+  NATIVE_MINT
 } from '@solana/spl-token'
 import {
   networkStateAccountAddress,
   randomnessAccountAddress
 } from '@orao-network/solana-vrf'
-import { signAndSend, getLendingAccountsForMint, ROUND_TIME } from 'ts-sdk'
+import {
+  signAndSend,
+  getLendingAccountsForMint,
+  getClaimAccount,
+  ROUND_TIME,
+  VAULT_COMMIT_DEPOSIT_AMOUNTS
+} from 'ts-sdk'
 import type { VaultAccount } from 'ts-sdk'
 import { connection, vault, vrfAuthority, orao } from '../../../consts'
 import { db, type DrawingRow, type ProofRow } from '../../../db'
@@ -125,40 +133,98 @@ export async function commitDrawing(
     vaultPda,
     true
   )
+  const vaultTokenAccount = getAssociatedTokenAddressSync(mint, vaultPda, true)
+  const pMint = vaultAccount.pMint
+  const vrfAuthorityTokenAccount = getAssociatedTokenAddressSync(
+    mint,
+    vrfAuthority.publicKey
+  )
+  const vrfAuthorityPTokenAccount = getAssociatedTokenAddressSync(
+    pMint,
+    vrfAuthority.publicKey
+  )
+  const claimAccount = getClaimAccount(mint, lendingAccounts.lendingAdmin)
 
   const networkState = networkStateAccountAddress()
   const networkStateAcc = await orao.getNetworkState()
   const request = randomnessAccountAddress(Buffer.from(vrfSeed))
-  console.log(lendingAccounts.fTokenMint.toBase58())
-  const commitIx = await vault.commitIx({
-    vrfAuthority: vrfAuthority.publicKey,
-    vaultIndex,
-    round: Number(drawing.round),
-    rewardType,
-    tickets: drawing.total_tickets,
-    merkleRoot: Array.from(merkleRoot),
-    secretHash: Array.from(secretHash),
-    mint,
-    vaultFTokenAccount,
-    fTokenMint: lendingAccounts.fTokenMint,
-    lending: lendingAccounts.lending,
-    treasury: networkStateAcc.config.treasury,
-    networkState,
-    request
-  })
 
-  const createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
+  const [depositIx, commitIx, withdrawIx] =
+    await vault.commitWithRateRefreshIxs({
+      vrfAuthority: vrfAuthority.publicKey,
+      vaultIndex,
+      round: Number(drawing.round),
+      rewardType,
+      tickets: drawing.total_tickets,
+      merkleRoot: Array.from(merkleRoot),
+      secretHash: Array.from(secretHash),
+      mint,
+      vaultFTokenAccount,
+      fTokenMint: lendingAccounts.fTokenMint,
+      lending: lendingAccounts.lending,
+      treasury: networkStateAcc.config.treasury,
+      networkState,
+      request,
+      pMint,
+      vrfAuthorityTokenAccount,
+      vrfAuthorityPTokenAccount,
+      vaultTokenAccount,
+      claimAccount,
+      lendingAccounts
+    })
+
+  const createFTokenAtaIx = createAssociatedTokenAccountIdempotentInstruction(
     vrfAuthority.publicKey,
     vaultFTokenAccount,
     vaultPda,
     lendingAccounts.fTokenMint
   )
+  const createVaultTokenAtaIx =
+    createAssociatedTokenAccountIdempotentInstruction(
+      vrfAuthority.publicKey,
+      vaultTokenAccount,
+      vaultPda,
+      mint
+    )
+  const createVrfPTokenAtaIx =
+    createAssociatedTokenAccountIdempotentInstruction(
+      vrfAuthority.publicKey,
+      vrfAuthorityPTokenAccount,
+      vrfAuthority.publicKey,
+      pMint
+    )
+
+  const isWsol = mint.equals(NATIVE_MINT)
+  const depositAmount = VAULT_COMMIT_DEPOSIT_AMOUNTS[mint.toBase58()]
+  const wrapIxs = isWsol
+    ? [
+        createAssociatedTokenAccountIdempotentInstruction(
+          vrfAuthority.publicKey,
+          vrfAuthorityTokenAccount,
+          vrfAuthority.publicKey,
+          NATIVE_MINT
+        ),
+        SystemProgram.transfer({
+          fromPubkey: vrfAuthority.publicKey,
+          toPubkey: vrfAuthorityTokenAccount,
+          lamports: depositAmount
+        }),
+        createSyncNativeInstruction(vrfAuthorityTokenAccount)
+      ]
+    : []
 
   let sig: string
   try {
     sig = await signAndSend(
       connection,
-      new Transaction().add(createAtaIx).add(commitIx),
+      new Transaction()
+        // .add(createFTokenAtaIx)
+        // .add(createVaultTokenAtaIx)
+        // .add(createVrfPTokenAtaIx)
+        .add(...wrapIxs)
+        .add(depositIx)
+        .add(commitIx),
+      // .add(withdrawIx),
       [vrfAuthority]
     )
   } catch (err: any) {
@@ -173,7 +239,10 @@ export async function commitDrawing(
       logWarn(
         `reward account already exists, recovering DB state drawingId=${String(drawing.id)}`
       )
-      const reward = await vault.fetcher.getReward(vaultPda, Number(drawing.round))
+      const reward = await vault.fetcher.getReward(
+        vaultPda,
+        Number(drawing.round)
+      )
       const mintPrice = getPrice(maybeDevnet(mint.toBase58()))
       const amountUsd =
         mintPrice != null
@@ -189,7 +258,14 @@ export async function commitDrawing(
                 request = ?,
                 committed_at = unixepoch()
           WHERE id = ?`
-      ).run(rewardType, Buffer.from(vrfSeed), reward.amount, amountUsd, request.toBase58(), drawing.id)
+      ).run(
+        rewardType,
+        Buffer.from(vrfSeed),
+        reward.amount,
+        amountUsd,
+        request.toBase58(),
+        drawing.id
+      )
       logWarn(`recovered commit drawingId=${String(drawing.id)}`)
       return (
         db

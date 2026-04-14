@@ -73,6 +73,11 @@ export const LENDING_ACCOUNTS_BY_MINT: LendingAccountsByMint = {
   [USDC_MINT.toBase58()]: JUPITER_USDC_ACCOUNTS,
   [NATIVE_MINT.toBase58()]: JUPITER_WSOL_ACCOUNTS
 }
+export const VAULT_COMMIT_DEPOSIT_AMOUNTS: Record<string, bigint> = {
+  '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU': 1_000n, // USDC, 6 decimals — 0.001 USDC
+  So11111111111111111111111111111111111111112: 1_0_000n // WSOL, 9 decimals — 0.00001 SOL
+}
+
 export const STATS_INTERVALS: Record<string, number> = {
   '1h': 3600,
   '4h': 14400,

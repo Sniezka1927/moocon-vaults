@@ -75,6 +75,15 @@ export interface ICommitIx {
   request: PublicKey
 }
 
+export interface ICommitWithDepositIx extends ICommitIx {
+  pMint: PublicKey
+  vrfAuthorityTokenAccount: PublicKey
+  vrfAuthorityPTokenAccount: PublicKey
+  vaultTokenAccount: PublicKey
+  claimAccount: PublicKey
+  lendingAccounts: ILendingAccounts
+}
+
 export interface IRevealIx {
   authority: PublicKey
   vaultIndex: number

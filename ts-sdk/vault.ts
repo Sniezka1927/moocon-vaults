@@ -15,13 +15,14 @@ import type {
   ISetWithdrawFeeIx,
   ISyncRateIx,
   ICommitIx,
+  ICommitWithDepositIx,
   IRevealIx,
   IDepositIx,
   IWithdrawIx,
   IClaimIx,
   ICollectFeeIx
 } from './types'
-import { VRF_PROGRAM_ID } from './consts'
+import { MAX_U64, VAULT_COMMIT_DEPOSIT_AMOUNTS, VRF_PROGRAM_ID } from './consts'
 
 export class Vault {
   connection: Connection
@@ -202,6 +203,54 @@ export class Vault {
         systemProgram: SystemProgram.programId
       })
       .instruction()
+  }
+
+  async commitWithRateRefreshIxs(params: ICommitWithDepositIx) {
+    const {
+      vrfAuthority,
+      vaultIndex,
+      mint,
+      pMint,
+      vaultFTokenAccount,
+      vaultTokenAccount,
+      vrfAuthorityTokenAccount,
+      vrfAuthorityPTokenAccount,
+      claimAccount,
+      lendingAccounts
+    } = params
+
+    const depositAmount = VAULT_COMMIT_DEPOSIT_AMOUNTS[mint.toBase58()]
+
+    const depositIx = await this.depositIx({
+      depositor: vrfAuthority,
+      vaultIndex,
+      amount: depositAmount,
+      depositorTokenAccount: vrfAuthorityTokenAccount,
+      vaultTokenAccount,
+      recipientTokenAccount: vaultFTokenAccount,
+      mint,
+      pMint,
+      depositorPTokenAccount: vrfAuthorityPTokenAccount,
+      lendingAccounts
+    })
+
+    const commitIx = await this.commitIx(params)
+
+    const withdrawIx = await this.withdrawIx({
+      withdrawer: vrfAuthority,
+      vaultIndex,
+      amount: MAX_U64,
+      vaultFTokenAccount,
+      vaultTokenAccount,
+      withdrawerTokenAccount: vrfAuthorityTokenAccount,
+      mint,
+      pMint,
+      withdrawerPTokenAccount: vrfAuthorityPTokenAccount,
+      claimAccount,
+      lendingAccounts
+    })
+
+    return [depositIx, commitIx, withdrawIx]
   }
 
   async revealIx(params: IRevealIx) {
