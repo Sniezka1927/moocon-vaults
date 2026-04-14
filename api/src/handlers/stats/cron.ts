@@ -1,7 +1,9 @@
-import { getAssociatedTokenAddressSync } from '@solana/spl-token'
+import { AccountLayout, getAssociatedTokenAddressSync } from '@solana/spl-token'
+import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { LENDING_ACCOUNTS_BY_MINT, getLendingAccountsForMint } from 'ts-sdk'
 import { connection, vault } from '../../consts'
 import { db } from '../../db'
+import { statsLogError, statsLogInfo } from './logger'
 
 const prices = new Map<string, number>()
 const tokenMetadata = new Map<string, { symbol: string; icon: string | null }>()
@@ -16,6 +18,9 @@ export function maybeDevnet(mint: string) {
       // DEVNET USDC
       case '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU':
         return 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
+      // DEVNET fWSOL
+      case 'BG892DUQW1NHQLinc4mabqH7EVeEfFWpVibAiNnggwmU':
+        return 'So11111111111111111111111111111111111111112'
       default:
         return mint
     }
@@ -52,8 +57,8 @@ export async function fetchTokenMetadata() {
         symbol: token.symbol,
         icon: token.icon ?? null
       })
-    } catch {
-      // metadata fetch failed for this mint, keep existing cached value
+    } catch (err) {
+      statsLogError('token metadata fetch failed', { mint: priceMint, err })
     }
   }
 }
@@ -87,7 +92,15 @@ export async function fetchPrices() {
     }
   }
 
-  console.log(`prices updated for ${Object.keys(json).length} mints`)
+  statsLogInfo('prices updated', { count: Object.keys(json).length })
+}
+
+type VaultEntry = {
+  vaultIndex: number
+  ata: PublicKey
+  fTokenPrice: number
+  decimal: number
+  pMint: PublicKey
 }
 
 export async function takeStatsSnapshot() {
@@ -95,6 +108,8 @@ export async function takeStatsSnapshot() {
   let tvlUsd = 0
   const uniqueWallets = new Set<string>()
 
+  // Collect all ATAs upfront
+  const entries: VaultEntry[] = []
   for (let i = 0; i < vaults.length; i++) {
     const v = vaults[i]
     const lendingAccounts = getLendingAccountsForMint(v.mint)
@@ -103,7 +118,6 @@ export async function takeStatsSnapshot() {
     const fTokenPrice = prices.get(
       maybeDevnet(lendingAccounts.fTokenMint.toBase58())
     )
-
     if (fTokenPrice == null) continue
 
     const vaultPda = vault.fetcher.getVaultAddress(i)[0]
@@ -112,17 +126,71 @@ export async function takeStatsSnapshot() {
       vaultPda,
       true
     )
+    entries.push({
+      vaultIndex: i,
+      ata,
+      fTokenPrice,
+      decimal: lendingAccounts.decimal,
+      pMint: v.pMint
+    })
+  }
 
-    try {
-      const bal = await connection.getTokenAccountBalance(ata)
-      const uiAmount = bal.value.uiAmount ?? 0
-      tvlUsd += uiAmount * fTokenPrice
-    } catch {
-      // ATA may not exist yet
+  if (entries.length === 0) {
+    statsLogInfo('stats snapshot skipped - no vault entries with known prices')
+    return
+  }
+
+  // Batch fetch all fToken ATAs in one RPC call
+  let accountInfos: (AccountInfo<Buffer> | null)[]
+  try {
+    accountInfos = await connection.getMultipleAccountsInfo(
+      entries.map((e) => e.ata)
+    )
+  } catch (err) {
+    statsLogError('getMultipleAccountsInfo failed', { err })
+    return
+  }
+
+  const foundCount = accountInfos.filter(Boolean).length
+  if (foundCount === 0) {
+    statsLogInfo('stats snapshot skipped - all vault ATAs missing on-chain', {
+      checked: entries.length
+    })
+    return
+  }
+
+  for (let j = 0; j < entries.length; j++) {
+    const { vaultIndex, fTokenPrice, decimal, pMint } = entries[j]
+    const info = accountInfos[j]
+
+    if (info) {
+      try {
+        const { amount } = AccountLayout.decode(info.data)
+        const uiAmount = Number(amount) / 10 ** decimal
+        tvlUsd += uiAmount * fTokenPrice
+        statsLogInfo('vault token balance', {
+          vaultIndex,
+          ata: entries[j].ata.toBase58(),
+          rawAmount: amount.toString(),
+          uiAmount,
+          fTokenPrice,
+          contributionUsd: uiAmount * fTokenPrice
+        })
+      } catch (err) {
+        statsLogError('token account decode failed', { vaultIndex, err })
+      }
+    } else {
+      statsLogInfo('vault token account not found', {
+        vaultIndex,
+        ata: entries[j].ata.toBase58()
+      })
     }
 
     try {
-      const holders = await vault.fetcher.getEligibleWallets(v.pMint)
+      const lendingAccounts = getLendingAccountsForMint(
+        vaults[vaultIndex].mint
+      )!
+      const holders = await vault.fetcher.getEligibleWallets(pMint)
       const denominator = 10n ** BigInt(lendingAccounts.decimal)
 
       for (const holder of holders) {
@@ -130,8 +198,8 @@ export async function takeStatsSnapshot() {
           uniqueWallets.add(holder.wallet.toBase58())
         }
       }
-    } catch {
-      // Skip wallet count for this vault if holder fetch fails
+    } catch (err) {
+      statsLogError('eligible wallets fetch failed', { vaultIndex, err })
     }
   }
 
@@ -150,9 +218,9 @@ export async function takeStatsSnapshot() {
     'INSERT INTO snapshots (tvl_usd, total_rewards_usd, unique_users, recorded_at) VALUES (?, ?, ?, unixepoch())'
   ).run(tvlUsd, totalRewardsUsd, uniqueUsers)
 
-  console.log(
-    `stats snapshot tvl=${tvlUsd.toFixed(2)} rewards=${totalRewardsUsd.toFixed(
-      4
-    )} users=${uniqueUsers}`
-  )
+  statsLogInfo('stats snapshot taken', {
+    tvlUsd: tvlUsd.toFixed(2),
+    totalRewardsUsd: totalRewardsUsd.toFixed(4),
+    uniqueUsers
+  })
 }

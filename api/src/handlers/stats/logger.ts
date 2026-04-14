@@ -1,14 +1,14 @@
 import { appendFileSync, mkdirSync } from 'fs'
 import { dirname } from 'path'
 
-const DRAWING_CRON_LOG_PATH =
-  process.env.DRAWING_CRON_LOG_PATH ?? './logs/drawing-cron.txt'
+const STATS_CRON_LOG_PATH =
+  process.env.STATS_CRON_LOG_PATH ?? './logs/stats-cron.txt'
 
 let logPathInitialized = false
 
 function ensureLogPathReady(): void {
   if (logPathInitialized) return
-  mkdirSync(dirname(DRAWING_CRON_LOG_PATH), { recursive: true })
+  mkdirSync(dirname(STATS_CRON_LOG_PATH), { recursive: true })
   logPathInitialized = true
 }
 
@@ -29,7 +29,6 @@ function replacer(_key: string, value: unknown): unknown {
 
 function serializeMeta(meta: unknown): string {
   if (meta === undefined) return ''
-
   if (typeof meta === 'string') return meta
 
   try {
@@ -43,7 +42,7 @@ type LogLevel = 'INFO' | 'WARN' | 'ERROR' | 'DEBUG'
 
 function writeLine(level: LogLevel, message: string, meta?: unknown): void {
   const timestamp = new Date().toISOString()
-  const prefix = `[drawing-cron][${timestamp}][${level}] ${message}`
+  const prefix = `[stats-cron][${timestamp}][${level}] ${message}`
 
   if (level === 'ERROR') {
     if (meta === undefined) console.error(prefix)
@@ -67,27 +66,27 @@ function writeLine(level: LogLevel, message: string, meta?: unknown): void {
 
   try {
     ensureLogPathReady()
-    appendFileSync(DRAWING_CRON_LOG_PATH, line, 'utf8')
+    appendFileSync(STATS_CRON_LOG_PATH, line, 'utf8')
   } catch (err) {
     console.error(
-      `[drawing-cron][${timestamp}][ERROR] failed to append log file ${DRAWING_CRON_LOG_PATH}`,
+      `[stats-cron][${timestamp}][ERROR] failed to append log file ${STATS_CRON_LOG_PATH}`,
       err
     )
   }
 }
 
-export function logInfo(message: string, meta?: unknown): void {
+export function statsLogInfo(message: string, meta?: unknown): void {
   writeLine('INFO', message, meta)
 }
 
-export function logWarn(message: string, meta?: unknown): void {
+export function statsLogWarn(message: string, meta?: unknown): void {
   writeLine('WARN', message, meta)
 }
 
-export function logError(message: string, meta?: unknown): void {
+export function statsLogError(message: string, meta?: unknown): void {
   writeLine('ERROR', message, meta)
 }
 
-export function logDebug(message: string, meta?: unknown): void {
+export function statsLogDebug(message: string, meta?: unknown): void {
   writeLine('DEBUG', message, meta)
 }

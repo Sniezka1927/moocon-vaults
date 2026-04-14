@@ -2,7 +2,7 @@ import { appendFileSync, mkdirSync } from 'fs'
 import { dirname } from 'path'
 
 const POINTS_CRON_LOG_PATH =
-  process.env.POINTS_CRON_LOG_PATH ?? './points-cron.txt'
+  process.env.POINTS_CRON_LOG_PATH ?? './logs/points-cron.txt'
 
 let logPathInitialized = false
 

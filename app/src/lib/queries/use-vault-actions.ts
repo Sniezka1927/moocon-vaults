@@ -335,6 +335,10 @@ export function useWithdraw(vault: VaultWithAddress) {
     onSuccess: async (sig) => {
       await invalidateAfterAction(qc, vault)
 
+      if (!sig) {
+        return
+      }
+
       let withdrawnAmount: number | null = null
       if (sig) {
         const txMeta = await connection.getTransaction(sig, {
@@ -434,6 +438,11 @@ export function useClaimReward() {
     },
     onSuccess: async (sig) => {
       await qc.invalidateQueries({ queryKey: ['rewards', 'user'] })
+
+      if (!sig) {
+        return
+      }
+
       toast.success('Reward claimed!', {
         action: sig
           ? {
@@ -476,20 +485,28 @@ export function useClaimAllRewards() {
         })
       )
 
+      const chunks: (typeof instructions)[] = []
+      for (let i = 0; i < instructions.length; i += 5)
+        chunks.push(instructions.slice(i, i + 5))
+
       try {
-        const { blockhash, lastValidBlockHeight } =
-          await connection.getLatestBlockhash()
-        const tx = new Transaction()
-        instructions.forEach((ix) => tx.add(ix))
-        tx.feePayer = publicKey
-        tx.recentBlockhash = blockhash
-        tx.lastValidBlockHeight = lastValidBlockHeight
-        const sig = await sendTransaction(tx, connection)
-        await connection.confirmTransaction({
-          blockhash,
-          lastValidBlockHeight,
-          signature: sig
-        })
+        let sig: string | null = null
+        for (const chunk of chunks) {
+          const { blockhash, lastValidBlockHeight } =
+            await connection.getLatestBlockhash()
+          const tx = new Transaction()
+          chunk.forEach((ix) => tx.add(ix))
+          tx.feePayer = publicKey
+          tx.recentBlockhash = blockhash
+          tx.lastValidBlockHeight = lastValidBlockHeight
+          const s = await sendTransaction(tx, connection)
+          await connection.confirmTransaction({
+            blockhash,
+            lastValidBlockHeight,
+            signature: s
+          })
+          sig = s
+        }
         return sig
       } catch (e) {
         if (isPluginClosed(e as Error)) return null
@@ -498,6 +515,11 @@ export function useClaimAllRewards() {
     },
     onSuccess: async (sig) => {
       await qc.invalidateQueries({ queryKey: ['rewards', 'user'] })
+
+      if (!sig) {
+        return
+      }
+
       toast.success('All rewards claimed!', {
         action: sig
           ? {
