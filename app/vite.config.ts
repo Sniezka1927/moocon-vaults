@@ -23,7 +23,7 @@ export default defineConfig({
     inject({
       assert: ['assert', 'default']
     }),
-    nodePolyfills()
+    nodePolyfills({ protocolImports: false })
   ],
   define: {
     'process.env.NODE_DEBUG': 'false',
