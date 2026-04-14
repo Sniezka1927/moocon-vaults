@@ -166,6 +166,9 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
           vault={vault}
           metadata={metadata}
           tvl={tvl}
+          tvlUsd={tvlUsd}
+          avgApr={avgApr}
+          price={price}
           open={modalOpen}
           onClose={() => setModalOpen(false)}
         />

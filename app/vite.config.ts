@@ -30,6 +30,14 @@ export default defineConfig({
     'process.browser': `"test"`,
     'process.version': `"test"`
   },
+  resolve: {
+    alias: {
+      'node:buffer': 'buffer/',
+      'node:stream': 'stream-browserify',
+      'node:util': 'util/',
+      'node:process': 'process/browser',
+    }
+  },
   build: {
     target: 'es2020',
     assetsInlineLimit: 0,
