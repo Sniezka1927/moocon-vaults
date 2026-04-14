@@ -94,7 +94,7 @@ export function HomePage() {
                 backgroundColor: APP_COLORS.page.cardHeaderBackground
               }}
             >
-              {['Asset', 'Total Supplied', 'Avg APR', 'Next Drawing', ''].map(
+              {['Asset', 'Total Supplied', 'Avg APR', 'Distribution in:', ''].map(
                 (col, i) => (
                   <th
                     key={col}

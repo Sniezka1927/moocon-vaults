@@ -1,14 +1,13 @@
 import { PublicKey, Transaction } from '@solana/web3.js'
-import { getAssociatedTokenAddressSync } from '@solana/spl-token'
+import {
+  getAssociatedTokenAddressSync,
+  createAssociatedTokenAccountIdempotentInstruction
+} from '@solana/spl-token'
 import {
   networkStateAccountAddress,
   randomnessAccountAddress
 } from '@orao-network/solana-vrf'
-import {
-  signAndSend,
-  getLendingAccountsForMint,
-  ROUND_TIME
-} from 'ts-sdk'
+import { signAndSend, getLendingAccountsForMint, ROUND_TIME } from 'ts-sdk'
 import type { VaultAccount } from 'ts-sdk'
 import { connection, vault, vrfAuthority, orao } from '../../../consts'
 import { db, type DrawingRow, type ProofRow } from '../../../db'
@@ -21,7 +20,6 @@ import {
   xorBytes
 } from '../../../utils'
 import { logError, logInfo, logWarn } from './logger'
-
 const SECONDS_PER_DAY = 86_400
 const ROUND_SECONDS = ROUND_TIME * 60
 
@@ -131,7 +129,7 @@ export async function commitDrawing(
   const networkState = networkStateAccountAddress()
   const networkStateAcc = await orao.getNetworkState()
   const request = randomnessAccountAddress(Buffer.from(vrfSeed))
-
+  console.log(lendingAccounts.fTokenMint.toBase58())
   const commitIx = await vault.commitIx({
     vrfAuthority: vrfAuthority.publicKey,
     vaultIndex,
@@ -149,9 +147,67 @@ export async function commitDrawing(
     request
   })
 
-  const sig = await signAndSend(connection, new Transaction().add(commitIx), [
-    vrfAuthority
-  ])
+  const createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
+    vrfAuthority.publicKey,
+    vaultFTokenAccount,
+    vaultPda,
+    lendingAccounts.fTokenMint
+  )
+
+  let sig: string
+  try {
+    sig = await signAndSend(
+      connection,
+      new Transaction().add(createAtaIx).add(commitIx),
+      [vrfAuthority]
+    )
+  } catch (err: any) {
+    const isAlreadyCommitted = err?.logs?.some((line: string) =>
+      line.includes('already in use')
+    )
+    const isInvalidRound = err?.logs?.some((line: string) =>
+      line.includes('InvalidRound')
+    )
+
+    if (isAlreadyCommitted) {
+      logWarn(
+        `reward account already exists, recovering DB state drawingId=${String(drawing.id)}`
+      )
+      const reward = await vault.fetcher.getReward(vaultPda, Number(drawing.round))
+      const mintPrice = getPrice(maybeDevnet(mint.toBase58()))
+      const amountUsd =
+        mintPrice != null
+          ? (Number(reward.amount) / 10 ** lendingAccounts.decimal) * mintPrice
+          : null
+      const request = randomnessAccountAddress(Buffer.from(vrfSeed))
+      db.query(
+        `UPDATE drawings
+            SET reward_type = ?,
+                vrf_seed = ?,
+                amount = ?,
+                amount_usd = ?,
+                request = ?,
+                committed_at = unixepoch()
+          WHERE id = ?`
+      ).run(rewardType, Buffer.from(vrfSeed), reward.amount, amountUsd, request.toBase58(), drawing.id)
+      logWarn(`recovered commit drawingId=${String(drawing.id)}`)
+      return (
+        db
+          .query<DrawingRow, [bigint]>('SELECT * FROM drawings WHERE id = ?')
+          .get(drawing.id) ?? null
+      )
+    }
+
+    if (isInvalidRound) {
+      logWarn(
+        `invalid round on-chain, dropping stale drawing drawingId=${String(drawing.id)} round=${String(drawing.round)}`
+      )
+      db.query('DELETE FROM drawings WHERE id = ?').run(drawing.id)
+      return null
+    }
+
+    throw err
+  }
   logInfo(`commit transaction submitted signature=${sig}`)
 
   await waitForFinalizedSignature(sig, 60)
@@ -308,7 +364,10 @@ export async function tryRevealAndComplete(
     )
 
     const vaultPda = vault.fetcher.getVaultAddress(vaultIndex)[0]
-    const reward = await vault.fetcher.getReward(vaultPda, Number(drawing.round))
+    const reward = await vault.fetcher.getReward(
+      vaultPda,
+      Number(drawing.round)
+    )
     const recoveredWinner = reward.claimer.toBase58()
     const apr = computeDrawingAprValue(drawing, recoveredWinner)
 

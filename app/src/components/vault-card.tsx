@@ -5,7 +5,7 @@ import { APP_COLORS, COLOR_TOKENS } from '@/consts'
 import { Button } from '@/components/ui/button'
 import type { VaultWithAddress } from '@/lib/store/vault-store'
 import { useMintStore } from '@/lib/store/mint-store'
-import { getLendingAccountsForMint, ROUND_TIME } from 'ts-sdk'
+import { getLendingAccountsForMint } from 'ts-sdk'
 import { DepositWithdrawModal } from './deposit-withdraw-modal'
 
 interface VaultCardProps {
@@ -29,21 +29,28 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
   const tvlLabel = tvl === '—' ? '—' : tvl !== null ? `${tvl} ${tokenName}` : '...'
 
   useEffect(() => {
-    const ROUND_SECS = ROUND_TIME * 60
     const tick = () => {
-      const nowSec = Math.floor(Date.now() / 1000)
-      const lastTier0DistributedAt = Number(
-        vault.distributionTiers[0]?.distributedAt ?? 0n
-      )
-      if (!Number.isFinite(lastTier0DistributedAt) || lastTier0DistributedAt <= 0) {
-        const m = Math.floor(ROUND_SECS / 60).toString().padStart(2, '0')
-        const s = (ROUND_SECS % 60).toString().padStart(2, '0')
-        setCountdown(`${m}:${s}`)
+      const now = BigInt(Math.floor(Date.now() / 1000))
+
+      let soonest: bigint | null = null
+      for (const tier of vault.distributionTiers) {
+        if (tier.interval <= 0n || tier.rewardShare <= 0n) continue
+        const next = tier.distributedAt > 0n
+          ? tier.distributedAt + tier.interval
+          : now + tier.interval
+        if (soonest === null || next < soonest) soonest = next
+      }
+
+      if (soonest === null) {
+        setCountdown('—')
         return
       }
 
-      const elapsed = Math.max(0, nowSec - lastTier0DistributedAt)
-      const remaining = ROUND_SECS - (elapsed % ROUND_SECS)
+      const remaining = Number(soonest - now)
+      if (remaining <= 0) {
+        setCountdown('00:00')
+        return
+      }
       const m = Math.floor(remaining / 60).toString().padStart(2, '0')
       const s = (remaining % 60).toString().padStart(2, '0')
       setCountdown(`${m}:${s}`)
@@ -51,7 +58,7 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
     tick()
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
-  }, [vault.distributionTiers[0]?.distributedAt])
+  }, [vault.distributionTiers])
 
   useEffect(() => {
     const lendingAccounts = getLendingAccountsForMint(vault.mint)
@@ -128,7 +135,7 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
         </span>
       </td>
 
-      {/* Next Drawing */}
+      {/* Distribution in: */}
       <td className="py-4 px-6 text-center">
         <span className="text-sm font-mono font-medium" style={{ color: APP_COLORS.page.cardValue }}>
           {countdown || '—'}
@@ -159,6 +166,9 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
           vault={vault}
           metadata={metadata}
           tvl={tvl}
+          tvlUsd={tvlUsd}
+          avgApr={avgApr}
+          price={price}
           open={modalOpen}
           onClose={() => setModalOpen(false)}
         />

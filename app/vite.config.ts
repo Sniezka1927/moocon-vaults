@@ -4,20 +4,11 @@ import { defineConfig, Plugin } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import { resolve } from 'node:path'
-import { createRequire } from 'node:module'
-
-const require = createRequire(import.meta.url)
 
 const shimAliases = {
-  'vite-plugin-node-polyfills/shims/buffer': require.resolve(
-    'vite-plugin-node-polyfills/shims/buffer'
-  ),
-  'vite-plugin-node-polyfills/shims/global': require.resolve(
-    'vite-plugin-node-polyfills/shims/global'
-  ),
-  'vite-plugin-node-polyfills/shims/process': require.resolve(
-    'vite-plugin-node-polyfills/shims/process'
-  ),
+  'vite-plugin-node-polyfills/shims/buffer': resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/buffer/dist/index.js'),
+  'vite-plugin-node-polyfills/shims/global': resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/global/dist/index.js'),
+  'vite-plugin-node-polyfills/shims/process': resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/process/dist/index.js'),
 }
 
 const resolveNodePolyfillShims = (): Plugin => ({
@@ -28,13 +19,13 @@ const resolveNodePolyfillShims = (): Plugin => ({
       return shimAliases[source as keyof typeof shimAliases]
     }
     return null
-  },
+  }
 })
 
 // https://vite.dev/config/
 export default defineConfig({
   resolve: {
-    alias: shimAliases,
+    alias: shimAliases
   },
   plugins: [
     resolveNodePolyfillShims(),
@@ -43,7 +34,7 @@ export default defineConfig({
     tailwindcss(),
     viteTsconfigPaths({
       //
-      root: resolve(__dirname),
-    }),
-  ],
+      root: resolve(__dirname)
+    })
+  ]
 })

@@ -66,41 +66,21 @@ export function UserRewardsModal({
             >
               Your Rewards
             </Dialog.Title>
-            <div className="flex items-center gap-3">
-              {rewards.length >= 2 && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="rounded-lg text-xs"
-                  style={{
-                    backgroundColor: APP_COLORS.vault.stakeButtonBackground,
-                    borderColor: APP_COLORS.vault.stakeButtonBorder,
-                    color: APP_COLORS.vault.stakeButtonText
-                  }}
-                  disabled={isAnyPending}
-                  onClick={() => {
-                    setClaimingAll(true)
-                    claimAll.mutate(claimablePairs, {
-                      onSettled: () => setClaimingAll(false)
-                    })
-                  }}
-                >
-                  {claimingAll ? 'Claiming...' : 'Claim All'}
-                </Button>
-              )}
-              <Dialog.Close asChild>
-                <button
-                  className="text-lg leading-none opacity-60 hover:opacity-100 transition-opacity"
-                  style={{ color: APP_COLORS.page.cardValue }}
-                  aria-label="Close"
-                >
-                  ✕
-                </button>
-              </Dialog.Close>
-            </div>
+            <Dialog.Close asChild>
+              <button
+                className="text-lg leading-none opacity-60 hover:opacity-100 transition-opacity"
+                style={{ color: APP_COLORS.page.cardValue }}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </Dialog.Close>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div
+            className="flex flex-col gap-2 overflow-y-auto"
+            style={{ maxHeight: rewards.length > 5 ? '320px' : undefined }}
+          >
             {rewards.map((reward, i) => {
               const vault = vaults.find((v) => v.address.equals(reward.vault))
               const tokenMeta = vault
@@ -174,6 +154,26 @@ export function UserRewardsModal({
               )
             })}
           </div>
+
+          {rewards.length >= 2 && (
+            <Button
+              className="mt-4 w-full rounded-lg"
+              style={{
+                backgroundColor: APP_COLORS.vault.stakeButtonBackground,
+                borderColor: APP_COLORS.vault.stakeButtonBorder,
+                color: APP_COLORS.vault.stakeButtonText
+              }}
+              disabled={isAnyPending}
+              onClick={() => {
+                setClaimingAll(true)
+                claimAll.mutate(claimablePairs, {
+                  onSettled: () => setClaimingAll(false)
+                })
+              }}
+            >
+              {claimingAll ? 'Claiming...' : 'Claim All'}
+            </Button>
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

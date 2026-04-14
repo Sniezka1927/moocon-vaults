@@ -226,34 +226,6 @@
 }
 
 
-/* ── Global Loader ── */
-
-@keyframes loader-logo-pulse {
-  0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 8px rgba(139, 233, 253, 0)) scale(1); }
-  50% { opacity: 1; filter: drop-shadow(0 0 18px rgba(139, 233, 253, 0.35)) scale(1.04); }
-}
-
-.global-loader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(8, 13, 30, 0.88);
-  backdrop-filter: blur(12px);
-  transition: opacity 300ms ease-out;
-}
-
-.global-loader[data-hidden='true'] {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.constellation-logo {
-  animation: loader-logo-pulse 1.6s ease-in-out infinite;
-}
-
 .wallet-adapter-button-trigger {
   padding: var(--wallet-btn-padding) !important;
   height: var(--wallet-btn-height) !important;

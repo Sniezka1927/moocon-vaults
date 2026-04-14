@@ -44,3 +44,7 @@ GET {{baseUrl}}/api/stats?interval=1h&limit=40
 
 ### Get mint metadata (price, symbol, icon, address) for all vault tokens
 GET {{baseUrl}}/api/stats/mint-data
+
+### Get points state for a wallet
+@pointsWallet = BsYDTmksyvTWpP3DGSWpoAXP7ykFDhikYdKEVspkStc4
+GET {{baseUrl}}/api/points/{{pointsWallet}}
