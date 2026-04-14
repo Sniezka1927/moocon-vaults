@@ -1,0 +1,34 @@
+2026-04-14T19:22:00.007Z [INFO] points tick start
+2026-04-14T19:22:00.007Z [INFO] fetched unprocessed drawings {"count":2}
+2026-04-14T19:22:00.007Z [INFO] processing drawing for points {"drawingId":"1","proofsCount":1}
+2026-04-14T19:22:00.008Z [DEBUG] wallet scoring computed {"drawingId":"1","wallet":"BsYDTmksyvTWpP3DGSWpoAXP7ykFDhikYdKEVspkStc4","rawTickets":"1","streak":1,"multiplier":1.0001314347265697,"effectiveTickets":1}
+2026-04-14T19:22:00.008Z [DEBUG] stake points awarded {"drawingId":"1","wallet":"BsYDTmksyvTWpP3DGSWpoAXP7ykFDhikYdKEVspkStc4","awardedStakePoints":1,"multiplier":1.0001314347265697}
+2026-04-14T19:22:00.008Z [DEBUG] no referrer for wallet; referral award skipped {"drawingId":"1","wallet":"BsYDTmksyvTWpP3DGSWpoAXP7ykFDhikYdKEVspkStc4"}
+2026-04-14T19:22:00.008Z [INFO] drawing points processing completed {"drawingId":"1","proofsCount":1}
+2026-04-14T19:22:00.008Z [INFO] processing drawing for points {"drawingId":"2","proofsCount":5}
+2026-04-14T19:22:00.008Z [DEBUG] wallet scoring computed {"drawingId":"2","wallet":"2kAz9q4HXiiiuZqLq4CJmErg7GHgS6UVn9TmCJengHyn","rawTickets":"3","streak":1,"multiplier":1.0001314347265697,"effectiveTickets":3}
+2026-04-14T19:22:00.008Z [DEBUG] stake points awarded {"drawingId":"2","wallet":"2kAz9q4HXiiiuZqLq4CJmErg7GHgS6UVn9TmCJengHyn","awardedStakePoints":3,"multiplier":1.0001314347265697}
+2026-04-14T19:22:00.008Z [DEBUG] no referrer for wallet; referral award skipped {"drawingId":"2","wallet":"2kAz9q4HXiiiuZqLq4CJmErg7GHgS6UVn9TmCJengHyn"}
+2026-04-14T19:22:00.008Z [DEBUG] wallet scoring computed {"drawingId":"2","wallet":"9G79kKmWUGTucVy1x3ZLpzxbZyGFGs6zCugPZqeTWsZv","rawTickets":"3","streak":1,"multiplier":1.0001314347265697,"effectiveTickets":3}
+2026-04-14T19:22:00.008Z [DEBUG] stake points awarded {"drawingId":"2","wallet":"9G79kKmWUGTucVy1x3ZLpzxbZyGFGs6zCugPZqeTWsZv","awardedStakePoints":3,"multiplier":1.0001314347265697}
+2026-04-14T19:22:00.008Z [DEBUG] no referrer for wallet; referral award skipped {"drawingId":"2","wallet":"9G79kKmWUGTucVy1x3ZLpzxbZyGFGs6zCugPZqeTWsZv"}
+2026-04-14T19:22:00.008Z [DEBUG] wallet scoring computed {"drawingId":"2","wallet":"9u7SfPwnSXdvTBC19RHyd36pLLztGKwCJhyvRnUUXTgu","rawTickets":"3","streak":1,"multiplier":1.0001314347265697,"effectiveTickets":3}
+2026-04-14T19:22:00.008Z [DEBUG] stake points awarded {"drawingId":"2","wallet":"9u7SfPwnSXdvTBC19RHyd36pLLztGKwCJhyvRnUUXTgu","awardedStakePoints":3,"multiplier":1.0001314347265697}
+2026-04-14T19:22:00.009Z [DEBUG] no referrer for wallet; referral award skipped {"drawingId":"2","wallet":"9u7SfPwnSXdvTBC19RHyd36pLLztGKwCJhyvRnUUXTgu"}
+2026-04-14T19:22:00.009Z [DEBUG] wallet scoring computed {"drawingId":"2","wallet":"AnUodtZBjs22F5Lxu7g8NC88xoJKEnvQ4X8wGLfNwUk7","rawTickets":"3","streak":1,"multiplier":1.0001314347265697,"effectiveTickets":3}
+2026-04-14T19:22:00.009Z [DEBUG] stake points awarded {"drawingId":"2","wallet":"AnUodtZBjs22F5Lxu7g8NC88xoJKEnvQ4X8wGLfNwUk7","awardedStakePoints":3,"multiplier":1.0001314347265697}
+2026-04-14T19:22:00.009Z [DEBUG] no referrer for wallet; referral award skipped {"drawingId":"2","wallet":"AnUodtZBjs22F5Lxu7g8NC88xoJKEnvQ4X8wGLfNwUk7"}
+2026-04-14T19:22:00.009Z [DEBUG] wallet scoring computed {"drawingId":"2","wallet":"BsYDTmksyvTWpP3DGSWpoAXP7ykFDhikYdKEVspkStc4","rawTickets":"5","streak":2,"multiplier":1.0002628867282266,"effectiveTickets":5}
+2026-04-14T19:22:00.009Z [DEBUG] stake points awarded {"drawingId":"2","wallet":"BsYDTmksyvTWpP3DGSWpoAXP7ykFDhikYdKEVspkStc4","awardedStakePoints":5,"multiplier":1.0002628867282266}
+2026-04-14T19:22:00.009Z [DEBUG] no referrer for wallet; referral award skipped {"drawingId":"2","wallet":"BsYDTmksyvTWpP3DGSWpoAXP7ykFDhikYdKEVspkStc4"}
+2026-04-14T19:22:00.009Z [INFO] drawing points processing completed {"drawingId":"2","proofsCount":5}
+2026-04-14T19:22:00.009Z [INFO] points tick complete {"totalUnprocessedDrawings":2,"processedDrawings":2,"failedDrawings":0}
+2026-04-14T19:23:00.013Z [INFO] points tick start
+2026-04-14T19:23:00.014Z [INFO] fetched unprocessed drawings {"count":0}
+2026-04-14T19:23:00.014Z [INFO] no unprocessed drawings; tick complete
+2026-04-14T19:24:00.004Z [INFO] points tick start
+2026-04-14T19:24:00.005Z [INFO] fetched unprocessed drawings {"count":0}
+2026-04-14T19:24:00.005Z [INFO] no unprocessed drawings; tick complete
+2026-04-14T19:25:00.003Z [INFO] points tick start
+2026-04-14T19:25:00.004Z [INFO] fetched unprocessed drawings {"count":0}
+2026-04-14T19:25:00.004Z [INFO] no unprocessed drawings; tick complete

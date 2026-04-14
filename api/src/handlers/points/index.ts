@@ -14,7 +14,7 @@ export const pointsHandler = new Elysia({
   .use(
     cron({
       name: 'points-heartbeat',
-      pattern: Patterns.everyMinutes(ROUND_TIME),
+      pattern: Patterns.everyMinute(),
       run: processPoints
     })
   )
