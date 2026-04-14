@@ -12,6 +12,7 @@ import { resolve } from 'node:path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    nodePolyfills(),
     react(),
     tailwindcss(),
     viteTsconfigPaths({
@@ -23,22 +24,11 @@ export default defineConfig({
     inject({
       assert: ['assert', 'default']
     }),
-    nodePolyfills({ protocolImports: false })
   ],
   define: {
     'process.env.NODE_DEBUG': 'false',
     'process.browser': `"test"`,
     'process.version': `"test"`
-  },
-  resolve: {
-    alias: {
-      'vite-plugin-node-polyfills/shims/buffer': resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/buffer/dist/index.js'),
-      'vite-plugin-node-polyfills/shims/global': resolve(__dirname, 'node_modules/vite-plugin-node-polyfills/shims/global/dist/index.js'),
-      'node:buffer': resolve(__dirname, 'node_modules/buffer/index.js'),
-      'node:stream': 'stream-browserify',
-      'node:util': 'util/',
-      'node:process': 'process/browser',
-    }
   },
   build: {
     target: 'es2020',
