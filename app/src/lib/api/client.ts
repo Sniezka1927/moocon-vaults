@@ -1,5 +1,9 @@
-export const API_BASE_URL =
-  import.meta.env.VITE_API_URL ?? 'http://localhost:7777'
+const configuredApiEndpoint =
+  import.meta.env.VITE_API_ENDPOINT ??
+  import.meta.env.VITE_API_URL ??
+  'http://localhost:7777'
+
+export const API_BASE_URL = configuredApiEndpoint.replace(/\/+$/, '')
 
 export class ApiError extends Error {
   constructor(

@@ -173,31 +173,33 @@ export async function commitDrawing(
       lendingAccounts
     })
 
-  const createFTokenAtaIx = createAssociatedTokenAccountIdempotentInstruction(
-    vrfAuthority.publicKey,
-    vaultFTokenAccount,
-    vaultPda,
-    lendingAccounts.fTokenMint
-  )
-  const createVaultTokenAtaIx =
-    createAssociatedTokenAccountIdempotentInstruction(
-      vrfAuthority.publicKey,
-      vaultTokenAccount,
-      vaultPda,
-      mint
-    )
-  const createVrfPTokenAtaIx =
-    createAssociatedTokenAccountIdempotentInstruction(
-      vrfAuthority.publicKey,
-      vrfAuthorityPTokenAccount,
-      vrfAuthority.publicKey,
-      pMint
-    )
+  // const createFTokenAtaIx = createAssociatedTokenAccountIdempotentInstruction(
+  //   vrfAuthority.publicKey,
+  //   vaultFTokenAccount,
+  //   vaultPda,
+  //   lendingAccounts.fTokenMint
+  // )
+  // const createVaultTokenAtaIx =
+  //   createAssociatedTokenAccountIdempotentInstruction(
+  //     vrfAuthority.publicKey,
+  //     vaultTokenAccount,
+  //     vaultPda,
+  //     mint
+  //   )
+  // const createVrfPTokenAtaIx =
+  //   createAssociatedTokenAccountIdempotentInstruction(
+  //     vrfAuthority.publicKey,
+  //     vrfAuthorityPTokenAccount,
+  //     vrfAuthority.publicKey,
+  //     pMint
+  //   )
 
   const isWsol = mint.equals(NATIVE_MINT)
   const depositAmount = VAULT_COMMIT_DEPOSIT_AMOUNTS[mint.toBase58()]
-  const wrapIxs = isWsol
-    ? [
+  const tx = new Transaction()
+  if (isWsol) {
+    tx.add(
+      ...[
         createAssociatedTokenAccountIdempotentInstruction(
           vrfAuthority.publicKey,
           vrfAuthorityTokenAccount,
@@ -211,7 +213,8 @@ export async function commitDrawing(
         }),
         createSyncNativeInstruction(vrfAuthorityTokenAccount)
       ]
-    : []
+    )
+  }
 
   let sig: string
   try {
@@ -221,7 +224,6 @@ export async function commitDrawing(
         // .add(createFTokenAtaIx)
         // .add(createVaultTokenAtaIx)
         // .add(createVrfPTokenAtaIx)
-        .add(...wrapIxs)
         .add(depositIx)
         .add(commitIx),
       // .add(withdrawIx),

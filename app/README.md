@@ -21,6 +21,15 @@ pnpm create solana-dapp@latest -t gh:solana-foundation/templates/web3js/app
 pnpm install
 ```
 
+### Environment
+
+Create `app/.env` (or copy from `app/.env.example`) and set:
+
+```shell
+VITE_API_ENDPOINT=http://localhost:7777
+VITE_SOLANA_RPC_URL=https://api.devnet.solana.com
+```
+
 ### Start the web app
 
 ```shell
