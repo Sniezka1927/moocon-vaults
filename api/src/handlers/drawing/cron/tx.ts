@@ -218,17 +218,14 @@ export async function commitDrawing(
 
   let sig: string
   try {
-    sig = await signAndSend(
-      connection,
-      new Transaction()
-        // .add(createFTokenAtaIx)
-        // .add(createVaultTokenAtaIx)
-        // .add(createVrfPTokenAtaIx)
-        .add(depositIx)
-        .add(commitIx),
-      // .add(withdrawIx),
-      [vrfAuthority]
-    )
+    tx
+      // .add(createFTokenAtaIx)
+      // .add(createVaultTokenAtaIx)
+      // .add(createVrfPTokenAtaIx)
+      .add(depositIx)
+      .add(commitIx)
+    // .add(withdrawIx)
+    sig = await signAndSend(connection, tx, [vrfAuthority])
   } catch (err: any) {
     const isAlreadyCommitted = err?.logs?.some((line: string) =>
       line.includes('already in use')
