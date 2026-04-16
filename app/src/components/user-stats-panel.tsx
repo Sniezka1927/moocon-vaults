@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import type React from 'react'
+import { useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { APP_COLORS } from '@/consts'
 import { usePoints, useAllVaults, useUserTotalDepositsUsd, useUserRewards } from '@/lib/queries'
@@ -23,33 +24,27 @@ export function UserStatsPanel() {
   const { publicKey, connected } = useWallet()
   const wallet = publicKey?.toBase58() ?? null
 
-  const { data: pointsData, isLoading: pointsLoading } = usePoints(wallet)
+  const { data: pointsData } = usePoints(wallet)
   const { data: vaults = [] } = useAllVaults()
-  const { data: totalDepositsUsd, isLoading: depositsLoading } =
+  const { data: totalDepositsUsd } =
     useUserTotalDepositsUsd(vaults, publicKey)
+
+  const isLoading = connected && (pointsData === undefined || totalDepositsUsd === undefined)
   const { data: rewards = [] } = useUserRewards()
 
   const [rewardsModalOpen, setRewardsModalOpen] = useState(false)
 
-  const isLoading = pointsLoading || depositsLoading
-
   const depositsDisplay = !connected
     ? '—'
-    : isLoading
-      ? '...'
-      : fmtUsd(totalDepositsUsd ?? 0)
+    : fmtUsd(totalDepositsUsd ?? 0)
 
   const multiplierDisplay = !connected
     ? '—'
-    : isLoading
-      ? '...'
-      : `${(pointsData?.multiplier ?? 1).toFixed(2)}x`
+    : `${(pointsData?.multiplier ?? 1).toFixed(2)}x`
 
   const pointsDisplay = !connected
     ? '—'
-    : isLoading
-      ? '...'
-      : fmtPoints(pointsData?.total_points ?? 0)
+    : fmtPoints(pointsData?.total_points ?? 0)
 
   function StatCard({
     label,
@@ -75,18 +70,23 @@ export function UserStatsPanel() {
           {label}
         </p>
         <div className="mt-1.5 flex items-center gap-1.5 leading-none">
-          <p
-            className="text-base font-semibold leading-none"
-            style={{
-              color:
-                isLoading || !connected
-                  ? APP_COLORS.page.cardLabel
-                  : APP_COLORS.page.cardValue
-            }}
-          >
-            {value}
-          </p>
-          {icon}
+          {isLoading ? (
+            <div className="h-4 w-16 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+          ) : (
+            <>
+              <p
+                className="text-base font-semibold leading-none"
+                style={{
+                  color: !connected
+                    ? APP_COLORS.page.cardLabel
+                    : APP_COLORS.page.cardValue
+                }}
+              >
+                {value}
+              </p>
+              {icon}
+            </>
+          )}
         </div>
       </article>
     )
@@ -114,17 +114,20 @@ export function UserStatsPanel() {
           >
             Deposited
           </p>
-          <p
-            className="mt-1.5 text-base font-semibold leading-none"
-            style={{
-              color:
-                isLoading || !connected
+          {isLoading ? (
+            <div className="mt-1.5 h-4 w-20 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+          ) : (
+            <p
+              className="mt-1.5 text-base font-semibold leading-none"
+              style={{
+                color: !connected
                   ? APP_COLORS.page.cardLabel
                   : APP_COLORS.page.cardValue
-            }}
-          >
-            {depositsDisplay}
-          </p>
+              }}
+            >
+              {depositsDisplay}
+            </p>
+          )}
         </div>
         <Button
             variant="outline"

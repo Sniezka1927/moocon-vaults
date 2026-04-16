@@ -12,9 +12,11 @@ import { RewardsList } from '@/components/rewards-list'
 import { UserStatsPanel } from '@/components/user-stats-panel'
 import { ReferralPanel } from '@/components/referral-panel'
 
+const SKELETON_LIST_ELEMENTS = 2
+
 export function HomePage() {
   const { vaults, setVaults } = useVaultsStore()
-  const { data } = useAllVaults()
+  const { data, isLoading: vaultsLoading } = useAllVaults()
   const { data: drawingsData } = useDrawings(1, 100)
   const aprByVault = drawingsData?.winners_compound_average_apy_percent_by_vault ?? {}
 
@@ -86,7 +88,14 @@ export function HomePage() {
             '0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)'
         }}
       >
-        <table className="w-full border-collapse">
+        <table className="w-full border-collapse table-fixed">
+          <colgroup>
+            <col style={{ width: '20%' }} />
+            <col style={{ width: '20%' }} />
+            <col style={{ width: '20%' }} />
+            <col style={{ width: '20%' }} />
+            <col style={{ width: '20%' }} />
+          </colgroup>
           <thead>
             <tr
               style={{
@@ -108,15 +117,46 @@ export function HomePage() {
             </tr>
           </thead>
           <tbody>
-            {registeredVaults.map(({ vault, metadata }, i) => (
-              <VaultCard
-                key={vault.mint.toBase58()}
-                vault={vault}
-                metadata={metadata}
-                isLast={i === registeredVaults.length - 1}
-                avgApr={aprByVault[vault.address.toBase58()] ?? null}
-              />
-            ))}
+            {vaultsLoading && registeredVaults.length === 0
+              ? Array.from({ length: SKELETON_LIST_ELEMENTS }).map((_, i) => (
+                  <tr
+                    key={i}
+                    style={{
+                      borderBottom:
+                        i === SKELETON_LIST_ELEMENTS - 1
+                          ? 'none'
+                          : `1px solid ${APP_COLORS.page.cardBorder}`
+                    }}
+                  >
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="h-6 w-6 rounded-full skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                        <div className="h-5 w-12 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                      </div>
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <div className="mx-auto h-5 w-20 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <div className="mx-auto h-5 w-16 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <div className="mx-auto h-5 w-16 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                    </td>
+                    <td className="py-4 px-6 text-right">
+                      <div className="ml-auto h-9 w-28 rounded-lg skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                    </td>
+                  </tr>
+                ))
+              : registeredVaults.map(({ vault, metadata }, i) => (
+                  <VaultCard
+                    key={vault.mint.toBase58()}
+                    vault={vault}
+                    metadata={metadata}
+                    isLast={i === registeredVaults.length - 1}
+                    avgApr={aprByVault[vault.address.toBase58()] ?? null}
+                  />
+                ))}
           </tbody>
         </table>
       </div>

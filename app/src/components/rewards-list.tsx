@@ -33,7 +33,7 @@ function fmtDate(ts: number | null) {
 export function RewardsList() {
   const { connection } = useConnection()
   const isDevnet = connection.rpcEndpoint.includes('devnet')
-  const { data, isLoading } = useDrawings(1, 20)
+  const { data } = useDrawings(1, 20)
   const drawings = data?.drawings ?? []
   const [selectedDrawing, setSelectedDrawing] = useState<Drawing | null>(null)
   const getMint = useMintStore((s) => s.getMint)
@@ -71,16 +71,7 @@ export function RewardsList() {
       </div>
 
       <div className="max-h-[420px] overflow-auto">
-        {isLoading && (
-          <p
-            className="px-5 py-8 text-center text-xs"
-            style={{ color: APP_COLORS.page.cardLabel }}
-          >
-            Loading...
-          </p>
-        )}
-
-        {!isLoading && drawings.length === 0 && (
+        {drawings.length === 0 && (
           <p
             className="px-5 py-8 text-center text-xs"
             style={{ color: APP_COLORS.page.cardLabel }}
@@ -89,7 +80,7 @@ export function RewardsList() {
           </p>
         )}
 
-        {!isLoading && drawings.length > 0 && (
+        {drawings.length > 0 && (
           <table className="w-full min-w-[820px] text-xs">
             <thead
               className="sticky top-0 z-10"

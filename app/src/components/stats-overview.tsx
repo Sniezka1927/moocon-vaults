@@ -14,7 +14,7 @@ function fmtUsers(v: number) {
 }
 
 export function StatsOverview() {
-  const { data, isLoading } = useStats({ interval: '1d', limit: 1 })
+  const { data } = useStats({ interval: '1d', limit: 1 })
   const latest = data?.data[0]
 
   const cards = [
@@ -52,10 +52,10 @@ export function StatsOverview() {
           <p
             className="mt-1.5 text-base font-semibold leading-none"
             style={{
-              color: isLoading ? APP_COLORS.page.cardLabel : APP_COLORS.page.cardValue
+              color: APP_COLORS.page.cardValue
             }}
           >
-            {isLoading ? '...' : card.value}
+            {card.value}
           </p>
         </article>
       ))}

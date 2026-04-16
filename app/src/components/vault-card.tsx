@@ -120,12 +120,23 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
 
       {/* Total Supplied */}
       <td className="py-4 px-6 text-center">
-        <span
-          className="text-sm font-medium"
-          style={{ color: APP_COLORS.page.cardValue }}
-        >
-          {tvlUsd !== null ? tvlUsd : tvlLabel}
-        </span>
+        {tvlUsd !== null ? (
+          <span
+            className="text-sm font-medium"
+            style={{ color: APP_COLORS.page.cardValue }}
+          >
+            {tvlUsd}
+          </span>
+        ) : tvl !== null && tvl === '—' ? (
+          <span
+            className="text-sm font-medium"
+            style={{ color: APP_COLORS.page.cardValue }}
+          >
+            —
+          </span>
+        ) : (
+          <div className="mx-auto h-4 w-20 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+        )}
       </td>
 
       {/* Avg APR */}

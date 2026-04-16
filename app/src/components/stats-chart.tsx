@@ -126,7 +126,7 @@ function ChartTooltip({
 
 export function StatsChart() {
   const [interval, setInterval] = useState<Interval>('1h')
-  const { data, isLoading } = useStats({ interval, limit: 200 })
+  const { data } = useStats({ interval, limit: 200 })
 
   const points = data?.data ?? []
   const chartData = points
@@ -202,101 +202,90 @@ export function StatsChart() {
         </div>
       </div>
 
-      {isLoading && (
-        <div
-          className="flex h-[200px] items-center justify-center text-sm"
-          style={{ color: AXIS_COLOR }}
-        >
-          Loading...
-        </div>
-      )}
-
-      {!isLoading && (
-        <div>
-          <ResponsiveContainer width="100%" height={200}>
-            <ComposedChart
-              data={chartData}
-              margin={{ top: 8, right: 6, left: 0, bottom: 4 }}
-            >
-              <defs>
-                <linearGradient id="tvlGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor={COLOR_TOKENS.primary}
-                    stopOpacity={0.24}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor={COLOR_TOKENS.primary}
-                    stopOpacity={0}
-                  />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke={GRID_COLOR}
-                vertical={false}
-              />
-              <XAxis
-                dataKey="label"
-                tick={{ fill: AXIS_COLOR, fontSize: 10 }}
-                axisLine={false}
-                tickLine={false}
-                minTickGap={24}
-                interval={xAxisInterval}
-              />
-              <YAxis
-                yAxisId="usd"
-                tickFormatter={fmtShortUSD}
-                tick={{ fill: AXIS_COLOR, fontSize: 10 }}
-                axisLine={false}
-                tickLine={false}
-                width={62}
-              />
-              <YAxis
-                yAxisId="users"
-                orientation="right"
-                tickFormatter={fmtShortNumber}
-                tick={{ fill: AXIS_COLOR, fontSize: 10 }}
-                axisLine={false}
-                tickLine={false}
-                width={46}
-              />
-              <Tooltip content={<ChartTooltip />} />
-              <Bar
-                yAxisId="users"
-                dataKey="unique_users"
-                name="Unique Wallets"
-                fill={COLOR_TOKENS.tertiary}
-                opacity={0.48}
-                radius={[2, 2, 0, 0]}
-                barSize={8}
-              />
-              <Area
-                yAxisId="usd"
-                type="monotone"
-                dataKey="tvl_usd"
-                name="TVL (USD)"
-                stroke={COLOR_TOKENS.primary}
-                strokeWidth={2}
-                fill="url(#tvlGrad)"
-                dot={false}
-                activeDot={{ r: 3 }}
-              />
-              <Line
-                yAxisId="usd"
-                type="monotone"
-                dataKey="total_rewards_usd"
-                name="Rewards (USD)"
-                stroke={COLOR_TOKENS.secondary}
-                strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 3 }}
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
-      )}
+      <div>
+        <ResponsiveContainer width="100%" height={200}>
+          <ComposedChart
+            data={chartData}
+            margin={{ top: 8, right: 6, left: 0, bottom: 4 }}
+          >
+            <defs>
+              <linearGradient id="tvlGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={COLOR_TOKENS.primary}
+                  stopOpacity={0.24}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={COLOR_TOKENS.primary}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={GRID_COLOR}
+              vertical={false}
+            />
+            <XAxis
+              dataKey="label"
+              tick={{ fill: AXIS_COLOR, fontSize: 10 }}
+              axisLine={false}
+              tickLine={false}
+              minTickGap={24}
+              interval={xAxisInterval}
+            />
+            <YAxis
+              yAxisId="usd"
+              tickFormatter={fmtShortUSD}
+              tick={{ fill: AXIS_COLOR, fontSize: 10 }}
+              axisLine={false}
+              tickLine={false}
+              width={62}
+            />
+            <YAxis
+              yAxisId="users"
+              orientation="right"
+              tickFormatter={fmtShortNumber}
+              tick={{ fill: AXIS_COLOR, fontSize: 10 }}
+              axisLine={false}
+              tickLine={false}
+              width={46}
+            />
+            <Tooltip content={<ChartTooltip />} />
+            <Bar
+              yAxisId="users"
+              dataKey="unique_users"
+              name="Unique Wallets"
+              fill={COLOR_TOKENS.tertiary}
+              opacity={0.48}
+              radius={[2, 2, 0, 0]}
+              barSize={8}
+            />
+            <Area
+              yAxisId="usd"
+              type="monotone"
+              dataKey="tvl_usd"
+              name="TVL (USD)"
+              stroke={COLOR_TOKENS.primary}
+              strokeWidth={2}
+              fill="url(#tvlGrad)"
+              dot={false}
+              activeDot={{ r: 3 }}
+            />
+            <Line
+              yAxisId="usd"
+              type="monotone"
+              dataKey="total_rewards_usd"
+              name="Rewards (USD)"
+              stroke={COLOR_TOKENS.secondary}
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 3 }}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   )
 }
