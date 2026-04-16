@@ -16,6 +16,26 @@ const DB_PATH = process.env.DB_PATH ?? './data/app.db'
 
 mkdirSync(dirname(DB_PATH), { recursive: true })
 
+function migrateReferralsCodeNullable(db: Database): void {
+  const col = db
+    .query<{ notnull: number }, []>(
+      `SELECT "notnull" FROM pragma_table_info('referrals') WHERE name = 'code'`
+    )
+    .get()
+  if (!col || col.notnull === 0) return // already nullable or column missing
+  db.run(`
+    CREATE TABLE referrals_new (
+      user_id     TEXT PRIMARY KEY,
+      code        TEXT UNIQUE,
+      referred_by TEXT,
+      created_at  INTEGER NOT NULL DEFAULT (unixepoch())
+    )
+  `)
+  db.run('INSERT INTO referrals_new SELECT * FROM referrals')
+  db.run('DROP TABLE referrals')
+  db.run('ALTER TABLE referrals_new RENAME TO referrals')
+}
+
 function initializeSchema(db: Database): void {
   db.run('PRAGMA journal_mode = WAL')
   db.run('PRAGMA foreign_keys = ON')
@@ -23,11 +43,14 @@ function initializeSchema(db: Database): void {
   db.run(`
     CREATE TABLE IF NOT EXISTS referrals (
       user_id     TEXT PRIMARY KEY,
-      code        TEXT NOT NULL UNIQUE,
+      code        TEXT UNIQUE,
       referred_by TEXT,
       created_at  INTEGER NOT NULL DEFAULT (unixepoch())
     )
   `)
+
+  // Migrate: make code column nullable (was NOT NULL in older schema)
+  migrateReferralsCodeNullable(db)
 
   db.run(`
     CREATE TABLE IF NOT EXISTS points (
@@ -202,7 +225,7 @@ export { db }
 
 export interface ReferralRow {
   user_id: string
-  code: string
+  code: string | null
   referred_by: string | null
   created_at: number
 }

@@ -391,7 +391,7 @@ export function DepositWithdrawModal({
                     }
                   }
                 }}
-                className="w-32 bg-transparent text-right text-2xl font-semibold outline-none placeholder:opacity-30 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="w-40 bg-transparent text-right text-2xl font-semibold outline-none placeholder:opacity-30 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 style={{ color: APP_COLORS.page.cardValue }}
               />
             </div>
@@ -399,9 +399,9 @@ export function DepositWithdrawModal({
             {/* Subline */}
             <p
               className="mt-1 text-right text-xs"
-              style={{ color: APP_COLORS.page.cardLabel }}
+              style={{ color: validationMsg ? APP_COLORS.error.text : APP_COLORS.page.cardLabel }}
             >
-              {validationMsg || '—'}
+              {validationMsg || '\u00A0'}
             </p>
           </div>
 

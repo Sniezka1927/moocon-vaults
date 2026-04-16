@@ -169,7 +169,7 @@ export const referralsHandler = new Elysia({
           'SELECT * FROM referrals WHERE user_id = ?'
         )
         .get(wallet)
-      if (existing) {
+      if (existing?.code) {
         set.status = 400
         return { error: 'wallet already has a referral code' }
       }
@@ -194,10 +194,17 @@ export const referralsHandler = new Elysia({
         }
       }
 
-      db.run('INSERT INTO referrals (user_id, code) VALUES (?, ?)', [
-        wallet,
-        code
-      ])
+      if (existing) {
+        db.run('UPDATE referrals SET code = ? WHERE user_id = ?', [
+          code,
+          wallet
+        ])
+      } else {
+        db.run('INSERT INTO referrals (user_id, code) VALUES (?, ?)', [
+          wallet,
+          code
+        ])
+      }
       return { success: true }
     },
     {
@@ -242,19 +249,21 @@ export const referralsHandler = new Elysia({
           'SELECT * FROM referrals WHERE user_id = ?'
         )
         .get(wallet)
-      if (!userRow) {
-        set.status = 400
-        return { error: 'create your own referral code before using one' }
+      if (userRow) {
+        if (userRow.referred_by !== null) {
+          set.status = 400
+          return { error: 'already used a referral code' }
+        }
+        db.run('UPDATE referrals SET referred_by = ? WHERE user_id = ?', [
+          code,
+          wallet
+        ])
+      } else {
+        db.run(
+          'INSERT INTO referrals (user_id, referred_by) VALUES (?, ?)',
+          [wallet, code]
+        )
       }
-      if (userRow.referred_by !== null) {
-        set.status = 400
-        return { error: 'already used a referral code' }
-      }
-
-      db.run('UPDATE referrals SET referred_by = ? WHERE user_id = ?', [
-        code,
-        wallet
-      ])
       return { success: true }
     },
     {

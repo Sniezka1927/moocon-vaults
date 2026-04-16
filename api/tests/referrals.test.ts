@@ -63,7 +63,7 @@ beforeAll(() => {
 })
 
 afterAll(() => {
-  for (const wallet of [walletOwner, walletUser, walletUsed, walletFresh]) {
+  for (const wallet of [walletOwner, walletUser, walletUsed, walletFresh, walletNoCode]) {
     db.run('DELETE FROM referrals WHERE user_id = ?', [wallet])
   }
 })
@@ -321,7 +321,7 @@ describe('POST /api/referrals/use — use code', () => {
     expect(body.error).toBe('cannot use your own referral code')
   })
 
-  test('no own code yet returns 400', async () => {
+  test('no own code yet still succeeds and creates row with referred_by', async () => {
     const sig = signUse(kpNoCode, CODE_OWNER, walletNoCode)
     const res = await app.handle(
       new Request('http://localhost/api/referrals/use', {
@@ -334,9 +334,18 @@ describe('POST /api/referrals/use — use code', () => {
         })
       })
     )
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body.error).toBe('create your own referral code before using one')
+    expect(body.success).toBe(true)
+
+    // Verify a row was created with referred_by but no code
+    const row = db
+      .query<{ code: string | null; referred_by: string | null }, [string]>(
+        'SELECT code, referred_by FROM referrals WHERE user_id = ?'
+      )
+      .get(walletNoCode)
+    expect(row?.referred_by).toBe(CODE_OWNER)
+    expect(row?.code).toBeNull()
   })
 
   test('already used a code returns 400', async () => {
@@ -392,7 +401,8 @@ describe('POST /api/referrals/use — use code', () => {
     const body = await res.json()
     expect(body.referrals).toContain(walletUser)
     expect(body.referrals).toContain(walletUsed)
-    expect(body.referrals).toHaveLength(2)
+    expect(body.referrals).toContain(walletNoCode)
+    expect(body.referrals).toHaveLength(3)
   })
 
   test('idempotent: second use attempt returns already-used error', async () => {

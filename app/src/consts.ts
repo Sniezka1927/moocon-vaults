@@ -170,6 +170,9 @@ export const APP_COLORS = {
     glowPurple: 'rgba(189, 147, 249, 0.15)',
     glowCyan: 'rgba(139, 233, 253, 0.12)',
   },
+  error: {
+    text: '#f87171'
+  },
   walletButton: {
     background: '#8BE9FD',
     backgroundHover: '#A3EFFE',
