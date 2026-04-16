@@ -1,3 +1,12 @@
+if (import.meta.env.PROD) {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const noop = () => {}
+  console.log = noop
+  console.debug = noop
+  console.info = noop
+  console.warn = noop
+}
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
