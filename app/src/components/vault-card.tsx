@@ -100,8 +100,15 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
 
   return (
     <tr
+      className="transition-colors duration-150"
       style={{
         borderBottom: isLast ? 'none' : `1px solid ${APP_COLORS.page.cardBorder}`
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.04)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'transparent'
       }}
     >
       {/* Asset */}

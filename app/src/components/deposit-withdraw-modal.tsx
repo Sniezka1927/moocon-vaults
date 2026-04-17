@@ -305,7 +305,7 @@ export function DepositWithdrawModal({
                 style={
                   tab === t
                     ? {
-                        backgroundColor: 'rgba(139, 233, 253, 0.15)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.12)',
                         color: COLOR_TOKENS.secondary
                       }
                     : { color: APP_COLORS.page.cardLabel }
@@ -345,9 +345,9 @@ export function DepositWithdrawModal({
                     onClick={lbl === 'HALF' ? handleHalf : handleMax}
                     className="rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide transition-opacity hover:opacity-80"
                     style={{
-                      backgroundColor: 'rgba(139, 233, 253, 0.1)',
+                      backgroundColor: 'rgba(59, 130, 246, 0.1)',
                       color: COLOR_TOKENS.secondary,
-                      border: `1px solid rgba(139, 233, 253, 0.25)`
+                      border: `1px solid rgba(59, 130, 246, 0.25)`
                     }}
                   >
                     {lbl}

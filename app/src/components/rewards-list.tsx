@@ -110,7 +110,7 @@ export function RewardsList() {
                 return (
                   <tr
                     key={d.id}
-                    className="border-b align-middle last:border-0"
+                    className="border-b align-middle last:border-0 transition-colors duration-150 hover:bg-white/[0.02]"
                     style={{ borderColor: APP_COLORS.page.cardBorder }}
                   >
                     <td

@@ -74,10 +74,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --scrollbar-track: #0B1628;
-  --scrollbar-thumb: #1A3A5C;
-  --scrollbar-thumb-hover: #2A5A8C;
-  --scrollbar-corner: #0B1628;
+  --scrollbar-track: #111827;
+  --scrollbar-thumb: #2563EB40;
+  --scrollbar-thumb-hover: #2563EB;
+  --scrollbar-corner: #111827;
 }
 
 .dark {
@@ -142,7 +142,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #2f4173 0%, var(--scrollbar-thumb) 100%);
+  background: linear-gradient(180deg, #2563EB40 0%, var(--scrollbar-thumb) 100%);
   border: 2px solid var(--scrollbar-track);
   border-radius: 999px;
 }

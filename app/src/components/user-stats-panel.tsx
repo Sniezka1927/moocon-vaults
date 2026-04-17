@@ -57,19 +57,19 @@ export function UserStatsPanel() {
   }) {
     return (
       <article
-        className="rounded-xl border p-3"
+        className="rounded-xl border p-4"
         style={{
           borderColor: APP_COLORS.page.cardBorder,
           backgroundColor: APP_COLORS.page.cardHeaderBackground
         }}
       >
         <p
-          className="text-[10px] uppercase tracking-[0.12em]"
+          className="text-[10px] uppercase tracking-[0.12em] font-medium"
           style={{ color: APP_COLORS.page.cardLabel }}
         >
           {label}
         </p>
-        <div className="mt-1.5 flex items-center gap-1.5 leading-none">
+        <div className="mt-2 flex items-center gap-1.5 leading-none">
           {isLoading ? (
             <div className="h-4 w-16 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
           ) : (
@@ -101,7 +101,7 @@ export function UserStatsPanel() {
         Your Stats
       </p>
       <article
-        className="rounded-xl border p-3 flex items-center justify-between h-[64px]"
+        className="rounded-xl border p-4 flex items-center justify-between h-[68px]"
         style={{
           borderColor: APP_COLORS.page.cardBorder,
           backgroundColor: APP_COLORS.page.cardHeaderBackground

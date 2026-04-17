@@ -25,9 +25,9 @@ export function App() {
         theme="dark"
         toastOptions={{
           style: {
-            background: '#0D1E36',
-            border: '1px solid #1A3A5C',
-            color: '#C8E8F8'
+            background: '#1E293B',
+            border: '1px solid #2563EB40',
+            color: '#E2E8F0'
           },
           classNames: {
             toast: 'toast-base',

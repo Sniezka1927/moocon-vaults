@@ -38,9 +38,15 @@ export function HomePage() {
   })
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+    <section className="mx-auto max-w-6xl px-4 py-12 md:px-8 md:py-16">
+      <p
+        className="text-[11px] uppercase tracking-[0.14em] font-medium"
+        style={{ color: APP_COLORS.page.cardLabel }}
+      >
+        Dashboard
+      </p>
       <h1
-        className="text-2xl font-bold"
+        className="mt-1 text-2xl font-bold"
         style={{ color: APP_COLORS.page.title }}
       >
         Portfolio
@@ -48,7 +54,7 @@ export function HomePage() {
 
       <div className="mt-6 flex flex-col md:flex-row gap-6">
         <div
-          className="flex-1 rounded-xl border p-5"
+          className="flex-1 rounded-2xl border p-6"
           style={{
             borderColor: APP_COLORS.page.cardBorder,
             backgroundColor: APP_COLORS.page.cardBackground
@@ -57,7 +63,7 @@ export function HomePage() {
           <UserStatsPanel />
         </div>
         <div
-          className="flex-1 rounded-xl border p-5"
+          className="flex-1 rounded-2xl border p-6"
           style={{
             borderColor: APP_COLORS.page.cardBorder,
             backgroundColor: APP_COLORS.page.cardBackground
@@ -67,25 +73,37 @@ export function HomePage() {
         </div>
       </div>
 
+      <div
+        className="mt-14 mb-6 h-px"
+        style={{ background: `linear-gradient(to right, transparent, ${APP_COLORS.page.cardBorder}, transparent)` }}
+      />
+
+      <p
+        className="text-[11px] uppercase tracking-[0.14em] font-medium"
+        style={{ color: APP_COLORS.page.cardLabel }}
+      >
+        Yield Vaults
+      </p>
       <h2
-        className="mt-10 text-2xl font-bold"
+        className="mt-1 text-2xl font-bold"
         style={{ color: APP_COLORS.page.title }}
       >
         Earn
       </h2>
       <p
-        className="mt-2 max-w-3xl text-base"
+        className="mt-2 max-w-3xl text-sm"
         style={{ color: APP_COLORS.page.description }}
       >
         Deposit assets and earn whale-sized yield with Moocon earn vaults.
       </p>
 
       <div
-        className="mt-4 rounded-xl overflow-hidden"
+        className="mt-5 rounded-2xl overflow-hidden border"
         style={{
+          borderColor: APP_COLORS.page.cardBorder,
           backgroundColor: APP_COLORS.page.cardBackground,
           boxShadow:
-            '0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)'
+            '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)'
         }}
       >
         <table className="w-full border-collapse table-fixed">
@@ -162,7 +180,7 @@ export function HomePage() {
       </div>
 
       <div
-        className="mt-6 rounded-xl border flex flex-col md:flex-row overflow-hidden"
+        className="mt-6 rounded-2xl border flex flex-col md:flex-row overflow-hidden"
         style={{
           borderColor: APP_COLORS.page.cardBorder,
           backgroundColor: APP_COLORS.page.cardBackground

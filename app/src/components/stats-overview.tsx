@@ -37,9 +37,10 @@ export function StatsOverview() {
       {cards.map((card) => (
         <article
           key={card.label}
-          className="rounded-xl border p-3"
+          className="rounded-xl border p-4 border-l-2"
           style={{
             borderColor: APP_COLORS.page.cardBorder,
+            borderLeftColor: APP_COLORS.page.cardLabel,
             backgroundColor: APP_COLORS.page.cardHeaderBackground
           }}
         >

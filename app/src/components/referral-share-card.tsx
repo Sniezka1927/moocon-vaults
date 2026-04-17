@@ -1,4 +1,4 @@
-import { APP_COLORS, COLOR_TOKENS, BRAND_NAME } from '@/consts'
+import { COLOR_TOKENS, BRAND_NAME } from '@/consts'
 import logoWhite from '@/icons/logo-white.png'
 
 interface ReferralShareCardProps {
@@ -13,141 +13,287 @@ export function ReferralShareCard({ code, cardRef }: ReferralShareCardProps) {
       style={{
         width: 1200,
         height: 630,
-        background: `linear-gradient(135deg, ${APP_COLORS.app.background} 0%, ${APP_COLORS.page.cardBackground} 50%, #0E1A30 100%)`,
+        background: '#050A18',
         position: 'relative',
         overflow: 'hidden',
         fontFamily: 'Space Grotesk, sans-serif',
         display: 'flex',
         flexDirection: 'column',
-        padding: '60px 70px'
+        justifyContent: 'center',
+        padding: '60px 80px'
       }}
     >
-      {/* Glow effects */}
+      {/* ── Background layers ── */}
+
+      {/* Gradient mesh — large blue orb top-right */}
       <div
         style={{
           position: 'absolute',
-          top: -120,
-          right: -80,
-          width: 500,
-          height: 500,
+          top: -200,
+          right: -150,
+          width: 800,
+          height: 800,
           borderRadius: '50%',
-          background: `radial-gradient(circle, ${APP_COLORS.shareCard.glowPurple} 0%, transparent 70%)`,
+          background: 'radial-gradient(circle, rgba(37,99,235,0.35) 0%, rgba(37,99,235,0.08) 40%, transparent 70%)',
           pointerEvents: 'none'
         }}
       />
+      {/* Secondary orb — bottom-left cyan */}
       <div
         style={{
           position: 'absolute',
-          bottom: -100,
-          left: -60,
-          width: 400,
-          height: 400,
+          bottom: -250,
+          left: -100,
+          width: 700,
+          height: 700,
           borderRadius: '50%',
-          background: `radial-gradient(circle, ${APP_COLORS.shareCard.glowCyan} 0%, transparent 70%)`,
+          background: 'radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(56,189,248,0.05) 40%, transparent 70%)',
+          pointerEvents: 'none'
+        }}
+      />
+      {/* Small accent orb — mid-left */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 100,
+          left: 300,
+          width: 300,
+          height: 300,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(129,140,248,0.15) 0%, transparent 70%)',
           pointerEvents: 'none'
         }}
       />
 
-      {/* Border overlay */}
+      {/* Scan lines overlay */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          border: `2px solid ${APP_COLORS.page.cardBorder}`,
-          borderRadius: 24,
+          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.015) 3px, rgba(255,255,255,0.015) 4px)',
           pointerEvents: 'none'
         }}
       />
 
-      {/* Top left heading */}
+      {/* Dot grid */}
       <div
-        style={{ display: 'flex', alignItems: 'center', gap: 14, zIndex: 1 }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'radial-gradient(circle, rgba(96,165,250,0.12) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+          pointerEvents: 'none'
+        }}
+      />
+
+      {/* Outer border — glowing */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          border: '1px solid rgba(59,130,246,0.2)',
+          borderRadius: 0,
+          pointerEvents: 'none'
+        }}
+      />
+      {/* Inner border — double-stroke effect */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 12,
+          border: '1px solid rgba(59,130,246,0.1)',
+          borderRadius: 4,
+          pointerEvents: 'none'
+        }}
+      />
+
+      {/* Corner accents — top-left */}
+      <div style={{ position: 'absolute', top: 24, left: 24, pointerEvents: 'none' }}>
+        <div style={{ width: 40, height: 2, background: 'rgba(96,165,250,0.6)' }} />
+        <div style={{ width: 2, height: 40, background: 'rgba(96,165,250,0.6)' }} />
+      </div>
+      {/* Corner accents — top-right */}
+      <div style={{ position: 'absolute', top: 24, right: 24, pointerEvents: 'none', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+        <div style={{ width: 40, height: 2, background: 'rgba(96,165,250,0.6)' }} />
+        <div style={{ width: 2, height: 40, background: 'rgba(96,165,250,0.6)', alignSelf: 'flex-end' }} />
+      </div>
+      {/* Corner accents — bottom-left */}
+      <div style={{ position: 'absolute', bottom: 24, left: 24, pointerEvents: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+        <div style={{ width: 2, height: 40, background: 'rgba(96,165,250,0.6)' }} />
+        <div style={{ width: 40, height: 2, background: 'rgba(96,165,250,0.6)' }} />
+      </div>
+      {/* Corner accents — bottom-right */}
+      <div style={{ position: 'absolute', bottom: 24, right: 24, pointerEvents: 'none', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+        <div style={{ width: 2, height: 40, background: 'rgba(96,165,250,0.6)', alignSelf: 'flex-end' }} />
+        <div style={{ width: 40, height: 2, background: 'rgba(96,165,250,0.6)' }} />
+      </div>
+
+      {/* ── Logo watermark — right side ── */}
+      <div
+        style={{
+          position: 'absolute',
+          right: -40,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: 520,
+          height: 520,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'none'
+        }}
       >
+        <img
+          src={logoWhite}
+          alt=""
+          style={{
+            height: 420,
+            width: 420,
+            objectFit: 'contain',
+            opacity: 0.06,
+            filter: 'drop-shadow(0 0 80px rgba(59,130,246,0.3))'
+          }}
+        />
+      </div>
+
+      {/* ── Content ── */}
+
+      {/* Top badge */}
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 10,
+          padding: '8px 20px',
+          borderRadius: 100,
+          background: 'rgba(59,130,246,0.1)',
+          border: '1px solid rgba(59,130,246,0.25)',
+          alignSelf: 'flex-start',
+          zIndex: 1,
+          marginBottom: 36
+        }}
+      >
+        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#3B82F6', boxShadow: '0 0 12px rgba(59,130,246,0.8)' }} />
         <span
           style={{
-            fontSize: 28,
-            fontWeight: 700,
-            color: APP_COLORS.app.foreground,
-            letterSpacing: '0.04em'
+            fontSize: 16,
+            fontWeight: 600,
+            color: '#93C5FD',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase'
           }}
         >
           {BRAND_NAME} Beta Access
         </span>
       </div>
 
-      {/* Main content */}
-      <div
-        style={{
-          display: 'flex',
-          flex: 1,
-          alignItems: 'center',
-          zIndex: 1,
-          marginTop: 20
-        }}
-      >
-        {/* Left side */}
-        <div
-          style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 32 }}
-        >
+      {/* Main row */}
+      <div style={{ display: 'flex', alignItems: 'center', zIndex: 1, flex: 1 }}>
+        {/* Left — code */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 24 }}>
           <span
             style={{
-              fontSize: 42,
-              fontWeight: 700,
-              letterSpacing: '0.12em',
+              fontSize: 18,
+              fontWeight: 600,
+              letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: APP_COLORS.page.cardLabel
+              color: '#64748B'
             }}
           >
-            Referral Code
+            Your Referral Code
           </span>
 
-          {/* Code display */}
+          {/* Neon code box */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              padding: '24px 44px',
+              padding: '28px 48px',
               borderRadius: 16,
-              background: 'rgba(189, 147, 249, 0.08)',
-              border: '1px solid rgba(189, 147, 249, 0.25)',
-              alignSelf: 'flex-start'
+              background: 'linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(129,140,248,0.08) 100%)',
+              border: '1px solid rgba(59,130,246,0.35)',
+              boxShadow: '0 0 40px rgba(59,130,246,0.15), 0 0 80px rgba(59,130,246,0.08), inset 0 1px 0 rgba(255,255,255,0.05)',
+              alignSelf: 'flex-start',
+              position: 'relative'
             }}
           >
+            {/* Inner glow behind text */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                borderRadius: 16,
+                background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.1) 0%, transparent 70%)',
+                pointerEvents: 'none'
+              }}
+            />
             <span
               style={{
-                fontSize: 64,
+                fontSize: 72,
                 fontWeight: 800,
-                color: COLOR_TOKENS.primary,
-                letterSpacing: '0.08em'
+                color: '#FFFFFF',
+                letterSpacing: '0.06em',
+                textShadow: '0 0 30px rgba(59,130,246,0.6), 0 0 60px rgba(59,130,246,0.3)',
+                position: 'relative'
               }}
             >
               {code}
             </span>
           </div>
-        </div>
 
-        {/* Right side — logo */}
-        <div
-          style={{
-            width: 450,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
+          {/* Tagline */}
+          <span
+            style={{
+              fontSize: 16,
+              fontWeight: 500,
+              color: '#475569',
+              letterSpacing: '0.04em',
+              marginTop: 8
+            }}
+          >
+            Join the herd. Earn yield together.
+          </span>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          zIndex: 1,
+          marginTop: 24
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <img
             src={logoWhite}
             alt=""
-            style={{
-              height: 500,
-              width: 500,
-              objectFit: 'contain',
-              opacity: 0.25,
-              borderRadius: '50%',
-              filter: `drop-shadow(0 0 40px ${APP_COLORS.shareCard.glowPurple})`
-            }}
+            style={{ height: 28, width: 28, objectFit: 'contain', opacity: 0.5 }}
           />
+          <span
+            style={{
+              fontSize: 15,
+              fontWeight: 700,
+              color: '#475569',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase'
+            }}
+          >
+            {BRAND_NAME}
+          </span>
         </div>
+        <span
+          style={{
+            fontSize: 13,
+            fontWeight: 500,
+            color: '#334155',
+            letterSpacing: '0.06em'
+          }}
+        >
+          moocon.xyz
+        </span>
       </div>
     </div>
   )

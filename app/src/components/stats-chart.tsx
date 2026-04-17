@@ -65,9 +65,9 @@ function fmtShortNumber(v: number) {
   return `${Math.round(v)}`
 }
 
-const GRID_COLOR = 'rgba(39, 53, 93, 0.6)'
+const GRID_COLOR = 'rgba(30, 58, 95, 0.5)'
 const AXIS_COLOR = APP_COLORS.page.cardLabel
-const TOOLTIP_BG = '#0A0F20'
+const TOOLTIP_BG = '#0F172A'
 const TOOLTIP_BORDER = APP_COLORS.page.cardBorder
 
 function ChartTooltip({
@@ -188,7 +188,7 @@ export function StatsChart() {
               className="rounded px-2.5 py-1 text-xs font-medium transition-colors"
               style={
                 interval === i.value
-                  ? { backgroundColor: COLOR_TOKENS.primary, color: '#1a0d3a' }
+                  ? { backgroundColor: COLOR_TOKENS.primary, color: '#0F172A' }
                   : {
                       backgroundColor: 'transparent',
                       color: AXIS_COLOR,

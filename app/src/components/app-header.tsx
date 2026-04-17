@@ -38,8 +38,8 @@ export function AppHeader({
   } as CSSProperties
 
   return (
-    <header className="relative z-50 bg-[var(--header-bg)]" style={headerStyle}>
-      <div className="w-full bg-[var(--header-bg)] px-5 py-5 md:px-10">
+    <header className="relative z-50 bg-[var(--header-bg)] border-b border-white/5" style={headerStyle}>
+      <div className="w-full bg-[var(--header-bg)] px-5 py-4 md:px-10">
         <div className="flex items-center justify-between gap-4">
           <Link
             to="/"
