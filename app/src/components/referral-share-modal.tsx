@@ -16,7 +16,7 @@ const btnStyle: React.CSSProperties = {
   backgroundColor: APP_COLORS.vault.stakeButtonBackground,
   borderColor: APP_COLORS.vault.stakeButtonBorder,
   color: APP_COLORS.vault.stakeButtonText,
-  borderRadius: 0,
+  borderRadius: '0.75rem',
   whiteSpace: 'nowrap'
 }
 
@@ -88,7 +88,7 @@ export function ReferralShareModal({ code, open, onClose }: Props) {
           }}
         />
         <Dialog.Content
-          className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 border p-5 shadow-2xl focus:outline-none"
+          className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl border p-5 shadow-2xl focus:outline-none"
           style={{
             backgroundColor: APP_COLORS.app.background,
             borderColor: APP_COLORS.page.cardBorder,
@@ -100,7 +100,7 @@ export function ReferralShareModal({ code, open, onClose }: Props) {
         >
           {/* Card preview */}
           <div
-            className="overflow-hidden"
+            className="rounded-xl overflow-hidden"
             style={{
               width: CARD_W * SCALE,
               height: CARD_H * SCALE,
@@ -145,7 +145,7 @@ export function ReferralShareModal({ code, open, onClose }: Props) {
               style={{
                 backgroundColor: APP_COLORS.walletButton.background,
                 color: APP_COLORS.walletButton.text,
-                borderRadius: 0,
+                borderRadius: '0.75rem',
                 fontWeight: 700,
                 border: 'none',
                 height: 'auto',

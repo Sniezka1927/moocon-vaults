@@ -53,7 +53,7 @@ export function UserRewardsModal({
           style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
         />
         <Dialog.Content
-          className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 p-6 shadow-xl outline-none"
+          className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl p-6 shadow-xl outline-none"
           style={{
             backgroundColor: APP_COLORS.page.cardBackground,
             border: `1px solid ${APP_COLORS.page.cardBorder}`
@@ -99,7 +99,7 @@ export function UserRewardsModal({
               return (
                 <div
                   key={i}
-                  className="border p-3 flex items-center justify-between"
+                  className="rounded-xl border p-3 flex items-center justify-between"
                   style={{
                     borderColor: APP_COLORS.page.cardBorder,
                     backgroundColor: APP_COLORS.page.cardHeaderBackground
@@ -132,7 +132,7 @@ export function UserRewardsModal({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="shrink-0"
+                    className="rounded-lg shrink-0"
                     style={{
                       backgroundColor: APP_COLORS.vault.stakeButtonBackground,
                       borderColor: APP_COLORS.vault.stakeButtonBorder,
@@ -157,7 +157,7 @@ export function UserRewardsModal({
 
           {rewards.length >= 2 && (
             <Button
-              className="mt-4 w-full"
+              className="mt-4 w-full rounded-lg"
               style={{
                 backgroundColor: APP_COLORS.vault.stakeButtonBackground,
                 borderColor: APP_COLORS.vault.stakeButtonBorder,

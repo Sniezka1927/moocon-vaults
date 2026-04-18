@@ -21,7 +21,7 @@ const btnStyle: React.CSSProperties = {
   backgroundColor: APP_COLORS.vault.stakeButtonBackground,
   borderColor: APP_COLORS.vault.stakeButtonBorder,
   color: APP_COLORS.vault.stakeButtonText,
-  borderRadius: 0,
+  borderRadius: '0.75rem',
   whiteSpace: 'nowrap'
 }
 
@@ -149,7 +149,7 @@ export function ReferralPanel() {
               setIsLedger(next)
               localStorage.setItem('useLedger', String(next))
             }}
-            className="w-3.5 h-3.5 rounded-none border cursor-pointer flex items-center justify-center"
+            className="w-3.5 h-3.5 rounded-[3px] border cursor-pointer flex items-center justify-center"
             style={{
               borderColor: APP_COLORS.page.cardLabel,
               backgroundColor: isLedger
@@ -187,7 +187,7 @@ export function ReferralPanel() {
             onChange={(e) => !hasCode && setCreateCode(e.target.value)}
             readOnly={hasCode || !connected}
             placeholder={connected ? 'Choose a code...' : 'Connect wallet'}
-            className="flex-1 rounded-none px-4 py-2.5 text-sm outline-none"
+            className="flex-1 rounded-xl px-4 py-2.5 text-sm outline-none"
             style={{
               ...fieldStyle,
               color: hasCode ? APP_COLORS.page.cardLabel : fieldStyle.color,
@@ -269,7 +269,7 @@ export function ReferralPanel() {
             placeholder={
               connected ? "Enter friend's code..." : 'Connect wallet'
             }
-            className="flex-1 rounded-none px-4 py-2.5 text-sm outline-none"
+            className="flex-1 rounded-xl px-4 py-2.5 text-sm outline-none"
             style={{
               ...fieldStyle,
               color: hasReferredBy
@@ -283,7 +283,7 @@ export function ReferralPanel() {
             style={{
               backgroundColor: APP_COLORS.walletButton.background,
               color: APP_COLORS.walletButton.text,
-              borderRadius: 0,
+              borderRadius: '0.75rem',
               fontWeight: 700,
               border: 'none',
               whiteSpace: 'nowrap',

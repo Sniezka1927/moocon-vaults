@@ -142,7 +142,7 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
             —
           </span>
         ) : (
-          <div className="mx-auto h-4 w-20 skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+          <div className="mx-auto h-4 w-20 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
         )}
       </td>
 
@@ -163,7 +163,7 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
       {/* Deposit */}
       <td className="py-4 px-6 text-right">
         <Button
-          className="rounded-none px-6 py-2 text-xs uppercase tracking-widest"
+          className="rounded-lg px-6 py-2 text-xs uppercase tracking-widest"
           style={{
             backgroundColor: APP_COLORS.walletButton.background,
             border: 'none',

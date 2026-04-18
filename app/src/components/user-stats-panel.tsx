@@ -57,7 +57,7 @@ export function UserStatsPanel() {
   }) {
     return (
       <article
-        className="rounded-none border p-4"
+        className="rounded-xl border p-4"
         style={{
           borderColor: APP_COLORS.page.cardBorder,
           backgroundColor: APP_COLORS.page.cardHeaderBackground
@@ -71,7 +71,7 @@ export function UserStatsPanel() {
         </p>
         <div className="mt-2 flex items-center gap-1.5 leading-none">
           {isLoading ? (
-            <div className="h-4 w-16 skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+            <div className="h-4 w-16 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
           ) : (
             <>
               <p
@@ -101,7 +101,7 @@ export function UserStatsPanel() {
         Your Stats
       </p>
       <article
-        className="rounded-none border p-4 flex items-center justify-between h-[68px]"
+        className="rounded-xl border p-4 flex items-center justify-between h-[68px]"
         style={{
           borderColor: APP_COLORS.page.cardBorder,
           backgroundColor: APP_COLORS.page.cardHeaderBackground
@@ -115,7 +115,7 @@ export function UserStatsPanel() {
             Deposited
           </p>
           {isLoading ? (
-            <div className="mt-1.5 h-4 w-20 skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+            <div className="mt-1.5 h-4 w-20 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
           ) : (
             <p
               className="mt-1.5 text-base font-semibold leading-none"
@@ -132,7 +132,7 @@ export function UserStatsPanel() {
         <Button
             variant="outline"
             size="sm"
-            className={`flex items-center gap-2 h-auto py-2.5 px-5 text-sm font-semibold transition-opacity ${connected && rewards.length > 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+            className={`flex items-center gap-2 h-auto py-2.5 px-5 rounded-lg text-sm font-semibold transition-opacity ${connected && rewards.length > 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
             style={{
               borderColor: APP_COLORS.page.cardBorder,
               backgroundColor: APP_COLORS.page.cardBackground,

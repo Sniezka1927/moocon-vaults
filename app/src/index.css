@@ -42,7 +42,7 @@
 }
 
 :root {
-  --radius: 0;
+  --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -144,7 +144,7 @@
 *::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #2563EB40 0%, var(--scrollbar-thumb) 100%);
   border: 2px solid var(--scrollbar-track);
-  border-radius: 2px;
+  border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -160,7 +160,7 @@
   border: 0 !important;
   background-color: var(--wallet-btn-bg) !important;
   color: var(--wallet-btn-text) !important;
-  @apply !px-6 !py-3 !rounded-none !text-sm !font-semibold !tracking-[0.08em] !transition-all;
+  @apply !px-6 !py-3 !rounded-md !text-sm !font-semibold !tracking-[0.08em] !transition-all;
 }
 
 .wallet-adapter-button-trigger:hover {
@@ -184,7 +184,7 @@
 
 .hero-dot {
   position: absolute;
-  border-radius: 2px;
+  border-radius: 999px;
   background: radial-gradient(circle, var(--hero-dot-start) 0%, var(--hero-dot-mid) 60%, var(--hero-dot-end) 100%);
   box-shadow: 0 0 14px var(--hero-dot-shadow);
   animation-name: hero-dot-drift;

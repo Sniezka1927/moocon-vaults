@@ -102,7 +102,7 @@ export function ReferralShareCard({ code, cardRef }: ReferralShareCardProps) {
           position: 'absolute',
           inset: 12,
           border: '1px solid rgba(59,130,246,0.1)',
-          borderRadius: 0,
+          borderRadius: 4,
           pointerEvents: 'none'
         }}
       />
@@ -165,7 +165,7 @@ export function ReferralShareCard({ code, cardRef }: ReferralShareCardProps) {
           alignItems: 'center',
           gap: 10,
           padding: '8px 20px',
-          borderRadius: 0,
+          borderRadius: 100,
           background: 'rgba(59,130,246,0.1)',
           border: '1px solid rgba(59,130,246,0.25)',
           alignSelf: 'flex-start',
@@ -209,7 +209,7 @@ export function ReferralShareCard({ code, cardRef }: ReferralShareCardProps) {
               display: 'inline-flex',
               alignItems: 'center',
               padding: '28px 48px',
-              borderRadius: 0,
+              borderRadius: 16,
               background: 'linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(129,140,248,0.08) 100%)',
               border: '1px solid rgba(59,130,246,0.35)',
               boxShadow: '0 0 40px rgba(59,130,246,0.15), 0 0 80px rgba(59,130,246,0.08), inset 0 1px 0 rgba(255,255,255,0.05)',
@@ -222,7 +222,7 @@ export function ReferralShareCard({ code, cardRef }: ReferralShareCardProps) {
               style={{
                 position: 'absolute',
                 inset: 0,
-                borderRadius: 0,
+                borderRadius: 16,
                 background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.1) 0%, transparent 70%)',
                 pointerEvents: 'none'
               }}

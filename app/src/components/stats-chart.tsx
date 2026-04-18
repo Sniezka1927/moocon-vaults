@@ -95,7 +95,7 @@ function ChartTooltip({
 
   return (
     <div
-      className="border px-3 py-2 text-xs"
+      className="rounded-lg border px-3 py-2 text-xs"
       style={{
         backgroundColor: TOOLTIP_BG,
         borderColor: TOOLTIP_BORDER,
@@ -154,7 +154,7 @@ export function StatsChart() {
             style={{ color: APP_COLORS.page.cardLabel }}
           >
             <span
-              className="inline-block h-2.5 w-2.5"
+              className="inline-block h-2.5 w-2.5 rounded-sm"
               style={{ backgroundColor: COLOR_TOKENS.tertiary, opacity: 0.55 }}
             />
             Unique Wallets
@@ -164,7 +164,7 @@ export function StatsChart() {
             style={{ color: APP_COLORS.page.cardLabel }}
           >
             <span
-              className="inline-block h-0.5 w-4"
+              className="inline-block h-0.5 w-4 rounded"
               style={{ backgroundColor: COLOR_TOKENS.primary }}
             />
             TVL (USD)
@@ -174,7 +174,7 @@ export function StatsChart() {
             style={{ color: APP_COLORS.page.cardLabel }}
           >
             <span
-              className="inline-block h-0.5 w-4"
+              className="inline-block h-0.5 w-4 rounded"
               style={{ backgroundColor: COLOR_TOKENS.secondary }}
             />
             Rewards (USD)
@@ -185,7 +185,7 @@ export function StatsChart() {
             <button
               key={i.value}
               onClick={() => setInterval(i.value)}
-              className="px-2.5 py-1 text-xs font-medium transition-colors"
+              className="rounded px-2.5 py-1 text-xs font-medium transition-colors"
               style={
                 interval === i.value
                   ? { backgroundColor: COLOR_TOKENS.primary, color: '#0F172A' }

@@ -55,7 +55,7 @@ export function AppFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="flex h-8 w-8 items-center justify-center border border-[var(--footer-chip-border)] bg-[var(--footer-chip-bg)] text-[var(--footer-chip-text)] transition-colors hover:text-[var(--footer-link-hover)]"
+              className="flex h-8 w-8 items-center justify-center rounded border border-[var(--footer-chip-border)] bg-[var(--footer-chip-bg)] text-[var(--footer-chip-text)] transition-colors hover:text-[var(--footer-link-hover)]"
             >
               <Icon className="h-4 w-4" />
             </a>
