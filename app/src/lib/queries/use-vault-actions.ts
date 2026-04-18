@@ -218,7 +218,7 @@ export function useDeposit(vault: VaultWithAddress) {
           : undefined,
         classNames: {
           actionButton:
-            '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] !text-xs !font-medium hover:!bg-[#1E293B] !rounded-md !px-3 !py-1'
+            '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] !text-xs !font-medium hover:!bg-[#1E293B] !rounded-none !px-3 !py-1'
         }
       })
     },
@@ -384,7 +384,7 @@ export function useWithdraw(vault: VaultWithAddress) {
           : undefined,
         classNames: {
           actionButton:
-            '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] !text-xs !font-medium hover:!bg-[#1E293B] !rounded-md !px-3 !py-1'
+            '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] !text-xs !font-medium hover:!bg-[#1E293B] !rounded-none !px-3 !py-1'
         }
       })
     },
@@ -452,7 +452,7 @@ export function useClaimReward() {
           : undefined,
         classNames: {
           actionButton:
-            '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] !text-xs !font-medium hover:!bg-[#1E293B] !rounded-md !px-3 !py-1'
+            '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] !text-xs !font-medium hover:!bg-[#1E293B] !rounded-none !px-3 !py-1'
         }
       })
     },
@@ -529,7 +529,7 @@ export function useClaimAllRewards() {
           : undefined,
         classNames: {
           actionButton:
-            '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] !text-xs !font-medium hover:!bg-[#1E293B] !rounded-md !px-3 !py-1'
+            '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] !text-xs !font-medium hover:!bg-[#1E293B] !rounded-none !px-3 !py-1'
         }
       })
     },

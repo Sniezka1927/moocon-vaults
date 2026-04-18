@@ -54,7 +54,7 @@ export function HomePage() {
 
       <div className="mt-6 flex flex-col md:flex-row gap-6">
         <div
-          className="flex-1 rounded-2xl border p-6"
+          className="flex-1 rounded-none border p-6"
           style={{
             borderColor: APP_COLORS.page.cardBorder,
             backgroundColor: APP_COLORS.page.cardBackground
@@ -63,7 +63,7 @@ export function HomePage() {
           <UserStatsPanel />
         </div>
         <div
-          className="flex-1 rounded-2xl border p-6"
+          className="flex-1 rounded-none border p-6"
           style={{
             borderColor: APP_COLORS.page.cardBorder,
             backgroundColor: APP_COLORS.page.cardBackground
@@ -98,7 +98,7 @@ export function HomePage() {
       </p>
 
       <div
-        className="mt-5 rounded-2xl overflow-hidden border"
+        className="mt-5 rounded-none overflow-hidden border"
         style={{
           borderColor: APP_COLORS.page.cardBorder,
           backgroundColor: APP_COLORS.page.cardBackground,
@@ -149,20 +149,20 @@ export function HomePage() {
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <div className="h-6 w-6 rounded-full skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
-                        <div className="h-5 w-12 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                        <div className="h-5 w-12 skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
                       </div>
                     </td>
                     <td className="py-4 px-6 text-center">
-                      <div className="mx-auto h-5 w-20 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                      <div className="mx-auto h-5 w-20 skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
                     </td>
                     <td className="py-4 px-6 text-center">
-                      <div className="mx-auto h-5 w-16 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                      <div className="mx-auto h-5 w-16 skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
                     </td>
                     <td className="py-4 px-6 text-center">
-                      <div className="mx-auto h-5 w-16 rounded skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                      <div className="mx-auto h-5 w-16 skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
                     </td>
                     <td className="py-4 px-6 text-right">
-                      <div className="ml-auto h-9 w-28 rounded-lg skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
+                      <div className="ml-auto h-9 w-28 skeleton" style={{ backgroundColor: APP_COLORS.page.cardBorder }} />
                     </td>
                   </tr>
                 ))
@@ -180,7 +180,7 @@ export function HomePage() {
       </div>
 
       <div
-        className="mt-6 rounded-2xl border flex flex-col md:flex-row overflow-hidden"
+        className="mt-6 rounded-none border flex flex-col md:flex-row overflow-hidden"
         style={{
           borderColor: APP_COLORS.page.cardBorder,
           backgroundColor: APP_COLORS.page.cardBackground

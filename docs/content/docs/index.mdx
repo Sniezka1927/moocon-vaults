@@ -1,0 +1,53 @@
+---
+title: Moocon Vaults
+description: Prize savings vaults on Solana — earn yield-based prizes without risking your principal.
+---
+
+## What is Moocon Vaults?
+
+Moocon Vaults is a prize savings protocol on Solana. You deposit tokens, earn yield via Jupiter Lend, and every round one depositor wins the entire pooled yield as a prize. Your principal is never at risk.
+
+Think of it as a lottery where the tickets are free — you only put in what you can always get back.
+
+---
+
+## The Problem
+
+Yield from lending is safe, but the returns are modest. Anything with meaningful upside typically requires putting your principal at risk — trading, leverage, illiquid protocols. There's no middle ground between "boring and safe" and "exciting and risky."
+
+Prize savings products solve this. They've existed in traditional finance for decades with hundreds of billions locked in them. On-chain, the concept is still early — and existing implementations are largely limited to native SOL staking.
+
+**Moocon Vaults is the first to open it up to any supported token, stablecoins included.**
+
+---
+
+## The Solution
+
+Instead of every depositor earning a small yield independently, Moocon Vaults pools yield across all depositors and pays it out as a single prize each round.
+
+- **Your principal stays intact.** You can withdraw anytime.
+- **One winner per round** claims the entire pooled yield.
+- **More deposited = more tickets = better odds**, but everyone has a chance.
+- **Rounds run frequently** — every 30–60 minutes on Solana's fast block times.
+
+---
+
+## Jupiter Lend as Yield Source
+
+All deposited tokens flow into **Jupiter Lending**, where they earn yield continuously. Jupiter Lend is the yield infrastructure layer — Moocon Vaults sits on top and redirects that yield into prize drawings instead of distributing it pro-rata.
+
+**Supported tokens:** USDC, WSOL (with more Jupiter Lend tokens planned).
+
+When you deposit, your tokens are converted into **fTokens** (Jupiter's interest-bearing token representation). Your pTokens track your share of the vault's fToken balance. As yield accrues, the exchange rate between fTokens and underlying tokens increases — that growing difference is what funds each prize.
+
+---
+
+## Provably Fair Randomness
+
+No participant — including the protocol — can know or influence who wins before it happens. Moocon Vaults uses a **Commit–Reveal scheme** layered with **ORAO VRF** so the result depends on two independent entropy sources.
+
+**Step 1 — Snapshot:** All eligible depositors are captured into a Merkle tree at round start. The Merkle root is committed on-chain.
+
+**Step 2 — Commit:** The operator hashes a secret and submits it to the contract, triggering a VRF request to ORAO's external validator network. The secret is locked in from this point.
+
+**Step 3 — Reveal:** Once VRF fulfillment lands on-chain, the operator publishes the secret. The two values are XOR-combined into a final seed, which selects a winner. Anyone can verify the result against their Merkle proof.

@@ -65,7 +65,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         href="https://jup.ag/lend"
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute bottom-5 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full border border-[#2563EB40] bg-[#0F172A]/80 px-3.5 py-2 backdrop-blur-sm transition-colors hover:bg-[#0F172A]"
+        className="absolute bottom-5 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 border border-[#2563EB40] bg-[#0F172A]/80 px-3.5 py-2 backdrop-blur-sm transition-colors hover:bg-[#0F172A]"
       >
         <img src="https://static.jup.ag/jup/icon.png" alt="Jupiter" className="h-5 w-5 rounded-full" />
         <span className="whitespace-nowrap text-[13px] font-medium text-[#94A3B8]">Built on Jupiter Lend</span>

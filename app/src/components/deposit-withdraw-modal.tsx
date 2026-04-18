@@ -187,7 +187,7 @@ export function DepositWithdrawModal({
           }}
         />
         <Dialog.Content
-          className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border p-5 shadow-2xl focus:outline-none"
+          className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 border p-5 shadow-2xl focus:outline-none"
           style={{
             backgroundColor: APP_COLORS.app.background,
             borderColor: APP_COLORS.page.cardBorder,
@@ -213,7 +213,7 @@ export function DepositWithdrawModal({
               </Dialog.Title>
             </div>
             <Dialog.Close
-              className="rounded p-1 text-sm leading-none transition-opacity hover:opacity-60"
+              className="p-1 text-sm leading-none transition-opacity hover:opacity-60"
               style={{ color: APP_COLORS.page.cardLabel }}
               aria-label="Close"
             >
@@ -223,7 +223,7 @@ export function DepositWithdrawModal({
 
           {/* ── Stats card ── */}
           <div
-            className="rounded-xl border p-4"
+            className="border p-4"
             style={{
               borderColor: APP_COLORS.page.cardBorder,
               backgroundColor: APP_COLORS.page.cardBackground
@@ -291,7 +291,7 @@ export function DepositWithdrawModal({
 
           {/* ── Tab switcher ── */}
           <div
-            className="flex rounded-xl p-1"
+            className="flex p-1"
             style={{
               backgroundColor: APP_COLORS.page.cardBackground,
               border: `1px solid ${APP_COLORS.page.cardBorder}`
@@ -301,7 +301,7 @@ export function DepositWithdrawModal({
               <button
                 key={t}
                 onClick={() => handleTabChange(t)}
-                className="flex-1 rounded-lg py-2 text-sm font-medium capitalize transition-colors"
+                className="flex-1 py-2 text-sm font-medium capitalize transition-colors"
                 style={
                   tab === t
                     ? {
@@ -318,7 +318,7 @@ export function DepositWithdrawModal({
 
           {/* ── Input section ── */}
           <div
-            className="rounded-xl border p-4"
+            className="border p-4"
             style={{
               borderColor: APP_COLORS.page.cardBorder,
               backgroundColor: APP_COLORS.page.cardBackground
@@ -343,7 +343,7 @@ export function DepositWithdrawModal({
                   <button
                     key={lbl}
                     onClick={lbl === 'HALF' ? handleHalf : handleMax}
-                    className="rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide transition-opacity hover:opacity-80"
+                    className="px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide transition-opacity hover:opacity-80"
                     style={{
                       backgroundColor: 'rgba(59, 130, 246, 0.1)',
                       color: COLOR_TOKENS.secondary,
@@ -409,7 +409,7 @@ export function DepositWithdrawModal({
           <button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="w-full rounded-xl py-3 text-sm font-bold uppercase tracking-widest transition-opacity disabled:opacity-40"
+            className="w-full py-3 text-sm font-bold uppercase tracking-widest transition-opacity disabled:opacity-40"
             style={{
               backgroundColor: APP_COLORS.walletButton.background,
               color: APP_COLORS.walletButton.text

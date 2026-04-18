@@ -120,7 +120,7 @@ export function ProofModal({ drawing, open, onClose }: ProofModalProps) {
           }}
         />
         <Dialog.Content
-          className="fixed left-1/2 top-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 rounded-2xl border p-6 shadow-2xl focus:outline-none"
+          className="fixed left-1/2 top-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 border p-6 shadow-2xl focus:outline-none"
           style={{
             backgroundColor: APP_COLORS.page.cardBackground,
             borderColor: APP_COLORS.page.cardBorder,
@@ -155,7 +155,7 @@ export function ProofModal({ drawing, open, onClose }: ProofModalProps) {
               <Button
                 size="sm"
                 disabled={!drawing}
-                className="rounded-lg px-4 text-xs uppercase tracking-widest font-bold border-none"
+                className="px-4 text-xs uppercase tracking-widest font-bold border-none"
                 style={{
                   backgroundColor: APP_COLORS.walletButton.background,
                   color: APP_COLORS.walletButton.text
@@ -171,7 +171,7 @@ export function ProofModal({ drawing, open, onClose }: ProofModalProps) {
                 View Snapshot
               </Button>
               <Dialog.Close
-                className="rounded p-1 text-xs transition-colors"
+                className="p-1 text-xs transition-colors"
                 style={{ color: APP_COLORS.page.cardLabel }}
                 aria-label="Close"
               >

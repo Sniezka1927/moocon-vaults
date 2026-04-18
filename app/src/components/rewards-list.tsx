@@ -52,7 +52,7 @@ export function RewardsList() {
 
   return (
     <div
-      className="rounded-2xl border"
+      className="border"
       style={{
         borderColor: APP_COLORS.page.cardBorder,
         backgroundColor: APP_COLORS.page.cardBackground
@@ -180,7 +180,7 @@ export function RewardsList() {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => setSelectedDrawing(d)}
-                        className="inline-flex items-center rounded-md border px-2.5 py-1 text-[11px] font-medium transition-colors"
+                        className="inline-flex items-center border px-2.5 py-1 text-[11px] font-medium transition-colors"
                         style={{
                           color: APP_COLORS.page.cardValue,
                           borderColor: APP_COLORS.page.cardBorder,
