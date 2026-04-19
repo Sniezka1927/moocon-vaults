@@ -7,6 +7,8 @@ import { APP_COLORS, BRAND_NAME, NAV_LINKS } from '@/consts'
 import { WalletButton } from '@/lib/solana/provider'
 import { useAllVaults } from '@/lib/queries/use-vaults'
 import { useVaultSubscriptions } from '@/lib/queries/use-vault-subscriptions'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { Button } from '@/components/ui/button'
 import { useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import type { CSSProperties, ReactNode } from 'react'
@@ -14,6 +16,7 @@ import type { CSSProperties, ReactNode } from 'react'
 export function AppLayout({ children }: { children: ReactNode }) {
   const { data: vaults = [] } = useAllVaults()
   useVaultSubscriptions(vaults)
+  const { connected } = useWallet()
   const [showMenu, setShowMenu] = useState(false)
   const { pathname } = useLocation()
 
@@ -56,7 +59,49 @@ export function AppLayout({ children }: { children: ReactNode }) {
           showMenu={showMenu}
           onToggleMenu={() => setShowMenu((v) => !v)}
           onNavigate={handleNavigate}
-          walletSlot={<WalletButton />}
+          walletSlot={
+            <div className="flex items-center gap-2">
+              {connected && (
+                <>
+                  <Button
+                    asChild
+                    variant="outline"
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '0 0.75rem',
+                      height: '2.5rem',
+                      borderColor: APP_COLORS.page.cardBorder,
+                      backgroundColor: APP_COLORS.page.cardBackground,
+                      color: APP_COLORS.page.cardLabel,
+                      boxShadow: `0 0 8px 2px ${APP_COLORS.page.cardLabel}55`,
+                    }}
+                  >
+                    <a href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer">
+                      USDC Faucet
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '0 0.75rem',
+                      height: '2.5rem',
+                      borderColor: APP_COLORS.page.cardBorder,
+                      backgroundColor: APP_COLORS.page.cardBackground,
+                      color: APP_COLORS.page.cardLabel,
+                      boxShadow: `0 0 8px 2px ${APP_COLORS.page.cardLabel}55`,
+                    }}
+                  >
+                    <a href="https://faucet.solana.com/" target="_blank" rel="noopener noreferrer">
+                      SOL Faucet
+                    </a>
+                  </Button>
+                </>
+              )}
+              <WalletButton />
+            </div>
+          }
         />
         {children}
         <AppFooter />
