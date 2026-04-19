@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { AppFooter } from '@/components/app-footer'
 import { AppHeader } from '@/components/app-header'
 import { HeroBackground } from '@/components/hero-section'
@@ -70,6 +71,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <img src="https://static.jup.ag/jup/icon.png" alt="Jupiter" className="h-5 w-5 rounded-full" />
         <span className="whitespace-nowrap text-[13px] font-medium text-[#94A3B8]">Built on Jupiter Lend</span>
       </a>
+      <Analytics />
     </div>
   )
 }
