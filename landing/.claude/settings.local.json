@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp /Users/sniezka/solana/moocon-vaults/app/src/icons/logo-white.png /Users/sniezka/solana/moocon-vaults/landing/public/)",
+      "Bash(cp /Users/sniezka/solana/moocon-vaults/app/src/icons/milk-box.png /Users/sniezka/solana/moocon-vaults/landing/public/)"
+    ]
+  }
+}

@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0A0F1E;
+  --foreground: #E2E8F0;
+  --primary: #3B82F6;
+  --primary-light: #60A5FA;
+  --secondary: #38BDF8;
+  --card-bg: #111827;
+  --card-border: rgba(37, 99, 235, 0.25);
+  --header-bg: #0B1120;
+  --muted: #94A3B8;
+  --surface: #1E293B;
+  --surface-border: #334155;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-header-bg: var(--header-bg);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-surface-border: var(--surface-border);
+  --font-headline: var(--font-space-grotesk);
+  --font-body: var(--font-manrope);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #111827;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.25), #2563EB);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
+}
+
+/* ── Dot grid background ── */
+.hero-dot-grid {
+  position: absolute;
+  inset: -18%;
+  background-image: radial-gradient(circle, rgba(59, 130, 246, 0.2) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.22;
+  animation: hero-grid-pan 34s linear infinite;
+}
+
+.hero-dots {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-dot {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 1) 0%,
+    rgba(96, 165, 250, 0.8) 60%,
+    rgba(59, 130, 246, 0.15) 100%
+  );
+  box-shadow: 0 0 14px rgba(59, 130, 246, 0.6);
+  animation-name: hero-dot-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes hero-grid-pan {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-28px, -28px, 0); }
+}
+
+@keyframes hero-dot-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translate3d(10px, -12px, 0) scale(1.2);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(-9px, -22px, 0) scale(0.9);
+    opacity: 0.35;
+  }
+  75% {
+    transform: translate3d(8px, -10px, 0) scale(1.1);
+    opacity: 0.72;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.2;
+  }
+}
+
+/* ── Float animation (mascot) ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* ── Fade in up (scroll reveal) ── */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease-out both;
+}
+
+/* ── Pulse glow (orbs) ── */
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.3;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ── Glass card ── */
+.glass-card {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  border-radius: 1rem;
+}
+
+.glass-card-hover {
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.glass-card-hover:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.15);
+}
+
+/* ── FAQ details ── */
+details summary { cursor: pointer; }
+details summary::-webkit-details-marker { display: none; }
+details summary::marker { content: ""; }
+details[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+.faq-chevron {
+  transition: transform 0.25s ease;
+}
