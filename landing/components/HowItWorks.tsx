@@ -65,10 +65,6 @@ export function HowItWorks() {
               )}
 
               <div className="glass-card glass-card-hover flex h-full w-full flex-col items-center p-8 text-center">
-                {/* Number */}
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-sm font-bold text-primary-light">
-                  {step.num}
-                </div>
                 {/* Icon */}
                 <div className="mb-4 text-primary-light">{step.icon}</div>
                 {/* Title */}

@@ -34,8 +34,6 @@ export function Hero() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               href="https://app.moocon.xyz"
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-semibold uppercase tracking-widest text-white transition-colors hover:bg-[#2563EB]"
             >
               Launch App

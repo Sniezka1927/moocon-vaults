@@ -40,8 +40,6 @@ export function Header() {
         {/* CTA */}
         <a
           href="https://app.moocon.xyz"
-          target="_blank"
-          rel="noopener noreferrer"
           className="rounded-full bg-primary px-5 py-2 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-[#2563EB]"
         >
           Launch App
