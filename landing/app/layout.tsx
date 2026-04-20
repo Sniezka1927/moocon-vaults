@@ -15,9 +15,26 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Moocon Vaults | Prize Savings on Solana",
+  title: "Moocon",
   description:
-    "Deposit tokens, earn yield, win prizes. Your principal is never at risk. Prize savings vaults powered by Jupiter Lending on Solana.",
+    "Earn platform with outsized rewards built on top of Jupiter Lend.",
+  icons: {
+    icon: "/icon.png",
+  },
+  openGraph: {
+    type: "website",
+    title: "Moocon",
+    description:
+      "Earn platform with outsized rewards built on top of Jupiter Lend.",
+    images: "/logo-white.png",
+  },
+  twitter: {
+    card: "summary",
+    title: "Moocon",
+    description:
+      "Earn platform with outsized rewards built on top of Jupiter Lend.",
+    images: "/logo-white.png",
+  },
 };
 
 export default function RootLayout({

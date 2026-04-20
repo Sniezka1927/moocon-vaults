@@ -11,7 +11,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full bg-header-bg/80 backdrop-blur-md">
       <div className="flex w-full items-center justify-between border-b border-white/5 px-5 py-4 md:px-10">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5">
+        <a href="#" className="flex items-center gap-2">
           <Image
             src="/logo-white.png"
             alt="Moocon"
