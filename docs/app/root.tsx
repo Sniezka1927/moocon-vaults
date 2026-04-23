@@ -13,6 +13,7 @@ import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation';
 import { docsContentRoute, docsRoute } from '@/lib/shared';
 
 export const links: Route.LinksFunction = () => [
+  { rel: 'icon', href: '/logo-white.png', type: 'image/png' },
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
     rel: 'preconnect',
