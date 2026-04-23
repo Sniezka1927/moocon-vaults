@@ -3,6 +3,7 @@ import { AppFooter } from '@/components/app-footer'
 import { AppHeader } from '@/components/app-header'
 import { HeroBackground } from '@/components/hero-section'
 import { APP_COLORS, BRAND_NAME, NAV_LINKS } from '@/consts'
+import { useFaucet } from '@/lib/queries/use-faucet'
 
 import { WalletButton } from '@/lib/solana/provider'
 import { useAllVaults } from '@/lib/queries/use-vaults'
@@ -17,6 +18,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const { data: vaults = [] } = useAllVaults()
   useVaultSubscriptions(vaults)
   const { connected } = useWallet()
+  const faucet = useFaucet()
   const [showMenu, setShowMenu] = useState(false)
   const { pathname } = useLocation()
 
@@ -60,44 +62,24 @@ export function AppLayout({ children }: { children: ReactNode }) {
           onToggleMenu={() => setShowMenu((v) => !v)}
           onNavigate={handleNavigate}
           walletSlot={
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               {connected && (
-                <>
-                  <Button
-                    asChild
-                    variant="outline"
-                    style={{
-                      fontSize: '0.75rem',
-                      padding: '0 0.75rem',
-                      height: '2.5rem',
-                      borderColor: APP_COLORS.page.cardBorder,
-                      backgroundColor: APP_COLORS.page.cardBackground,
-                      color: APP_COLORS.page.cardLabel,
-                      boxShadow: `0 0 8px 2px ${APP_COLORS.page.cardLabel}55`,
-                    }}
-                  >
-                    <a href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer">
-                      USDC Faucet
-                    </a>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="outline"
-                    style={{
-                      fontSize: '0.75rem',
-                      padding: '0 0.75rem',
-                      height: '2.5rem',
-                      borderColor: APP_COLORS.page.cardBorder,
-                      backgroundColor: APP_COLORS.page.cardBackground,
-                      color: APP_COLORS.page.cardLabel,
-                      boxShadow: `0 0 8px 2px ${APP_COLORS.page.cardLabel}55`,
-                    }}
-                  >
-                    <a href="https://faucet.solana.com/" target="_blank" rel="noopener noreferrer">
-                      SOL Faucet
-                    </a>
-                  </Button>
-                </>
+                <Button
+                  variant="outline"
+                  disabled={faucet.isPending}
+                  onClick={() => faucet.mutate()}
+                  style={{
+                    fontSize: '0.9rem',
+                    padding: '0 0.75rem',
+                    height: '2.5rem',
+                    borderColor: APP_COLORS.page.cardBorder,
+                    backgroundColor: APP_COLORS.page.cardBackground,
+                    color: APP_COLORS.page.cardLabel,
+                    boxShadow: `0 0 8px 2px ${APP_COLORS.page.cardLabel}55`,
+                  }}
+                >
+                  {faucet.isPending ? 'Sending...' : 'Faucet'}
+                </Button>
               )}
               <WalletButton />
             </div>

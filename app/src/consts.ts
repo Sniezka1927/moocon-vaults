@@ -1,9 +1,23 @@
+import { PublicKey } from '@solana/web3.js'
 export const BRAND_NAME = 'Moocon' as const
 
 export interface NavLink {
   label: string
   path: string
 }
+
+export const FAUCET_KEYPAIR = [
+  35, 191, 160, 17, 154, 61, 226, 125, 37, 155, 75, 152, 119, 199, 108, 115,
+  147, 88, 182, 84, 73, 102, 94, 46, 99, 30, 126, 123, 132, 81, 182, 206, 230,
+  120, 165, 155, 34, 119, 150, 187, 19, 164, 81, 50, 15, 239, 95, 102, 119, 34,
+  164, 255, 44, 134, 124, 207, 15, 14, 12, 253, 240, 254, 203, 119
+]
+
+export const USDC_MINT = new PublicKey(
+  '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+)
+export const USDC_AMOUNT = 5 * 1e6
+export const WSOL_AMOUNT = 1e8
 
 export const NAV_LINKS: NavLink[] = [
   { label: 'Vaults', path: '/' },
@@ -168,7 +182,7 @@ export const APP_COLORS = {
   },
   shareCard: {
     glowPurple: 'rgba(59, 130, 246, 0.15)',
-    glowCyan: 'rgba(56, 189, 248, 0.12)',
+    glowCyan: 'rgba(56, 189, 248, 0.12)'
   },
   error: {
     text: '#f87171'
