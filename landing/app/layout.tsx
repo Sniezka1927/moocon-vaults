@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: 'Moocon',
     description:
       'Earn platform with outsized rewards built on top of Jupiter Lend.',
-    images: ['https://moocon.xyz/logo-white.png']
+    images: ['https://moocon.xyz/moocon-summary-card.png']
   }
 }
 
