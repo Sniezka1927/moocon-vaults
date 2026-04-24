@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useWallet, useConnection } from '@solana/wallet-adapter-react'
 import { Keypair, SystemProgram, Transaction } from '@solana/web3.js'
 import {
@@ -15,6 +15,7 @@ const faucetKeypair = Keypair.fromSecretKey(Uint8Array.from(FAUCET_KEYPAIR))
 export function useFaucet() {
   const { publicKey } = useWallet()
   const { connection } = useConnection()
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async () => {
@@ -94,6 +95,10 @@ export function useFaucet() {
             '!bg-[#0F1D3A] !border !border-[#2563EB40] !text-[#60A5FA] hover:!bg-[#1E293B]'
         }
       })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['user', 'nativeSol'] }),
+        queryClient.invalidateQueries({ queryKey: ['user', 'tokenBalance'] })
+      ])
     },
     onError: (e: Error) => {
       toast.error(e.message || 'Faucet request failed')
