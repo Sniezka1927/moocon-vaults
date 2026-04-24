@@ -16,6 +16,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://moocon.xyz"),
   title: "Moocon",
   description:
     "Earn platform with outsized rewards built on top of Jupiter Lend.",
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
       "Earn platform with outsized rewards built on top of Jupiter Lend.",
     images: [
       {
-        url: "https://moocon.xyz/logo-white.png",
+        url: "/logo-white.png",
         width: 1200,
         height: 630,
         alt: "Moocon",
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     title: "Moocon",
     description:
       "Earn platform with outsized rewards built on top of Jupiter Lend.",
-    images: ["https://moocon.xyz/logo-white.png"],
+    images: ["/logo-white.png"],
   },
 };
 
