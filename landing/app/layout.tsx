@@ -16,7 +16,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://moocon.xyz"),
+  metadataBase: new URL("https://www.moocon.xyz"),
   title: "Moocon",
   description:
     "Earn platform with outsized rewards built on top of Jupiter Lend.",
