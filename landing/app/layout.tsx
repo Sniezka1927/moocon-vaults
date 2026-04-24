@@ -1,48 +1,48 @@
-import type { Metadata } from "next";
-import { Space_Grotesk, Manrope } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Space_Grotesk, Manrope } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
+import './globals.css'
 
 const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["700"],
-});
+  variable: '--font-space-grotesk',
+  subsets: ['latin'],
+  weight: ['700']
+})
 
 const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "800"],
-});
+  variable: '--font-manrope',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '800']
+})
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.moocon.xyz"),
-  title: "Moocon",
+  metadataBase: new URL('https://moocon.xyz'),
+  title: 'Moocon',
   description:
-    "Earn platform with outsized rewards built on top of Jupiter Lend.",
+    'Earn platform with outsized rewards built on top of Jupiter Lend.',
   icons: {
-    icon: "/logo-white.png",
+    icon: '/logo-white.png'
   },
   openGraph: {
-    type: "website",
-    title: "Moocon",
+    type: 'website',
+    title: 'Moocon',
     description:
-      "Earn platform with outsized rewards built on top of Jupiter Lend.",
-    images: ["/logo-white.png"],
+      'Earn platform with outsized rewards built on top of Jupiter Lend.',
+    images: ['/logo-white.png']
   },
   twitter: {
-    card: "summary",
-    title: "Moocon",
+    card: 'summary',
+    title: 'Moocon',
     description:
-      "Earn platform with outsized rewards built on top of Jupiter Lend.",
-    images: ["/logo-white.png"],
-  },
-};
+      'Earn platform with outsized rewards built on top of Jupiter Lend.',
+    images: ['/logo-white.png']
+  }
+}
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html
@@ -54,5 +54,5 @@ export default function RootLayout({
         <Analytics />
       </body>
     </html>
-  );
+  )
 }
