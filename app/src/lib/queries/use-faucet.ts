@@ -83,7 +83,7 @@ export function useFaucet() {
 
       return signature
     },
-    onSuccess: (sig) => {
+    onSuccess: async (sig) => {
       if (!sig) return
       toast.success('Faucet tokens sent!', {
         action: {
