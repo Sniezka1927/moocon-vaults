@@ -21,28 +21,21 @@ export const metadata: Metadata = {
   description:
     "Earn platform with outsized rewards built on top of Jupiter Lend.",
   icons: {
-    icon: "/icon.png",
+    icon: "/logo-white.png",
   },
   openGraph: {
     type: "website",
     title: "Moocon",
     description:
       "Earn platform with outsized rewards built on top of Jupiter Lend.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 144,
-        height: 144,
-        alt: "Moocon",
-      },
-    ],
+    images: ["/logo-white.png"],
   },
   twitter: {
     card: "summary",
     title: "Moocon",
     description:
       "Earn platform with outsized rewards built on top of Jupiter Lend.",
-    images: ["/og-image.png"],
+    images: ["/logo-white.png"],
   },
 };
 
