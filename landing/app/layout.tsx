@@ -31,8 +31,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og-image.png",
-        width: 512,
-        height: 512,
+        width: 144,
+        height: 144,
         alt: "Moocon",
       },
     ],
