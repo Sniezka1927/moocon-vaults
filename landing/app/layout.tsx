@@ -30,7 +30,7 @@ export const metadata: Metadata = {
       "Earn platform with outsized rewards built on top of Jupiter Lend.",
     images: [
       {
-        url: "/logo-white.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Moocon",
@@ -38,11 +38,11 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Moocon",
     description:
       "Earn platform with outsized rewards built on top of Jupiter Lend.",
-    images: ["/logo-white.png"],
+    images: ["/og-image.png"],
   },
 };
 
