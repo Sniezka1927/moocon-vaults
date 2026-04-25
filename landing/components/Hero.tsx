@@ -18,7 +18,7 @@ export function Hero() {
           {/* Headline */}
           <h1 className="font-headline text-4xl font-bold uppercase leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             <span className="bg-gradient-to-r from-white via-primary-light to-secondary bg-clip-text text-transparent">
-              Win Yield.
+              Earn Yield.
             </span>
             <br />
             <span className="text-[#F1F5F9]">Keep Your Principal.</span>
