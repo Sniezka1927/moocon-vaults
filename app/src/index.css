@@ -257,3 +257,21 @@
 .skeleton {
   animation: skeleton-shimmer 1.8s ease-in-out infinite;
 }
+
+@keyframes vault-ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.vault-ticker-track {
+  animation: vault-ticker-scroll linear infinite;
+  will-change: transform;
+}
+
+.vault-ticker:hover .vault-ticker-track {
+  animation-play-state: paused;
+}

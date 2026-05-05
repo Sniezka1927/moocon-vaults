@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { AppFooter } from '@/components/app-footer'
 import { AppHeader } from '@/components/app-header'
 import { HeroBackground } from '@/components/hero-section'
+import { VaultTicker } from '@/components/vault-ticker'
 import { APP_COLORS, BRAND_NAME, NAV_LINKS } from '@/consts'
 import { useFaucet } from '@/lib/queries/use-faucet'
 
@@ -54,7 +55,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
       style={style}
     >
       <HeroBackground />
-      <main className="relative flex-1 overflow-y-auto">
+      <VaultTicker />
+      <main className="relative flex-1 overflow-y-auto pt-9">
         <AppHeader
           brandName={BRAND_NAME}
           links={links}

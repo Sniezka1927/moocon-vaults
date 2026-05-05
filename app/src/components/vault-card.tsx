@@ -5,6 +5,7 @@ import { APP_COLORS, COLOR_TOKENS } from '@/consts'
 import { Button } from '@/components/ui/button'
 import type { VaultWithAddress } from '@/lib/store/vault-store'
 import { useMintStore } from '@/lib/store/mint-store'
+import { useVaultCountdown } from '@/lib/hooks/use-vault-countdown'
 import { getLendingAccountsForMint } from 'ts-sdk'
 import { DepositWithdrawModal } from './deposit-withdraw-modal'
 
@@ -19,7 +20,6 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
   const { connection } = useConnection()
   const [tvl, setTvl] = useState<string | null>(null)
   const [tvlUsd, setTvlUsd] = useState<string | null>(null)
-  const [countdown, setCountdown] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const tokenName = metadata.name
   const price = useMintStore((s) => s.getMint(vault.mint.toBase58()))?.price ?? null
@@ -27,38 +27,7 @@ export function VaultCard({ vault, metadata, isLast, avgApr }: VaultCardProps) {
     ? Math.min(metadata.decimals, 18)
     : 6
   const tvlLabel = tvl === '—' ? '—' : tvl !== null ? `${tvl} ${tokenName}` : '...'
-
-  useEffect(() => {
-    const tick = () => {
-      const now = BigInt(Math.floor(Date.now() / 1000))
-
-      let soonest: bigint | null = null
-      for (const tier of vault.distributionTiers) {
-        if (tier.interval <= 0n || tier.rewardShare <= 0n) continue
-        const next = tier.distributedAt > 0n
-          ? tier.distributedAt + tier.interval
-          : now + tier.interval
-        if (soonest === null || next < soonest) soonest = next
-      }
-
-      if (soonest === null) {
-        setCountdown('—')
-        return
-      }
-
-      const remaining = Number(soonest - now)
-      if (remaining <= 0) {
-        setCountdown('00:00')
-        return
-      }
-      const m = Math.floor(remaining / 60).toString().padStart(2, '0')
-      const s = (remaining % 60).toString().padStart(2, '0')
-      setCountdown(`${m}:${s}`)
-    }
-    tick()
-    const id = setInterval(tick, 1000)
-    return () => clearInterval(id)
-  }, [vault.distributionTiers])
+  const countdown = useVaultCountdown(vault.distributionTiers)
 
   useEffect(() => {
     const lendingAccounts = getLendingAccountsForMint(vault.mint)
