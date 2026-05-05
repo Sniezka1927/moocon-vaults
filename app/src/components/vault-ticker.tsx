@@ -6,7 +6,7 @@ import { useVaultCountdown } from '@/lib/hooks/use-vault-countdown'
 import type { VaultWithAddress } from '@/lib/store/vault-store'
 
 const SECONDS_PER_ITEM = 6
-const MIN_ITEMS_PER_COPY = 8
+const MIN_ITEMS_PER_COPY = 30
 
 export function VaultTicker() {
   const { data: vaults = [] } = useAllVaults()
